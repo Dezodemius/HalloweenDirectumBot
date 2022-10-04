@@ -111,10 +111,10 @@ async Task HandleUpdate(ITelegramBotClient bot, Update update, CancellationToken
     }
 }
 
-Task HandleError(ITelegramBotClient bot, Exception exception, CancellationToken cancellationToken)
+async Task HandleError(ITelegramBotClient bot, Exception exception, CancellationToken cancellationToken)
 {
     Console.WriteLine(exception);
-    return Task.CompletedTask;
+    Environment.Exit(1);
 }
 
 class WinnersWithWord
