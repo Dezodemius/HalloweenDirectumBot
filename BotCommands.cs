@@ -4,7 +4,7 @@ public static class BotCommands
 {
   public const string Start = "/start";
 
-  public const string Movie = "/movie";
+  public const string Movie = "Подобрать фильм";
 
-  public const string Prize = "/prize";
+  public const string Prize = "Получить приз";
 }
