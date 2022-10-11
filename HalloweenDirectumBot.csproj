@@ -13,8 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="movies\**" CopyToOutputDirectory="PreserveNewest" />      
-      <None Include="stickers\**" CopyToOutputDirectory="PreserveNewest" />      
+      <None Include="movies\**" CopyToOutputDirectory="PreserveNewest" />     
     </ItemGroup>
 
 </Project>
