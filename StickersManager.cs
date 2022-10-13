@@ -6,17 +6,17 @@ namespace HalloweenDirectumBot;
 
 public static class StickersManager
 {
-    private static Sticker[]? _stickers;
+  private static Sticker[]? _stickers;
 
-    public static void InitializeStickerPack(ITelegramBotClient bot, string stickerPackName)
-    {
-        _stickers = bot.GetStickerSetAsync(stickerPackName).Result.Stickers;
-    }
+  public static void InitializeStickerPack(ITelegramBotClient bot, string stickerPackName)
+  {
+    _stickers = bot.GetStickerSetAsync(stickerPackName).Result.Stickers;
+  }
 
-    public static async void SendStickerAsync(ITelegramBotClient bot, long chatId, string stickerEmoji)
-    {
-        if (_stickers == null)
-            return;
-        await bot.SendStickerAsync(chatId, _stickers.First(x => x.Emoji == stickerEmoji).FileId);
-    }
+  public static async void SendStickerAsync(ITelegramBotClient bot, long chatId, string stickerEmoji)
+  {
+    if (_stickers == null)
+      return;
+    await bot.SendStickerAsync(chatId, _stickers.First(x => x.Emoji == stickerEmoji).FileId);
+  }
 }
