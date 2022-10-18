@@ -1,11 +1,21 @@
-container("openjdk:11") {
-    kotlinScript { api ->
-        api.space().projects.automation.deployments.start(
-            project = api.projectIdentifier(),
-            targetIdentifier = TargetIdentifier.Key("bot-deploy"),
-            version = "1.0.0",
-            // automatically update deployment status based on a status of a job
-            syncWithAutomationJob = true
-        )
+job("Example") {
+    requirements {
+        workerType = WorkerTypes.SPACE_CLOUD_UBUNTU_LTS_REGULAR
+    }
+
+    host("Run script") {
+        shellScript {
+            content = "echo Hello World!"
+        }
     }
 }
+job(".NET Core desktop. Build, test, publish"){
+     container(image = "mcr.microsoft.com/dotnet/core/sdk:6.0"){
+         shellScript {
+             content = """
+                 echo Run build...
+                 dotnet build HalloweenDirectumBot.sln
+             """
+         }
+     }
+ }
