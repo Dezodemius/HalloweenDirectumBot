@@ -10,7 +10,7 @@ job("Example") {
     }
 }
 job(".NET Core desktop. Build, test, publish"){
-     container(image = "mcr.microsoft.com/dotnet/core/sdk:6.0"){
+     container(image = "mcr.microsoft.com/dotnet/sdk:6.0"){
          shellScript {
              content = """
                  echo Run build...
