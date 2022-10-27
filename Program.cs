@@ -24,19 +24,19 @@ namespace HalloweenDirectumBot
 
     private static string[] prizeWords = new[]
     {
-      "...сел медведь в машину и сгорел",
-      "Два стоматолога поспорили кто больше выпьет из чаши...",
-      "Пупа и Лупа пошли получать зарплату...",
-      "Бу!",
-      "1C",
-      "Заходит богатый вампир в бар...",
-      "Заходит вампир среднего достатка в бар...",
-      "Заходит бедный вампир в бар...",
-      "Гладиолус",
-      "Хочешь узнать какой ты вампир?",
-      "Поспорили два стоматолога...",
-      "...первый стоматолог сделал три глотка...",
-      "...второй стоматолог сделал 5 глотков...",
+      "Все твои сообщения руководителю будут писаться только капслоком",
+      "Как бы ты не старался все твои задачи в Ауре будут красными",
+      "Все печенье сегодня будет съедено другими. Ты даже крошек не увидишь",
+      "У меня нет времени читать баг-репорт, опиши проблему в двух словах",
+      "Зачем мне Directum, если я это всё и в Excel могу",
+      "Чтоб у тебя RDP отвалился!",
+      "[Просто нажми](www.youtube.com/watch?v=dQw4w9WgXcQ)",
+      "Мы знаем, что ты себя плохо ведешь, поэтому твой Сhrome превратится в Internet Explorer",
+      "Опять сборка не прошла? Ну давай, заплачь!",
+      "Кодишь на C#? Ну давай, попробуй на C++",
+      "Пишешь на Python? Ну давай, попробуй на C#",
+      "Я знаю, что ты преувеличиваешь, когда ставишь отметку в Ауре!",
+      "На твоём этаже самый невкусный кофе!",
     };
 
     private const int NumberOfWinners = 13;
@@ -157,24 +157,27 @@ namespace HalloweenDirectumBot
         {
           StickersManager.SendStickerAsync(bot, chatId, Emojis.ExpressionlessFace);
           await bot.SendTextMessageAsync(chatId,
-            $"Слышь, {message.From.FirstName}, у тебя уже есть подарок, иди отсюда!!!",
+            $"Не пытайся меня обмануть. У тебя уже есть подарок.{Environment.NewLine}" +
+            $"Все-го хо-ро-ше-го",
             cancellationToken: cancellationToken);
         }
         else
         {
           var lastWinner = winners.LastOrDefault();
           var number = lastWinner.Key == default ? 0 : lastWinner.Value + 1;
-          var word = prizeWords[number];
+          var word = prizeWords[new Random().Next(0, NumberOfWinners) % prizeWords.Length];
 
           winners[message.From.Id] = number;
           StickersManager.SendStickerAsync(bot, chatId, Emojis.GrinningFaceWithBigEyes);
           await bot.SendTextMessageAsync(
             chatId,
-            $"Поздравляю, {message.From.FirstName}!{Environment.NewLine}" +
-            $"Заслуженный приз получи у Эльвиры в 804 кабинете. Не забудь сказать свой номер и фразу!{Environment.NewLine}{Environment.NewLine}" +
+            $"Поздравляю, ты один из счастливчиков, выигравших сладкий приз от компании.{Environment.NewLine}" +
+            $"Скорее пиши [Эльвире Ибрагимовой](https://talk.directum.ru/directum/messages/@Ibragimova_ES) в ММ свой номер и фразу!{Environment.NewLine}{Environment.NewLine}" +
             $"Номер: {number + 1}{Environment.NewLine}" +
-            $"Фраза:\"{word}\"{Environment.NewLine}",
+            $"Злобная фраза:\"{word}\"{Environment.NewLine}",
+            ParseMode.Markdown,
             cancellationToken: cancellationToken);
+          Console.WriteLine($"WINNER: {number} {(string.IsNullOrEmpty(message.From.Username) ? $"{message.From.FirstName} {message.From.LastName}" : message.From.Username)}");
         }
       }
       else
