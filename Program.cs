@@ -163,7 +163,7 @@ namespace HalloweenDirectumBot
         }
         else
         {
-          var lastWinner = winners.LastOrDefault();
+          var lastWinner = winners.OrderBy(pair => pair.Value).LastOrDefault();
           var number = lastWinner.Key == default ? 0 : lastWinner.Value + 1;
           var word = prizeWords[new Random().Next(0, NumberOfWinners) % prizeWords.Length];
 
