@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Text;
 using HalloweenDirectumBot;
 using Newtonsoft.Json;
@@ -39,7 +39,7 @@ namespace HalloweenDirectumBot
       "На твоём этаже самый невкусный кофе!",
     };
 
-    private const int NumberOfWinners = 13;
+    private const int NumberOfWinners = 31;
 
     private static ConcurrentDictionary<long, int> winners = GetWinners();
 
@@ -165,7 +165,7 @@ namespace HalloweenDirectumBot
         {
           var lastWinner = winners.LastOrDefault();
           var number = lastWinner.Key == default ? 0 : lastWinner.Value + 1;
-          var word = prizeWords[number];
+          var word = prizeWords[new Random().Next(0, NumberOfWinners) % prizeWords.Length];
 
           winners[message.From.Id] = number;
           StickersManager.SendStickerAsync(bot, chatId, Emojis.GrinningFaceWithBigEyes);
