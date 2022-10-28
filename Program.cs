@@ -165,7 +165,7 @@ namespace HalloweenDirectumBot
         {
           var lastWinner = winners.LastOrDefault();
           var number = lastWinner.Key == default ? 0 : lastWinner.Value + 1;
-          var word = prizeWords[new Random().Next(0, NumberOfWinners) % prizeWords.Length];
+          var word = prizeWords[number];
 
           winners[message.From.Id] = number;
           StickersManager.SendStickerAsync(bot, chatId, Emojis.GrinningFaceWithBigEyes);
