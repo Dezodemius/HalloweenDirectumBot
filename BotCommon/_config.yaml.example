@@ -1,7 +1,20 @@
-﻿token: "5812039352:AAHKB9sk2E89GP6Vhe0zJ_jNxw9nhXQ32Co"
-bot_name: ""
-bot_about: ""
-bot_desc: ""
-bot_desc_pic_full_filepath: ""
-bot_pic: ""
+﻿# Bot token
+bot_token: "5812039352:AAEIOUF8zK7hehxPRWrWWaYlYtJ1fMKNs-4"
+
+# Bot name
+bot_name: "Test bot"
+
+# Bot profile description
+bot_about: "Some phrase in profile description"
+
+# Bot before /start description 
+bot_description: "Some phrase before /start"
+
+# Bot before /start description picture full filepath 
+bot_description_picture_full_filepath: ""
+
+# Bot profile picture full filepath
+bot_picture_full_filepath: ""
+
+# Bot list of commands in bot menu
 bot_commands: ""
