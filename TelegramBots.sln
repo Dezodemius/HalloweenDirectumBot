@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloweenDirectumBot", "HalloweenDirectumBot.csproj", "{E8756F92-34AD-4997-A8E0-FAC0FB779B04}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloweenDirectumBot", "HalloweenDirectumBot\HalloweenDirectumBot.csproj", "{E8756F92-34AD-4997-A8E0-FAC0FB779B04}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCommon", "BotCommon\BotCommon.csproj", "{BA378780-17FE-4DD8-9408-2A26324EB3F7}"
 EndProject
