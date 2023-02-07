@@ -6,16 +6,16 @@ namespace BotCommon.Scenarios;
 
 public static class ChatScenarioCache
 {
-  private static readonly IList<ChatScenario> _chatScenarios = new List<ChatScenario>();
+  private static readonly IList<AutoChatScenario> _chatScenarios = new List<AutoChatScenario>();
 
-  public static IEnumerable<ChatScenario> ChatScenarios => _chatScenarios.AsReadOnly();
+  public static IEnumerable<AutoChatScenario> ChatScenarios => _chatScenarios.AsReadOnly();
 
-  public static ChatScenario FindByCommandName(string commandName)
+  public static AutoChatScenario FindByCommandName(string commandName)
   {
     return _chatScenarios.SingleOrDefault(s => s.ScenarioCommand == commandName);
   }
 
-  public static void Register(ChatScenario scenario)
+  public static void Register(AutoChatScenario scenario)
   {
     if (_chatScenarios.All(s => s.Id != scenario.Id))
       _chatScenarios.Add(scenario);
@@ -26,7 +26,7 @@ public static class ChatScenarioCache
     _chatScenarios.Add(_chatScenarios.SingleOrDefault(s => s.Id == id));
   }
 
-  public static void Unregister(ChatScenario scenario)
+  public static void Unregister(AutoChatScenario scenario)
   {
     _chatScenarios.Remove(scenario);
   }

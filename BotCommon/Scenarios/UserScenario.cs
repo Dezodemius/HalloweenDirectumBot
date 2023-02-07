@@ -18,21 +18,21 @@ public class UserScenario
   public Guid ChatScenarioGuid { get; set; }
 
   [NotMapped]
-  public ChatScenario ChatScenario { get; set; }
+  public AutoChatScenario AutoChatScenario { get; set; }
 
   public bool Run(ITelegramBotClient bot, Update update)
   {
-    return ChatScenario.RunNextStep(bot, update);
+    return AutoChatScenario.ExecuteStep(bot, update);
   }
 
   public UserScenario()
   {
   }
 
-  public UserScenario(long userId, ChatScenario chatScenario)
+  public UserScenario(long userId, AutoChatScenario autoChatScenario)
   {
     this.UserId = userId;
-    this.ChatScenario = chatScenario;
-    this.ChatScenarioGuid = chatScenario.Id;
+    this.AutoChatScenario = autoChatScenario;
+    this.ChatScenarioGuid = autoChatScenario.Id;
   }
 }

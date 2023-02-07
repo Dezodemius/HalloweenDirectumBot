@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace Directum238Bot.Scenarios;
 
-public class StartScenario : ChatScenario
+public class StartScenario : AutoChatScenario
 {
   public override Guid Id { get; set; } = new Guid("73645235-88E5-4132-9722-2FFE0269369B");
 

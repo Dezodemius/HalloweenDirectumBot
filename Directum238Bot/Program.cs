@@ -54,9 +54,10 @@ namespace Directum238Bot
       bot.StartReceiving(UpdateHandler, PollingErrorHandler, receiverOptions: opts);
     }
 
-    private static async Task PollingErrorHandler(ITelegramBotClient bot, Exception exception, CancellationToken ct)
+    private static Task PollingErrorHandler(ITelegramBotClient bot, Exception exception, CancellationToken ct)
     {
       LogManager.GetCurrentClassLogger().Debug(exception);
+      return Task.CompletedTask;
     }
 
     private static async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)

@@ -22,14 +22,14 @@ public sealed class UserScenarioRepository : DbContext
       return null;
 
     var chatScenario = ChatScenarioCache.ChatScenarios.SingleOrDefault(s => s.Id == foundedScenario.ChatScenarioGuid);
-    foundedScenario.ChatScenario = chatScenario;
+    foundedScenario.AutoChatScenario = chatScenario;
     return foundedScenario;
   }
 
   public void Remove(long userId)
   {
     var foundedScenario = this.Get(userId);
-    foundedScenario.ChatScenario.Reset();
+    foundedScenario.AutoChatScenario.Reset();
     this.UserScenarios.Remove(foundedScenario);
     this.SaveChanges();
   }

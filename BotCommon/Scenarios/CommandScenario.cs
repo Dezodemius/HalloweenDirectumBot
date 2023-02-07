@@ -8,7 +8,7 @@ using Telegram.Bot.Types;
 namespace BotCommon.Scenarios;
 
 [PrimaryKey(nameof(Id))]
-public abstract class ChatScenario
+public abstract class CommandScenario
 {
   public abstract Guid Id { get; set; }
 
@@ -18,24 +18,17 @@ public abstract class ChatScenario
 
   protected IEnumerator<ScenarioStep> steps;
 
-  public bool RunNextStep(ITelegramBotClient telegramBotClient, Update update)
+  public virtual bool ExecuteStep(ITelegramBotClient telegramBotClient, Update update)
   {
-    if (!this.steps.MoveNext())
-      return false;
-
-    this.CurrentStep = this.steps.Current;
     this.CurrentStep?.StepAction(telegramBotClient, update);
-
     return true;
   }
 
-  public void Reset()
+  public virtual void Reset()
   {
     this.steps.Reset();
     this.CurrentStep = this.steps.Current;
   }
 
-  public ChatScenario()
-  {
-  }
+  public CommandScenario() { }
 }

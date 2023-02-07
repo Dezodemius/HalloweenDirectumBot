@@ -7,7 +7,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Directum238Bot.Scenarios;
 
-public class Wish23Scenario : ChatScenario
+public class Wish23Scenario : AutoChatScenario
 {
   public override Guid Id { get; set; } = new Guid("6A5102BE-668C-42D2-9FD2-818494DCDE8B");
 
