@@ -1,3 +1,11 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿namespace Directum238Bot
+{
+  public static class Program
+  {
+    public static void Main(string[] args)
+    {
+      
+    }
+  }
+}
 
-Console.WriteLine("Hello, World!");
