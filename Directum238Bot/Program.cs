@@ -33,9 +33,6 @@ namespace Directum238Bot
     {
       _configManager = new BotConfigManager();
       _userScenarioRepository = new UserScenarioRepository(_configManager.Config.DbConnectionString);
-
-      BotCommandScenarioCache.Register(new StartScenario());
-      BotCommandScenarioCache.Register(new Wish23Scenario());
     }
 
     private static void StartBot()
@@ -49,7 +46,8 @@ namespace Directum238Bot
           UpdateType.Message,
           UpdateType.CallbackQuery,
           UpdateType.EditedMessage,
-        }
+        },
+        ThrowPendingUpdates = true
       };
       bot.StartReceiving(UpdateHandler, PollingErrorHandler, receiverOptions: opts);
     }
@@ -57,7 +55,7 @@ namespace Directum238Bot
     private static Task PollingErrorHandler(ITelegramBotClient bot, Exception exception, CancellationToken ct)
     {
       LogManager.GetCurrentClassLogger().Debug(exception);
-      return Task.CompletedTask;
+      return bot.TestApiAsync(ct);
     }
 
     private static async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)
@@ -72,24 +70,29 @@ namespace Directum238Bot
         if (!userScenario.Run(bot, update))
           _userScenarioRepository.Remove(userScenario);
       }
-
-      if (update.Type == UpdateType.Message)
+      else
       {
+        if (update.Type != UpdateType.Message)
+          return;
+
         switch (update.Message.Text)
         {
           case BotChatCommand.Start:
           {
-            userScenario = new UserCommandScenario(userId, BotCommandScenarioCache.FindByCommandName(BotChatCommand.Start));
+            BotCommandScenarioCache.Register(userId, new StartScenario());
+            BotCommandScenarioCache.Register(userId, new Wish23Scenario());
+
+            userScenario = new UserCommandScenario(userId, BotCommandScenarioCache.FindByCommandName(userId, BotChatCommand.Start).Value);
             break;
           }
           case BotChatCommand.Wish23:
           {
-            userScenario = new UserCommandScenario(userId, BotCommandScenarioCache.FindByCommandName(BotChatCommand.Wish23));
+            userScenario = new UserCommandScenario(userId, BotCommandScenarioCache.FindByCommandName(userId, BotChatCommand.Wish23).Value);
             break;
           }
         }
         _userScenarioRepository.Add(userScenario);
-        userScenario.Run(bot, update);
+        userScenario?.Run(bot, update);
       }
     }
 

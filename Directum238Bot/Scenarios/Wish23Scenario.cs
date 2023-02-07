@@ -43,7 +43,7 @@ public class Wish23Scenario : AutoStepBotCommandScenario
     await botClient.SendTextMessageAsync(chatId, "подтверди", replyMarkup: inlineMarkup);
   }
 
-  public static async Task ConfirmSending(ITelegramBotClient botClient, Update update)
+  public async Task ConfirmSending(ITelegramBotClient botClient, Update update)
   {
     var chatId = update.CallbackQuery.From.Id;
     if (update.CallbackQuery != null && update.CallbackQuery.Data == "Отправить")

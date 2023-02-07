@@ -12,7 +12,7 @@ public sealed class UserScenarioRepository : DbContext
   public bool TryGet(long userId, out UserCommandScenario userCommandScenario)
   {
     userCommandScenario = this.Get(userId);
-    return userCommandScenario == null;
+    return userCommandScenario != null;
   }
 
   public UserCommandScenario Get(long userId)
@@ -21,7 +21,9 @@ public sealed class UserScenarioRepository : DbContext
     if (foundedScenario == null)
       return null;
 
-    var chatScenario = BotCommandScenarioCache.ChatScenarios.SingleOrDefault(s => s.Id == foundedScenario.ChatScenarioGuid);
+    var chatScenario = BotCommandScenarioCache.ChatScenarios.
+      SingleOrDefault(s => s.Key == userId && s.Value.Id == foundedScenario.ChatScenarioGuid)
+      .Value;
     foundedScenario.CommandScenario = chatScenario;
     return foundedScenario;
   }

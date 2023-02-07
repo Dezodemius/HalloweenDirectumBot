@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace BotCommon.Scenarios;
 
 public static class BotCommandScenarioCache
 {
-  private static readonly IList<BotCommandScenario> _chatScenarios = new List<BotCommandScenario>();
+  private static readonly IDictionary<long, BotCommandScenario> _chatScenarios = new Dictionary<long, BotCommandScenario>();
 
-  public static IEnumerable<BotCommandScenario> ChatScenarios => _chatScenarios.AsReadOnly();
+  public static ReadOnlyDictionary<long, BotCommandScenario> ChatScenarios => _chatScenarios.AsReadOnly();
 
-  public static BotCommandScenario FindByCommandName(string commandName)
+  public static KeyValuePair<long, BotCommandScenario> FindByCommandName(long userid, string commandName)
   {
-    return _chatScenarios.SingleOrDefault(s => s.ScenarioCommand == commandName);
+    return _chatScenarios.SingleOrDefault(s => s.Key == userid && s.Value.ScenarioCommand == commandName);
   }
 
-  public static void Register(BotCommandScenario scenario)
+  public static void Register(long userid, BotCommandScenario scenario)
   {
-    if (_chatScenarios.All(s => s.Id != scenario.Id))
-      _chatScenarios.Add(scenario);
+    if (_chatScenarios.All(s => s.Key == userid && s.Value.Id != scenario.Id))
+      _chatScenarios.Add(new KeyValuePair<long, BotCommandScenario>(userid, scenario) );
   }
 
-  public static void Unregister(Guid id)
+  public static void Unregister(long userId, Guid id)
   {
-    _chatScenarios.Add(_chatScenarios.SingleOrDefault(s => s.Id == id));
+    _chatScenarios.Add(_chatScenarios.SingleOrDefault(s => s.Key == userId && s.Value.Id == id));
   }
 
-  public static void Unregister(BotCommandScenario scenario)
+  public static void Unregister(long userId, BotCommandScenario scenario)
   {
-    _chatScenarios.Remove(scenario);
+    var scenarioToRemove = _chatScenarios.SingleOrDefault(s => s.Key == userId);
+    _chatScenarios.Remove(scenarioToRemove);
   }
 }
