@@ -25,6 +25,7 @@ namespace Directum238Bot
       {
         command = Console.ReadLine();
       } while (!command.Equals("/exit", StringComparison.InvariantCulture));
+      log.Info("Bye bye");
       Environment.Exit(0);
     }
 
