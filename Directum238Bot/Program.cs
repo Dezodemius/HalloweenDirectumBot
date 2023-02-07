@@ -1,5 +1,7 @@
 ﻿using BotCommon;
+using BotCommon.Scenarios;
 using Directum238Bot.Scenarios;
+using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -12,7 +14,7 @@ namespace Directum238Bot
   {
     private static readonly ILogger log = LogManager.GetCurrentClassLogger();
 
-    private static ScenarioManager _scenarioManager;
+    private static UserScenarioRepository _userScenarioRepository;
     private static BotConfigManager _configManager;
     public static void Main(string[] args)
     {
@@ -29,7 +31,9 @@ namespace Directum238Bot
     private static void PrepareForStartBot()
     {
       _configManager = new BotConfigManager();
-      _scenarioManager = new ScenarioManager(_configManager.Config.DbConnectionString);
+      _userScenarioRepository = new UserScenarioRepository(_configManager.Config.DbConnectionString);
+
+      ChatScenarioCache.Register(new StartScenario());
     }
 
     private static void StartBot()
@@ -48,80 +52,25 @@ namespace Directum238Bot
       bot.StartReceiving(UpdateHandler, PollingErrorHandler, receiverOptions: opts);
     }
 
-    private static Task PollingErrorHandler(ITelegramBotClient bot, Exception exception, CancellationToken ct)
+    private static async Task PollingErrorHandler(ITelegramBotClient bot, Exception exception, CancellationToken ct)
     {
       LogManager.GetCurrentClassLogger().Debug(exception);
-      return Task.CompletedTask;
     }
 
-    private static Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)
+    private static async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)
     {
+      log.Debug(JsonConvert.SerializeObject(update));
       var userId = update.Message.From.Id;
-      var userScenario = _scenarioManager.UserScenarios.SingleOrDefault(s => s.UserId == userId);
-      if (userScenario != null)
-      {
-        if (!userScenario.Run(bot, update))
-          _scenarioManager.UserScenarios.Remove(userScenario);
-      }
-      else
-      {
-        _scenarioManager.UserScenarios
-          .Add(new UserScenario(userId, new StartScenario()));
-      }
-      // switch (update.Type)
-      // {
-      //   case UpdateType.Message:
-      //   {
-      //     
-      //     // var message = update.Message;
-      //     // if (message is { Text: { } } )
-      //     // {
-      //     //   if (UpdateMessageIsCommand(message.Text))
-      //     //   {
-      //     //     ProcessCommandUpdate(message);
-      //     //   }
-      //     // }
-      //     break;
-      //   }
-      //   case UpdateType.CallbackQuery:
-      //   {
-      //     break;
-      //   }
-      //   case UpdateType.EditedMessage:
-      //   {
-      //     break;
-      //   }
-      //   default:
-      //   {
-      //     log.Info($"Unknown or unsupported update type: {update.Type}");
-      //     break;
-      //   }
-      // }
+      var userScenario = _userScenarioRepository.Get(userId);
 
-      return Task.CompletedTask;
+      if (userScenario == null)
+      {
+        userScenario = new UserScenario(userId, ChatScenarioCache.FindByCommandName(BotChatCommand.Start));
+        _userScenarioRepository.Add(userScenario);
+      }
+      if (!userScenario.Run(bot, update))
+        _userScenarioRepository.Remove(userScenario);
     }
-
-    // private static async void ProcessCommandUpdate(Message message)
-    // {
-    //   var messageText = message.Text;
-    //   var chatId = message.Chat.Id;
-    //   var userId = message.From.Id;
-    //   switch (messageText)
-    //   {
-    //     case BotChatCommand.Start:
-    //     {
-    //       var currentUserScenario = _scenarioManager.UserScenarios.Select(s => s.UserId == userId);
-    //       currentUserScenario.
-    //       // TODO: Приветствие.
-    //       break;
-    //     }
-    //   }
-    // }
-    //
-    // private static bool UpdateMessageIsCommand(string updateMessage)
-    // {
-    //   return !string.IsNullOrWhiteSpace(updateMessage) && BotChatCommands.Commands.Any(c => c == updateMessage);
-    // }
   }
 }
 

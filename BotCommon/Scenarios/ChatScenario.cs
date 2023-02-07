@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Directum238Bot;
+using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace Directum238Bot;
+namespace BotCommon.Scenarios;
 
+[PrimaryKey(nameof(Id))]
 public class ChatScenario
 {
-  public Guid Id { get; set; }
+  public virtual Guid Id { get; set; }
+
+  public virtual string ScenarioCommand { get; }
 
   public ScenarioStep CurrentStep { get; set; }
 
@@ -30,8 +35,7 @@ public class ChatScenario
     this.CurrentStep = this.steps.Current;
   }
 
-  public ChatScenario(Guid id)
+  public ChatScenario()
   {
-    this.Id = id;
   }
 }
