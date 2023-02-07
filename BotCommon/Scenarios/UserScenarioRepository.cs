@@ -9,6 +9,12 @@ public sealed class UserScenarioRepository : DbContext
 
   private readonly string connectionString;
 
+  public bool TryGet(long userId, out UserScenario userScenario)
+  {
+    userScenario = this.Get(userId);
+    return userScenario == null;
+  }
+
   public UserScenario Get(long userId)
   {
     var foundedScenario = this.UserScenarios.SingleOrDefault(s => s.UserId == userId);
@@ -23,6 +29,7 @@ public sealed class UserScenarioRepository : DbContext
   public void Remove(long userId)
   {
     var foundedScenario = this.Get(userId);
+    foundedScenario.ChatScenario.Reset();
     this.UserScenarios.Remove(foundedScenario);
     this.SaveChanges();
   }
@@ -34,6 +41,8 @@ public sealed class UserScenarioRepository : DbContext
 
   public void Add(UserScenario userScenario)
   {
+    if (userScenario == null)
+      return;
     this.UserScenarios.Add(userScenario);
     this.SaveChanges();
   }

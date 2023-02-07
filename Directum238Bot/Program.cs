@@ -35,6 +35,7 @@ namespace Directum238Bot
       _userScenarioRepository = new UserScenarioRepository(_configManager.Config.DbConnectionString);
 
       ChatScenarioCache.Register(new StartScenario());
+      ChatScenarioCache.Register(new Wish23Scenario());
     }
 
     private static void StartBot()
@@ -61,16 +62,49 @@ namespace Directum238Bot
     private static async Task UpdateHandler(ITelegramBotClient bot, Update update, CancellationToken ct)
     {
       log.Debug(JsonConvert.SerializeObject(update));
-      var userId = update.Message.From.Id;
-      var userScenario = _userScenarioRepository.Get(userId);
+      var userId = GetUserId(update);
+      if (userId == default)
+        return;
 
-      if (userScenario == null)
+      if (_userScenarioRepository.TryGet(userId, out var userScenario))
       {
-        userScenario = new UserScenario(userId, ChatScenarioCache.FindByCommandName(BotChatCommand.Start));
-        _userScenarioRepository.Add(userScenario);
+        if (!userScenario.Run(bot, update))
+          _userScenarioRepository.Remove(userScenario);
       }
-      if (!userScenario.Run(bot, update))
-        _userScenarioRepository.Remove(userScenario);
+
+      if (update.Type == UpdateType.Message)
+      {
+        switch (update.Message.Text)
+        {
+          case BotChatCommand.Start:
+          {
+            userScenario = new UserScenario(userId, ChatScenarioCache.FindByCommandName(BotChatCommand.Start));
+            break;
+          }
+          case BotChatCommand.Wish23:
+          {
+            userScenario = new UserScenario(userId, ChatScenarioCache.FindByCommandName(BotChatCommand.Wish23));
+            break;
+          }
+        }
+        _userScenarioRepository.Add(userScenario);
+        userScenario.Run(bot, update);
+      }
+    }
+
+    private static long GetUserId(Update update)
+    {
+      switch (update.Type)
+      {
+        case UpdateType.Message:
+          return update.Message.From.Id;
+        case UpdateType.CallbackQuery:
+          return update.CallbackQuery.From.Id;
+        case UpdateType.EditedMessage:
+          return update.EditedMessage.From.Id;
+        default:
+          return default;
+      }
     }
   }
 }

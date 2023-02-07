@@ -6,9 +6,9 @@ namespace Directum238Bot.Scenarios;
 
 public class StartScenario : ChatScenario
 {
-  public override string ScenarioCommand => BotChatCommand.Start;
-
   public override Guid Id { get; set; } = new Guid("73645235-88E5-4132-9722-2FFE0269369B");
+
+  public override string ScenarioCommand => BotChatCommand.Start;
 
   private static async Task ShowStartMessage(ITelegramBotClient bot, Update update)
   {

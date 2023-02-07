@@ -8,11 +8,11 @@ using Telegram.Bot.Types;
 namespace BotCommon.Scenarios;
 
 [PrimaryKey(nameof(Id))]
-public class ChatScenario
+public abstract class ChatScenario
 {
-  public virtual Guid Id { get; set; }
+  public abstract Guid Id { get; set; }
 
-  public virtual string ScenarioCommand { get; }
+  public abstract string ScenarioCommand { get; }
 
   public ScenarioStep CurrentStep { get; set; }
 
