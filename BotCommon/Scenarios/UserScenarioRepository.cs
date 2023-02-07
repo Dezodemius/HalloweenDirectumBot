@@ -5,45 +5,45 @@ namespace BotCommon.Scenarios;
 
 public sealed class UserScenarioRepository : DbContext
 {
-  private DbSet<UserScenario> UserScenarios { get; set; }
+  private DbSet<UserCommandScenario> UserScenarios { get; set; }
 
   private readonly string connectionString;
 
-  public bool TryGet(long userId, out UserScenario userScenario)
+  public bool TryGet(long userId, out UserCommandScenario userCommandScenario)
   {
-    userScenario = this.Get(userId);
-    return userScenario == null;
+    userCommandScenario = this.Get(userId);
+    return userCommandScenario == null;
   }
 
-  public UserScenario Get(long userId)
+  public UserCommandScenario Get(long userId)
   {
     var foundedScenario = this.UserScenarios.SingleOrDefault(s => s.UserId == userId);
     if (foundedScenario == null)
       return null;
 
-    var chatScenario = ChatScenarioCache.ChatScenarios.SingleOrDefault(s => s.Id == foundedScenario.ChatScenarioGuid);
-    foundedScenario.AutoChatScenario = chatScenario;
+    var chatScenario = BotCommandScenarioCache.ChatScenarios.SingleOrDefault(s => s.Id == foundedScenario.ChatScenarioGuid);
+    foundedScenario.CommandScenario = chatScenario;
     return foundedScenario;
   }
 
   public void Remove(long userId)
   {
     var foundedScenario = this.Get(userId);
-    foundedScenario.AutoChatScenario.Reset();
+    foundedScenario.CommandScenario.Reset();
     this.UserScenarios.Remove(foundedScenario);
     this.SaveChanges();
   }
 
-  public void Remove(UserScenario scenario)
+  public void Remove(UserCommandScenario commandScenario)
   {
-    this.Remove(scenario.UserId);
+    this.Remove(commandScenario.UserId);
   }
 
-  public void Add(UserScenario userScenario)
+  public void Add(UserCommandScenario userCommandScenario)
   {
-    if (userScenario == null)
+    if (userCommandScenario == null)
       return;
-    this.UserScenarios.Add(userScenario);
+    this.UserScenarios.Add(userCommandScenario);
     this.SaveChanges();
   }
 

@@ -3,7 +3,7 @@ using Telegram.Bot.Types;
 
 namespace BotCommon.Scenarios;
 
-public abstract class AutoChatScenario : CommandScenario
+public abstract class AutoStepBotCommandScenario : BotCommandScenario
 {
   public override bool ExecuteStep(ITelegramBotClient telegramBotClient, Update update)
   {

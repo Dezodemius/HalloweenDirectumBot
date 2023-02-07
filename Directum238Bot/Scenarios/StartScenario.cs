@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace Directum238Bot.Scenarios;
 
-public class StartScenario : AutoChatScenario
+public class StartScenario : AutoStepBotCommandScenario
 {
   public override Guid Id { get; set; } = new Guid("73645235-88E5-4132-9722-2FFE0269369B");
 
@@ -24,10 +24,10 @@ public class StartScenario : AutoChatScenario
 
   public StartScenario()
   {
-    this.steps = new List<ScenarioStep>
+    this.steps = new List<BotCommandScenarioStep>
     {
-      new ScenarioStep(1, ShowStartMessage),
-      new ScenarioStep(2, ShowNextMessage)
+      new BotCommandScenarioStep(1, ShowStartMessage),
+      new BotCommandScenarioStep(2, ShowNextMessage)
     }.GetEnumerator();
   }
 }

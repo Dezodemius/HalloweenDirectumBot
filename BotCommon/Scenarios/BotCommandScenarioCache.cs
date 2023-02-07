@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace BotCommon.Scenarios;
 
-public static class ChatScenarioCache
+public static class BotCommandScenarioCache
 {
-  private static readonly IList<AutoChatScenario> _chatScenarios = new List<AutoChatScenario>();
+  private static readonly IList<BotCommandScenario> _chatScenarios = new List<BotCommandScenario>();
 
-  public static IEnumerable<AutoChatScenario> ChatScenarios => _chatScenarios.AsReadOnly();
+  public static IEnumerable<BotCommandScenario> ChatScenarios => _chatScenarios.AsReadOnly();
 
-  public static AutoChatScenario FindByCommandName(string commandName)
+  public static BotCommandScenario FindByCommandName(string commandName)
   {
     return _chatScenarios.SingleOrDefault(s => s.ScenarioCommand == commandName);
   }
 
-  public static void Register(AutoChatScenario scenario)
+  public static void Register(BotCommandScenario scenario)
   {
     if (_chatScenarios.All(s => s.Id != scenario.Id))
       _chatScenarios.Add(scenario);
@@ -26,7 +26,7 @@ public static class ChatScenarioCache
     _chatScenarios.Add(_chatScenarios.SingleOrDefault(s => s.Id == id));
   }
 
-  public static void Unregister(AutoChatScenario scenario)
+  public static void Unregister(BotCommandScenario scenario)
   {
     _chatScenarios.Remove(scenario);
   }

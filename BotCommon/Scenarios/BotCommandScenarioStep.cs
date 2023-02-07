@@ -4,7 +4,7 @@ using Telegram.Bot.Types;
 
 namespace Directum238Bot;
 
-public class ScenarioStep
+public class BotCommandScenarioStep
 {
   public int Id { get; }
 
@@ -12,9 +12,9 @@ public class ScenarioStep
 
   public StepActionDelegate StepAction { get; }
 
-  public ScenarioStep() { }
+  public BotCommandScenarioStep() { }
 
-  public ScenarioStep(int id, StepActionDelegate stepAction)
+  public BotCommandScenarioStep(int id, StepActionDelegate stepAction)
   {
     this.Id = id;
     this.StepAction = stepAction;

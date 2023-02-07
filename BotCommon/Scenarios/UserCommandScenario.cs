@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -9,7 +8,7 @@ using Telegram.Bot.Types;
 namespace BotCommon.Scenarios;
 
 [PrimaryKey(nameof(UserId), nameof(ChatScenarioGuid))]
-public class UserScenario
+public class UserCommandScenario
 {
   [Required]
   public long UserId { get; set; }
@@ -18,21 +17,19 @@ public class UserScenario
   public Guid ChatScenarioGuid { get; set; }
 
   [NotMapped]
-  public AutoChatScenario AutoChatScenario { get; set; }
+  public BotCommandScenario CommandScenario { get; set; }
 
   public bool Run(ITelegramBotClient bot, Update update)
   {
-    return AutoChatScenario.ExecuteStep(bot, update);
+    return CommandScenario.ExecuteStep(bot, update);
   }
 
-  public UserScenario()
-  {
-  }
+  public UserCommandScenario() { }
 
-  public UserScenario(long userId, AutoChatScenario autoChatScenario)
+  public UserCommandScenario(long userId, BotCommandScenario commandScenario)
   {
     this.UserId = userId;
-    this.AutoChatScenario = autoChatScenario;
-    this.ChatScenarioGuid = autoChatScenario.Id;
+    this.CommandScenario = commandScenario;
+    this.ChatScenarioGuid = commandScenario.Id;
   }
 }

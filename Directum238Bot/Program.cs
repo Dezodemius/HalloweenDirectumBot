@@ -34,8 +34,8 @@ namespace Directum238Bot
       _configManager = new BotConfigManager();
       _userScenarioRepository = new UserScenarioRepository(_configManager.Config.DbConnectionString);
 
-      ChatScenarioCache.Register(new StartScenario());
-      ChatScenarioCache.Register(new Wish23Scenario());
+      BotCommandScenarioCache.Register(new StartScenario());
+      BotCommandScenarioCache.Register(new Wish23Scenario());
     }
 
     private static void StartBot()
@@ -79,12 +79,12 @@ namespace Directum238Bot
         {
           case BotChatCommand.Start:
           {
-            userScenario = new UserScenario(userId, ChatScenarioCache.FindByCommandName(BotChatCommand.Start));
+            userScenario = new UserCommandScenario(userId, BotCommandScenarioCache.FindByCommandName(BotChatCommand.Start));
             break;
           }
           case BotChatCommand.Wish23:
           {
-            userScenario = new UserScenario(userId, ChatScenarioCache.FindByCommandName(BotChatCommand.Wish23));
+            userScenario = new UserCommandScenario(userId, BotCommandScenarioCache.FindByCommandName(BotChatCommand.Wish23));
             break;
           }
         }
