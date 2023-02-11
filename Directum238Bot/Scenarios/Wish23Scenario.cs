@@ -46,7 +46,7 @@ public class Wish23Scenario : AutoStepBotCommandScenario
         await botClient.SendTextMessageAsync(chatId, "Poshel nahui");
         break;
     }
-    await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
+    await botClient.DeleteMessageAsync(chatId, update.Message.MessageId);
   }
 
   public async Task ConfirmSending(ITelegramBotClient botClient, Update update)

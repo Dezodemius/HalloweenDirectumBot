@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BotCommon;
 
-public class ActiveUsersManager : DbContext
+public sealed class ActiveUsersManager : DbContext
 {
   private readonly string _connectionString;
 
@@ -39,6 +41,10 @@ public class ActiveUsersManager : DbContext
   {
     this._connectionString = connectionString;
     Database.EnsureCreated();
+
+    var creator = this.Database.GetService<IRelationalDatabaseCreator>();
+    if (!creator.Exists())
+      creator.CreateTables();
   }
 }
 

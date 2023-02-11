@@ -11,10 +11,10 @@ namespace Directum238Bot.Scenarios;
 public class AdminMessageBroadcastScenario : BotCommandScenario
 {
   private readonly ActiveUsersManager cache;
+
   public override Guid Id => new Guid("8F2DD0DC-E84B-4319-8277-58222A671FC5");
 
   public override string ScenarioCommand { get; }
-
 
   private async Task BroadcastMessageCheck(ITelegramBotClient bot, Update update)
   {

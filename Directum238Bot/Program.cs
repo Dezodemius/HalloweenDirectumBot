@@ -67,18 +67,18 @@ namespace Directum238Bot
       if (userId == default)
         return;
       _activeUsersManager.AddUser(new BotUser(userId));
-      if (userId == _configManager.Config.BotAdminId)
-      {
-        if (_userScenarioRepository.TryGet(userId, out var adminScenario))
-          adminScenario.Run(bot, update);
-        else
-        {
-          adminScenario = new UserCommandScenario(userId, new AdminMessageBroadcastScenario(_activeUsersManager));
-          _userScenarioRepository.Add(adminScenario);
-          adminScenario.Run(bot, update);
-        }
-        return;
-      }
+      // if (userId == _configManager.Config.BotAdminId)
+      // {
+      //   if (_userScenarioRepository.TryGet(userId, out var adminScenario))
+      //     adminScenario.Run(bot, update);
+      //   else
+      //   {
+      //     adminScenario = new UserCommandScenario(userId, new AdminMessageBroadcastScenario(_activeUsersManager));
+      //     _userScenarioRepository.Add(adminScenario);
+      //     adminScenario.Run(bot, update);
+      //   }
+      //   return;
+      // }
       if (_userScenarioRepository.TryGet(userId, out var userScenario))
       {
         if (!userScenario.Run(bot, update))
