@@ -1,15 +1,46 @@
+using Directum238Bot;
+using NUnit.Framework;
+using Telegram.Bot.Types.Enums;
+
 namespace Directum238.Tests;
 
 public class Tests
 {
-  [SetUp]
-  public void Setup()
+  private UserContentCache _contentCache;
+
+  [OneTimeSetUp]
+  public void OneTimeSetUp()
   {
+    _contentCache = new UserContentCache("Filename=\"Test.db\"");
+  }
+
+  [OneTimeTearDown]
+  public void OneTimeTearDown()
+  {
+    _contentCache.Database.EnsureDeleted();
   }
 
   [Test]
   public void Test1()
   {
-    Assert.Pass();
+    const string expectedText = "test2";
+    _contentCache.Add(new UserContent(42, "test1", MessageType.Text));
+    _contentCache.Add(new UserContent(43, "test2", MessageType.Text));
+
+    var actualText = _contentCache.GetRandomContentExceptCurrent(42, MessageType.Text).Content;
+
+    Assert.AreEqual(expectedText, actualText);
+  }
+
+  [Test]
+  public void Test2()
+  {
+    const string expectedText = "test2";
+    _contentCache.Add(new UserContent(42, "test1", MessageType.Text));
+    _contentCache.Add(new UserContent(43, "test2", MessageType.Text));
+
+    var actualText = _contentCache.GetRandomContentExceptCurrent(42, MessageType.Text).Content;
+
+    Assert.AreEqual(expectedText, actualText);
   }
 }
