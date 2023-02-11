@@ -1,35 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using BotCommon.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BotCommon;
 
-public sealed class ActiveUsersManager : DbContext
+public sealed class ActiveUsersManager : DefaultDbContext<BotUser>
 {
-  private readonly string _connectionString;
+  private DbSet<BotUser> BotUsers { get; set; }
 
-  public DbSet<BotUser> BotUsers { get; set; }
-
-  public BotUser GetUser(long id)
+  public override BotUser Get(BotUser user)
   {
-    var user = this.BotUsers.SingleOrDefault(u => u.BotUserId == id);
-    return user;
+    return this.BotUsers.SingleOrDefault(u => u.BotUserId == user.BotUserId);
   }
 
-  public void AddUser(BotUser user)
+  public override IEnumerable<BotUser> GetAll()
   {
-    if (this.GetUser(user.BotUserId) != null)
+    return this.BotUsers;
+  }
+
+  public override void Add(BotUser user)
+  {
+    if (this.Get(user) != null)
       return;
     this.BotUsers.Add(user);
-    this.SaveChanges();
+    base.Add(user);
   }
 
-  public void DeleteUser(BotUser user)
+  public override void Delete(BotUser user)
   {
     this.BotUsers.Remove(user);
-    this.SaveChanges();
+    base.Delete(user);
   }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -37,14 +39,9 @@ public sealed class ActiveUsersManager : DbContext
     optionsBuilder.UseSqlite(this._connectionString);
   }
 
-  public ActiveUsersManager(string connectionString)
-  {
-    this._connectionString = connectionString;
-    Database.EnsureCreated();
 
-    var creator = this.Database.GetService<IRelationalDatabaseCreator>();
-    if (!creator.Exists())
-      creator.CreateTables();
+  public ActiveUsersManager(string connectionString) : base(connectionString)
+  {
   }
 }
 
@@ -56,7 +53,6 @@ public class BotUser
 
   public BotUser()
   {
-  
   }
 
   public BotUser(long id)

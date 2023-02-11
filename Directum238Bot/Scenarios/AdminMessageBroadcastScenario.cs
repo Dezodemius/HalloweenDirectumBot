@@ -1,4 +1,8 @@
-﻿using BotCommon;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BotCommon;
 using BotCommon.Scenarios;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -54,7 +58,7 @@ public class AdminMessageBroadcastScenario : BotCommandScenario
     {
       case "Отправить":
       {
-        var allUsers = cache.BotUsers.Select(c => c);
+        var allUsers = cache.GetAll();
         foreach (var user in allUsers)
         {
           switch (update.CallbackQuery.Message.Type)

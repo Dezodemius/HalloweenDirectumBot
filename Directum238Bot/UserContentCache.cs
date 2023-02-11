@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using BotCommon.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Telegram.Bot.Types.Enums;
 
 namespace Directum238Bot;
 
-public sealed class UserContentCache : DbContext
+public sealed class UserContentCache : DefaultDbContext<UserContent>
 {
-  private readonly string _connectionString;
-
-  public DbSet<UserContent> UserContents { get; set; }
+  private DbSet<UserContent> UserContents { get; set; }
 
   public UserContent GetRandomContentExceptCurrent(long userId, MessageType type)
   {
@@ -20,20 +20,35 @@ public sealed class UserContentCache : DbContext
   }
 
 
+  public override UserContent Get(UserContent entity)
+  {
+    return this.UserContents.SingleOrDefault(c => c.Id == entity.Id);
+  }
+
+  public override IEnumerable<UserContent> GetAll()
+  {
+    return this.UserContents;
+  }
+
+  public override void Add(UserContent entity)
+  {
+    this.UserContents.Add(entity);
+    base.Add(entity);
+  }
+
+  public override void Delete(UserContent entity)
+  {
+    this.UserContents.Remove(this.Get(entity));
+    base.Delete(entity);
+  }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
     optionsBuilder.UseSqlite(this._connectionString);
   }
 
-  public UserContentCache(string connectionString)
+  public UserContentCache(string connectionString) : base(connectionString)
   {
-    this._connectionString = connectionString;
-    Database.EnsureCreated();
-
-    var creator = this.Database.GetService<IRelationalDatabaseCreator>();
-    if (!creator.Exists())
-      creator.CreateTables();
   }
 }
 

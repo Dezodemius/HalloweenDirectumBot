@@ -1,4 +1,7 @@
-﻿using BotCommon.Scenarios;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BotCommon.Scenarios;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -69,7 +72,7 @@ public class Wish23Scenario : AutoStepBotCommandScenario
           {
             case MessageType.Text:
             {
-              cache.UserContents.Add(new UserContent(chatId, update.CallbackQuery.Message.Text,
+              cache.Add(new UserContent(chatId, update.CallbackQuery.Message.Text,
                 update.CallbackQuery.Message.Type));
               if (content != null)
                 await botClient.SendTextMessageAsync(chatId, content.Content);
@@ -77,7 +80,7 @@ public class Wish23Scenario : AutoStepBotCommandScenario
             }
             case MessageType.VideoNote:
             {
-              cache.UserContents.Add(new UserContent(chatId, update.CallbackQuery.Message.VideoNote.FileId,
+              cache.Add(new UserContent(chatId, update.CallbackQuery.Message.VideoNote.FileId,
                 update.CallbackQuery.Message.Type));
               if (content != null)
                 await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(content.Content));
@@ -85,7 +88,7 @@ public class Wish23Scenario : AutoStepBotCommandScenario
             }
             case MessageType.Voice:
             {
-              cache.UserContents.Add(new UserContent(chatId, update.CallbackQuery.Message.Voice.FileId,
+              cache.Add(new UserContent(chatId, update.CallbackQuery.Message.Voice.FileId,
                 update.CallbackQuery.Message.Type));
               if (content != null)
                 await botClient.SendVoiceAsync(chatId, new InputOnlineFile(content.Content));
