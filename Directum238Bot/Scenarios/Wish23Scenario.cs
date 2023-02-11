@@ -10,7 +10,7 @@ namespace Directum238Bot.Scenarios;
 public class Wish23Scenario : AutoStepBotCommandScenario
 {
   private UserContentCache cache;
-  public override Guid Id { get; set; } = new Guid("6A5102BE-668C-42D2-9FD2-818494DCDE8B");
+  public override Guid Id => new Guid("6A5102BE-668C-42D2-9FD2-818494DCDE8B");
 
   public override string ScenarioCommand => BotChatCommand.Wish23;
 

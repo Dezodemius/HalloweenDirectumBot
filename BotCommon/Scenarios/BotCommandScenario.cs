@@ -10,7 +10,7 @@ namespace BotCommon.Scenarios;
 [PrimaryKey(nameof(Id))]
 public abstract class BotCommandScenario
 {
-  public abstract Guid Id { get; set; }
+  public abstract Guid Id { get; }
 
   public abstract string ScenarioCommand { get; }
 
