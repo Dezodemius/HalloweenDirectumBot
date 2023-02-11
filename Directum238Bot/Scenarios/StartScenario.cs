@@ -16,7 +16,7 @@ public class StartScenario : AutoStepBotCommandScenario
   private static async Task ShowStartMessage(ITelegramBotClient bot, Update update)
   {
     var chatId = update.Message.Chat.Id;
-    await bot.SendTextMessageAsync(chatId, "Привет, pidor");
+    await bot.SendTextMessageAsync(chatId, $"Привет, {update.Message.From.FirstName}!");
   }
 
   private static async Task ShowNextMessage(ITelegramBotClient bot, Update update)

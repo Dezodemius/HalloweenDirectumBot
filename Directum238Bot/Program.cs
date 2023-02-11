@@ -54,6 +54,7 @@ namespace Directum238Bot
           UpdateType.Message,
           UpdateType.CallbackQuery,
           UpdateType.EditedMessage,
+          UpdateType.InlineQuery
         },
         ThrowPendingUpdates = true
       };
@@ -73,18 +74,7 @@ namespace Directum238Bot
       if (userId == default)
         return;
       _activeUsersManager.Add(new BotUser(userId));
-      // if (userId == _configManager.Config.BotAdminId)
-      // {
-      //   if (_userScenarioRepository.TryGet(userId, out var adminScenario))
-      //     adminScenario.Run(bot, update);
-      //   else
-      //   {
-      //     adminScenario = new UserCommandScenario(userId, new AdminMessageBroadcastScenario(_activeUsersManager));
-      //     _userScenarioRepository.Add(adminScenario);
-      //     adminScenario.Run(bot, update);
-      //   }
-      //   return;
-      // }
+
       if (_userScenarioRepository.TryGet(userId, out var userScenario))
       {
         if (!userScenario.Run(bot, update))
@@ -108,6 +98,14 @@ namespace Directum238Bot
           case BotChatCommand.Wish23:
           {
             userScenario = new UserCommandScenario(userId, new Wish23Scenario(_contentCache));
+            break;
+          }
+          case BotChatCommand.Broadcast:
+          {
+            if (userId == _configManager.Config.BotAdminId)
+            {
+              userScenario = new UserCommandScenario(userId, new BroadcastScenario(_activeUsersManager));
+            }
             break;
           }
         }

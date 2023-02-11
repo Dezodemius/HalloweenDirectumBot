@@ -12,13 +12,19 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Directum238Bot.Scenarios;
 
-public class AdminMessageBroadcastScenario : BotCommandScenario
+public class BroadcastScenario : AutoStepBotCommandScenario
 {
   private readonly ActiveUsersManager cache;
 
   public override Guid Id => new Guid("8F2DD0DC-E84B-4319-8277-58222A671FC5");
 
   public override string ScenarioCommand { get; }
+
+  private async Task RequestMessageToBroadcast(ITelegramBotClient bot, Update update)
+  {
+    var chatId = update.Message.From.Id;
+    await bot.SendTextMessageAsync(chatId, "Введи сообщение:");
+  }
 
   private async Task BroadcastMessageCheck(ITelegramBotClient bot, Update update)
   {
@@ -47,8 +53,6 @@ public class AdminMessageBroadcastScenario : BotCommandScenario
       }
     }
     await bot.DeleteMessageAsync(chatId, update.Message.MessageId);
-    this.steps.MoveNext();
-    this.CurrentStep = steps.Current;
   }
 
   private async Task CheckMessage(ITelegramBotClient bot, Update update)
@@ -88,18 +92,16 @@ public class AdminMessageBroadcastScenario : BotCommandScenario
         break;
       }
     }
-    this.steps.Reset();
   }
 
-  public AdminMessageBroadcastScenario(ActiveUsersManager cache)
+  public BroadcastScenario(ActiveUsersManager cache)
   {
     this.cache = cache;
     this.steps = new List<BotCommandScenarioStep>
     {
+        new (RequestMessageToBroadcast),
         new (BroadcastMessageCheck),
         new (CheckMessage)
     }.GetEnumerator();
-    steps.MoveNext();
-    this.CurrentStep = steps.Current;
   }
 }
