@@ -35,12 +35,11 @@ public class Tests
   [Test]
   public void Test2()
   {
-    const string expectedText = "test2";
     _contentCache.Add(new UserContent(42, "test1", MessageType.Text));
-    _contentCache.Add(new UserContent(43, "test2", MessageType.Text));
+    _contentCache.Add(new UserContent(42, "test2", MessageType.Text));
 
-    var actualText = _contentCache.GetRandomContentExceptCurrent(42, MessageType.Text).Content;
+    var notFoundObject = _contentCache.GetRandomContentExceptCurrent(42, MessageType.Text);
 
-    Assert.AreEqual(expectedText, actualText);
+    Assert.AreEqual(null, notFoundObject);
   }
 }
