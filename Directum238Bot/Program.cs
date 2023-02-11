@@ -1,4 +1,7 @@
-﻿using BotCommon;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using BotCommon;
 using BotCommon.Scenarios;
 using Directum238Bot.Scenarios;
 using Newtonsoft.Json;
@@ -17,6 +20,8 @@ namespace Directum238Bot
     private static UserScenarioRepository _userScenarioRepository;
     private static ActiveUsersManager _activeUsersManager;
     private static BotConfigManager _configManager;
+    private static UserContentCache _contentCache;
+
     public static void Main(string[] args)
     {
       PrepareForStartBot();
@@ -35,6 +40,7 @@ namespace Directum238Bot
       _configManager = new BotConfigManager();
       _userScenarioRepository = new UserScenarioRepository();
       _activeUsersManager = new ActiveUsersManager(_configManager.Config.DbConnectionString);
+      _contentCache = new UserContentCache(_configManager.Config.DbConnectionString);
     }
 
     private static void StartBot()
@@ -66,7 +72,7 @@ namespace Directum238Bot
       var userId = GetUserId(update);
       if (userId == default)
         return;
-      _activeUsersManager.AddUser(new BotUser(userId));
+      _activeUsersManager.Add(new BotUser(userId));
       // if (userId == _configManager.Config.BotAdminId)
       // {
       //   if (_userScenarioRepository.TryGet(userId, out var adminScenario))
@@ -101,7 +107,7 @@ namespace Directum238Bot
           }
           case BotChatCommand.Wish23:
           {
-            userScenario = new UserCommandScenario(userId, new Wish23Scenario(new UserContentCache(_configManager.Config.DbConnectionString)));
+            userScenario = new UserCommandScenario(userId, new Wish23Scenario(_contentCache));
             break;
           }
         }

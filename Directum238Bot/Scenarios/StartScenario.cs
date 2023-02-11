@@ -1,4 +1,7 @@
-﻿using BotCommon.Scenarios;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BotCommon.Scenarios;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
