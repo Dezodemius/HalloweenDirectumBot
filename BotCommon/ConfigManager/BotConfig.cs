@@ -10,7 +10,7 @@ public class BotConfig
   /// </summary>
   public string BotToken { get; set; }
 
-  public string BotAdminId { get; set; }
+  public long BotAdminId { get; set; }
 
   public string DbConnectionString { get; set; }
 }
