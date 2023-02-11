@@ -9,6 +9,7 @@ namespace Directum238Bot.Scenarios;
 
 public class Wish23Scenario : AutoStepBotCommandScenario
 {
+  private UserContentCache cache;
   public override Guid Id { get; set; } = new Guid("6A5102BE-668C-42D2-9FD2-818494DCDE8B");
 
   public override string ScenarioCommand => BotChatCommand.Wish23;
@@ -25,41 +26,93 @@ public class Wish23Scenario : AutoStepBotCommandScenario
       return;
     var chatId = update.Message.Chat.Id;
 
-    if (update.Message.VideoNote != null)
-    {
-      await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(update.Message.VideoNote.FileId));
-    }
-    else if (update.Message.Text != null)
-      await botClient.SendTextMessageAsync(chatId, update.Message.Text);
-    else if (update.Message.Voice != null)
-    {
-      await botClient.SendVoiceAsync(chatId, new InputOnlineFile(update.Message.Voice.FileId));
-    }
-
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
       InlineKeyboardButton.WithCallbackData("Отправить", "Отправить"),
+      InlineKeyboardButton.WithCallbackData("Удалить", "Удалить"),
     });
-    await botClient.SendTextMessageAsync(chatId, "подтверди", replyMarkup: inlineMarkup);
+    switch (update.Message.Type)
+    {
+      case MessageType.VideoNote:
+        await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(update.Message.VideoNote.FileId), replyMarkup: inlineMarkup);
+        break;
+      case MessageType.Text:
+        await botClient.SendTextMessageAsync(chatId, update.Message.Text, replyMarkup: inlineMarkup);
+        break;
+      case MessageType.Voice:
+        await botClient.SendVoiceAsync(chatId, new InputOnlineFile(update.Message.Voice.FileId), replyMarkup: inlineMarkup);
+        break;
+      default:
+        await botClient.SendTextMessageAsync(chatId, "Poshel nahui");
+        break;
+    }
+    await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
   }
 
   public async Task ConfirmSending(ITelegramBotClient botClient, Update update)
   {
-    var chatId = update.CallbackQuery.From.Id;
-    if (update.CallbackQuery != null && update.CallbackQuery.Data == "Отправить")
+    if (update.CallbackQuery != null)
     {
-      await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
-      await botClient.SendTextMessageAsync(chatId, "sent");
+      var chatId = update.CallbackQuery.From.Id;
+      switch (update.CallbackQuery.Data)
+      {
+        case "Отправить":
+        {
+          var type = update.CallbackQuery.Message.Type;
+          await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
+          await botClient.SendTextMessageAsync(chatId, "sent");
+
+          var content = cache.GetRandomContentExceptCurrent(chatId, type);
+          if (content == null)
+            await botClient.SendTextMessageAsync(chatId, "no content");
+          switch (type)
+          {
+            case MessageType.Text:
+            {
+              cache.UserContents.Add(new UserContent(chatId, update.CallbackQuery.Message.Text,
+                update.CallbackQuery.Message.Type));
+              if (content != null)
+                await botClient.SendTextMessageAsync(chatId, content.Content);
+              break;
+            }
+            case MessageType.VideoNote:
+            {
+              cache.UserContents.Add(new UserContent(chatId, update.CallbackQuery.Message.VideoNote.FileId,
+                update.CallbackQuery.Message.Type));
+              if (content != null)
+                await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(content.Content));
+              break;
+            }
+            case MessageType.Voice:
+            {
+              cache.UserContents.Add(new UserContent(chatId, update.CallbackQuery.Message.Voice.FileId,
+                update.CallbackQuery.Message.Type));
+              if (content != null)
+                await botClient.SendVoiceAsync(chatId, new InputOnlineFile(content.Content));
+              break;
+            }
+          }
+          break;
+        }
+        case "Удалить":
+        {
+          await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
+          await botClient.SendTextMessageAsync(chatId, "deleted");
+          break;
+        }
+      }
+        await cache.SaveChangesAsync();
     }
   }
 
-  public Wish23Scenario()
+  public Wish23Scenario(UserContentCache cache)
   {
+    this.cache = cache;
     this.steps = new List<BotCommandScenarioStep>
     {
-        new (1, SendInstruction),
-        new (2, SendUserCheckMessage),
-        new (3, ConfirmSending)
+        new (SendInstruction),
+        new (SendUserCheckMessage),
+        new (ConfirmSending)
     }.GetEnumerator();
   }
 }

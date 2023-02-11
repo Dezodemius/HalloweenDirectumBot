@@ -20,8 +20,10 @@ public abstract class BotCommandScenario
 
   public virtual bool ExecuteStep(ITelegramBotClient telegramBotClient, Update update)
   {
-    this.CurrentStep?.StepAction(telegramBotClient, update);
-    return true;
+    var canExecute = this.CurrentStep != null;
+    if (canExecute)
+      this.CurrentStep?.StepAction(telegramBotClient, update);
+    return canExecute;
   }
 
   public virtual void Reset()

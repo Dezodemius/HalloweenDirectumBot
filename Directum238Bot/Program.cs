@@ -15,6 +15,7 @@ namespace Directum238Bot
     private static readonly ILogger log = LogManager.GetCurrentClassLogger();
 
     private static UserScenarioRepository _userScenarioRepository;
+    private static ActiveUsersManager _activeUsersManager;
     private static BotConfigManager _configManager;
     public static void Main(string[] args)
     {
@@ -32,7 +33,8 @@ namespace Directum238Bot
     private static void PrepareForStartBot()
     {
       _configManager = new BotConfigManager();
-      _userScenarioRepository = new UserScenarioRepository(_configManager.Config.DbConnectionString);
+      _userScenarioRepository = new UserScenarioRepository();
+      _activeUsersManager = new ActiveUsersManager(_configManager.Config.DbConnectionString);
     }
 
     private static void StartBot()
@@ -64,13 +66,28 @@ namespace Directum238Bot
       var userId = GetUserId(update);
       if (userId == default)
         return;
-
+      _activeUsersManager.AddUser(new BotUser(userId));
+      if (userId == _configManager.Config.BotAdminId)
+      {
+        if (_userScenarioRepository.TryGet(userId, out var adminScenario))
+          adminScenario.Run(bot, update);
+        else
+        {
+          adminScenario = new UserCommandScenario(userId, new AdminMessageBroadcastScenario(_activeUsersManager));
+          _userScenarioRepository.Add(adminScenario);
+          adminScenario.Run(bot, update);
+        }
+        return;
+      }
       if (_userScenarioRepository.TryGet(userId, out var userScenario))
       {
         if (!userScenario.Run(bot, update))
+        {
           _userScenarioRepository.Remove(userScenario);
+          userScenario = null;
+        };
       }
-      else
+      if (userScenario == null)
       {
         if (update.Type != UpdateType.Message)
           return;
@@ -79,15 +96,12 @@ namespace Directum238Bot
         {
           case BotChatCommand.Start:
           {
-            BotCommandScenarioCache.Register(userId, new StartScenario());
-            BotCommandScenarioCache.Register(userId, new Wish23Scenario());
-
-            userScenario = new UserCommandScenario(userId, BotCommandScenarioCache.FindByCommandName(userId, BotChatCommand.Start).Value);
+            userScenario = new UserCommandScenario(userId, new StartScenario());
             break;
           }
           case BotChatCommand.Wish23:
           {
-            userScenario = new UserCommandScenario(userId, BotCommandScenarioCache.FindByCommandName(userId, BotChatCommand.Wish23).Value);
+            userScenario = new UserCommandScenario(userId, new Wish23Scenario(new UserContentCache(_configManager.Config.DbConnectionString)));
             break;
           }
         }

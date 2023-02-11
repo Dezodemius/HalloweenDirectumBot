@@ -21,7 +21,7 @@ public class UserCommandScenario
 
   public bool Run(ITelegramBotClient bot, Update update)
   {
-    return CommandScenario.ExecuteStep(bot, update);
+     return CommandScenario.ExecuteStep(bot, update);
   }
 
   public UserCommandScenario() { }

@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BotCommon.Scenarios;
 
-public sealed class UserScenarioRepository : DbContext
+public sealed class UserScenarioRepository
 {
-  private DbSet<UserCommandScenario> UserScenarios { get; set; }
-
-  private readonly string connectionString;
+  private List<UserCommandScenario> _userScenarios = new List<UserCommandScenario>();
 
   public bool TryGet(long userId, out UserCommandScenario userCommandScenario)
   {
@@ -17,14 +15,7 @@ public sealed class UserScenarioRepository : DbContext
 
   public UserCommandScenario Get(long userId)
   {
-    var foundedScenario = this.UserScenarios.SingleOrDefault(s => s.UserId == userId);
-    if (foundedScenario == null)
-      return null;
-
-    var chatScenario = BotCommandScenarioCache.ChatScenarios.
-      SingleOrDefault(s => s.Key == userId && s.Value.Id == foundedScenario.ChatScenarioGuid)
-      .Value;
-    foundedScenario.CommandScenario = chatScenario;
+    var foundedScenario = this._userScenarios.SingleOrDefault(s => s.UserId == userId);
     return foundedScenario;
   }
 
@@ -32,8 +23,7 @@ public sealed class UserScenarioRepository : DbContext
   {
     var foundedScenario = this.Get(userId);
     foundedScenario.CommandScenario.Reset();
-    this.UserScenarios.Remove(foundedScenario);
-    this.SaveChanges();
+    this._userScenarios.Remove(foundedScenario);
   }
 
   public void Remove(UserCommandScenario commandScenario)
@@ -45,18 +35,6 @@ public sealed class UserScenarioRepository : DbContext
   {
     if (userCommandScenario == null)
       return;
-    this.UserScenarios.Add(userCommandScenario);
-    this.SaveChanges();
-  }
-
-  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-  {
-    optionsBuilder.UseSqlite(this.connectionString);
-  }
-
-  public UserScenarioRepository(string connectionString)
-  {
-    this.connectionString = connectionString;
-    Database.EnsureCreated();
+    this._userScenarios.Add(userCommandScenario);
   }
 }

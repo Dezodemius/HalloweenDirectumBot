@@ -11,8 +11,6 @@ public abstract class AutoStepBotCommandScenario : BotCommandScenario
       return false;
 
     this.CurrentStep = this.steps.Current;
-    base.ExecuteStep(telegramBotClient, update);
-
-    return true;
+    return base.ExecuteStep(telegramBotClient, update);
   }
 }

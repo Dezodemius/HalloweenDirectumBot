@@ -26,8 +26,8 @@ public class StartScenario : AutoStepBotCommandScenario
   {
     this.steps = new List<BotCommandScenarioStep>
     {
-      new BotCommandScenarioStep(1, ShowStartMessage),
-      new BotCommandScenarioStep(2, ShowNextMessage)
+      new BotCommandScenarioStep(ShowStartMessage),
+      new BotCommandScenarioStep(ShowNextMessage)
     }.GetEnumerator();
   }
 }
