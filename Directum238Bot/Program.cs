@@ -97,7 +97,7 @@ namespace Directum238Bot
           }
           case BotChatCommand.Wish23:
           {
-            userScenario = new UserCommandScenario(userId, new Wish23Scenario(_contentCache));
+            userScenario = new UserCommandScenario(userId, new RecordWishScenario(_contentCache));
             break;
           }
           case BotChatCommand.Broadcast:

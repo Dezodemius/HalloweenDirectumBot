@@ -10,7 +10,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Directum238Bot.Scenarios;
 
-public class Wish23Scenario : AutoStepBotCommandScenario
+public class RecordWishScenario : AutoStepBotCommandScenario
 {
   private UserContentCache cache;
   public override Guid Id => new Guid("6A5102BE-668C-42D2-9FD2-818494DCDE8B");
@@ -46,7 +46,7 @@ public class Wish23Scenario : AutoStepBotCommandScenario
         await botClient.SendVoiceAsync(chatId, new InputOnlineFile(update.Message.Voice.FileId), replyMarkup: inlineMarkup);
         break;
       default:
-        await botClient.SendTextMessageAsync(chatId, "Poshel nahui");
+        await botClient.SendTextMessageAsync(chatId, "Я такое не понимаю. Могу только текст, голосовые, и видеосообщения");
         break;
     }
     await botClient.DeleteMessageAsync(chatId, update.Message.MessageId);
@@ -63,11 +63,11 @@ public class Wish23Scenario : AutoStepBotCommandScenario
         {
           var type = update.CallbackQuery.Message.Type;
           await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
-          await botClient.SendTextMessageAsync(chatId, "sent");
+          await botClient.SendTextMessageAsync(chatId, "твоё поздравление отправлено");
 
           var content = cache.GetRandomContentExceptCurrent(chatId, type);
           if (content == null)
-            await botClient.SendTextMessageAsync(chatId, "no content");
+            await botClient.SendTextMessageAsync(chatId, "кроме тебя ещё никто не записывал поздравление");
           switch (type)
           {
             case MessageType.Text:
@@ -100,7 +100,7 @@ public class Wish23Scenario : AutoStepBotCommandScenario
         case "Удалить":
         {
           await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
-          await botClient.SendTextMessageAsync(chatId, "deleted");
+          await botClient.SendTextMessageAsync(chatId, "Ладно, твоё поздравление удалено. Попробуй записать новое");
           break;
         }
       }
@@ -108,7 +108,7 @@ public class Wish23Scenario : AutoStepBotCommandScenario
     }
   }
 
-  public Wish23Scenario(UserContentCache cache)
+  public RecordWishScenario(UserContentCache cache)
   {
     this.cache = cache;
     this.steps = new List<BotCommandScenarioStep>
