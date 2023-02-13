@@ -19,18 +19,11 @@ public class StartScenario : AutoStepBotCommandScenario
     await bot.SendTextMessageAsync(chatId, $"Привет, {update.Message.From.FirstName}!");
   }
 
-  private static async Task ShowNextMessage(ITelegramBotClient bot, Update update)
-  {
-    var chatId = update.Message.Chat.Id;
-    await bot.SendTextMessageAsync(chatId, $"ты написал, {update.Message.Text}");
-  }
-
   public StartScenario()
   {
     this.steps = new List<BotCommandScenarioStep>
     {
       new BotCommandScenarioStep(ShowStartMessage),
-      new BotCommandScenarioStep(ShowNextMessage)
     }.GetEnumerator();
   }
 }
