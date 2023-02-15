@@ -24,11 +24,11 @@ public class StartScenario : AutoStepBotCommandScenario
     {
       new []{InlineKeyboardButton.WithCallbackData("Поздравить с 23 февраля", BotChatCommand.SendWish23)},
     };
-    if (DateTime.Now.CompareTo(day23WishGetTime) >= 0)
+    // if (DateTime.Now.CompareTo(day23WishGetTime) >= 0)
       inlineButtons.Add(new [] {InlineKeyboardButton.WithCallbackData("Получить поздравление с 23 февраля", BotChatCommand.GetWish23)});
-    if (DateTime.Now.CompareTo(day8WishSendTime) >= 0)
+    // if (DateTime.Now.CompareTo(day8WishSendTime) >= 0)
       inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData("Поздравить с 8 марта", BotChatCommand.SendWish8) });
-    if (DateTime.Now.CompareTo(day8WishGetTime) >= 0)
+    // if (DateTime.Now.CompareTo(day8WishGetTime) >= 0)
       inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData("Получить поздравление с 8 марта", BotChatCommand.GetWish8) });
     var markup = new InlineKeyboardMarkup(inlineButtons);
     await bot.SendTextMessageAsync(chatId, "Привет!", replyMarkup: markup);

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using BotCommon;
+using BotCommon.KeepAlive;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using Directum238Bot.Repository;
@@ -26,8 +27,9 @@ namespace Directum238Bot
 
     public static void Main(string[] args)
     {
-      PrepareForStartBot();
-      StartBot();
+      var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
+      PrepareForStartBot(bot);
+      StartBot(bot);
       string command;
       do
       {
@@ -37,18 +39,19 @@ namespace Directum238Bot
       Environment.Exit(0);
     }
 
-    private static void PrepareForStartBot()
+    private static void PrepareForStartBot(TelegramBotClient bot)
     {
       _configManager = new BotConfigManager();
       _userScenarioRepository = new UserScenarioRepository();
       _contentCache = new UserContentCache(_configManager.Config.DbConnectionString);
       _activeUsersManager = new ActiveUsersManager(_configManager.Config.DbConnectionString);
+      var botKeepAlive = new BotKeepAlive(bot);
+      botKeepAlive.StartKeepAlive();
     }
 
-    private static void StartBot()
+    private static void StartBot(TelegramBotClient bot)
     {
       log.Debug("Start Bot");
-      var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
       var opts = new ReceiverOptions()
       {
         AllowedUpdates = new []
