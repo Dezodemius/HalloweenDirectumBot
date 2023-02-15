@@ -1,2 +1,6 @@
 ﻿# Bot token
-bot_token: "5812039352:AAEIOUF8zK7hehxPRWrWWaYlYtJ1fMKNs-4"
+bot_token: ""
+
+bot_admin_id: 
+
+db_connection_string: ""
