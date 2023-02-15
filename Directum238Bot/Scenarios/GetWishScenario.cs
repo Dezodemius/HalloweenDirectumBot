@@ -24,6 +24,8 @@ public class GetWishScenario : AutoStepBotCommandScenario
     {
       InlineKeyboardButton.WithCallbackData("В главное меню ↩", BotChatCommand.Start)
     });
+    if (wish == null)
+      await botClient.SendTextMessageAsync(chatId, "Пока что поздравлений нет. Зайди позже :)", replyMarkup: markup);
     switch (wish.Type)
     {
       case MessageType.Voice:
