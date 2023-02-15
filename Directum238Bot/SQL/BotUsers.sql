@@ -1,5 +1,5 @@
 ﻿create table main.BotUsers
 (
-    BotUserId integer
+    BotUserId    INTEGER not null 
 );
 
