@@ -19,9 +19,9 @@ public class UserCommandScenario
   [NotMapped]
   public BotCommandScenario CommandScenario { get; set; }
 
-  public bool Run(ITelegramBotClient bot, Update update)
+  public bool Run(ITelegramBotClient bot, Update update, long chatId)
   {
-     return CommandScenario.ExecuteStep(bot, update);
+     return CommandScenario.ExecuteStep(bot, update, chatId);
   }
 
   public UserCommandScenario() { }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.Scenarios;
@@ -20,15 +19,13 @@ public class BroadcastScenario : AutoStepBotCommandScenario
 
   public override string ScenarioCommand { get; }
 
-  private async Task RequestMessageToBroadcast(ITelegramBotClient bot, Update update)
+  private async Task RequestMessageToBroadcast(ITelegramBotClient bot, Update update, long userId)
   {
-    var chatId = update.Message.From.Id;
-    await bot.SendTextMessageAsync(chatId, "Введи сообщение:");
+    await bot.SendTextMessageAsync(userId, "Введи сообщение:");
   }
 
-  private async Task BroadcastMessageCheck(ITelegramBotClient bot, Update update)
+  private async Task BroadcastMessageCheck(ITelegramBotClient bot, Update update, long chatId)
   {
-    var chatId = update.Message.From.Id;
     var keyboard = new InlineKeyboardMarkup(new []
     {
       InlineKeyboardButton.WithCallbackData("Отправить", "Отправить"),
@@ -55,9 +52,8 @@ public class BroadcastScenario : AutoStepBotCommandScenario
     await bot.DeleteMessageAsync(chatId, update.Message.MessageId);
   }
 
-  private async Task CheckMessage(ITelegramBotClient bot, Update update)
+  private async Task CheckMessage(ITelegramBotClient bot, Update update, long chatId)
   {
-    var chatId = update.CallbackQuery.From.Id;
     switch (update.CallbackQuery.Data)
     {
       case "Отправить":

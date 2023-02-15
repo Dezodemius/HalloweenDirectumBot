@@ -52,9 +52,7 @@ namespace Directum238Bot
         AllowedUpdates = new []
         {
           UpdateType.Message,
-          UpdateType.CallbackQuery,
-          UpdateType.EditedMessage,
-          UpdateType.InlineQuery
+          UpdateType.CallbackQuery
         },
         ThrowPendingUpdates = true
       };
@@ -75,42 +73,61 @@ namespace Directum238Bot
         return;
       _activeUsersManager.Add(new BotUser(userId));
 
-      if (_userScenarioRepository.TryGet(userId, out var userScenario))
+      UserCommandScenario userScenario = null;
+      switch (GetMessage(update))
       {
-        if (!userScenario.Run(bot, update))
+        case BotChatCommand.Start:
         {
-          _userScenarioRepository.Remove(userScenario);
-          userScenario = null;
-        };
-      }
-      if (userScenario == null)
-      {
-        if (update.Type != UpdateType.Message)
-          return;
-
-        switch (update.Message.Text)
-        {
-          case BotChatCommand.Start:
-          {
-            userScenario = new UserCommandScenario(userId, new StartScenario());
-            break;
-          }
-          case BotChatCommand.Wish23:
-          {
-            userScenario = new UserCommandScenario(userId, new RecordWishScenario(_contentCache));
-            break;
-          }
-          case BotChatCommand.Broadcast:
-          {
-            if (userId == _configManager.Config.BotAdminId)
-            {
-              userScenario = new UserCommandScenario(userId, new BroadcastScenario(_activeUsersManager));
-            }
-            break;
-          }
+          userScenario = new UserCommandScenario(userId, new StartScenario());
+          break;
         }
-        _userScenarioRepository.Add(userScenario);
-        userScenario?.Run(bot, update);
+        case BotChatCommand.SendWish23:
+        {
+          userScenario = new UserCommandScenario(userId, new SendWishScenario(_contentCache, WishDay.Day23));
+          break;
+        }
+        case BotChatCommand.SendWish8:
+        {
+          userScenario = new UserCommandScenario(userId, new SendWishScenario(_contentCache, WishDay.Day8));
+          break;
+        }
+        case BotChatCommand.GetWish23:
+        {
+          userScenario = new UserCommandScenario(userId, new SendWishScenario(_contentCache, WishDay.Day23));
+          break;
+        }
+        case BotChatCommand.GetWish8:
+        {
+          userScenario = new UserCommandScenario(userId, new SendWishScenario(_contentCache, WishDay.Day8));
+          break;
+        }
+        case BotChatCommand.Broadcast:
+        {
+          if (userId == _configManager.Config.BotAdminId)
+            userScenario = new UserCommandScenario(userId, new BroadcastScenario(_activeUsersManager));
+          break;
+        }
+      }
+
+      if (userScenario == null && _userScenarioRepository.TryGet(userId, out var _userScenario))
+        userScenario = _userScenario;
+      else
+        _userScenarioRepository.AddOrReplace(userScenario);
+
+      if (userScenario != null && !userScenario.Run(bot, update, userId))
+        _userScenarioRepository.Remove(userScenario);
+    }
+
+    private static string GetMessage(Update update)
+    {
+      switch (update.Type)
+      {
+        case UpdateType.Message:
+          return update.Message.Text;
+        case UpdateType.CallbackQuery:
+          return update.CallbackQuery.Data;
+        default:
+          return null;
       }
     }
 
@@ -122,8 +139,6 @@ namespace Directum238Bot
           return update.Message.From.Id;
         case UpdateType.CallbackQuery:
           return update.CallbackQuery.From.Id;
-        case UpdateType.EditedMessage:
-          return update.EditedMessage.From.Id;
         default:
           return default;
       }

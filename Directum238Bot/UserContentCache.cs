@@ -12,9 +12,9 @@ public sealed class UserContentCache : DefaultDbContext<UserContent>
 {
   private DbSet<UserContent> UserContents { get; set; }
 
-  public UserContent GetRandomContentExceptCurrent(long userId, MessageType type)
+  public UserContent GetRandomContentExceptCurrent(long userId, WishDay wishDay)
   {
-    var founded = UserContents.Where(c => c.UserId != userId && c.Type == type);
+    var founded = UserContents.Where(c => c.UserId != userId && c.WishDay == wishDay);
     var randomIndex = new Random().Next(founded.Count());
     return founded.ToList().ElementAtOrDefault(randomIndex);
   }
@@ -60,14 +60,22 @@ public class UserContent
   public long UserId { get; set; }
   public string Content { get; set; }
   public MessageType Type { get; set; }
+  public WishDay WishDay { get; set; }
 
   public UserContent() { }
 
-  public UserContent(long userId, string content, MessageType type)
+  public UserContent(long userId, string content, MessageType type, WishDay wishDay)
   {
     this.Id  = new Guid();
     this.UserId = userId;
     this.Content = content;
     this.Type = type;
+    this.WishDay = wishDay;
   }
+}
+
+public enum WishDay
+{
+  Day23,
+  Day8
 }

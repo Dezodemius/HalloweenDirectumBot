@@ -31,10 +31,12 @@ public sealed class UserScenarioRepository
     this.Remove(commandScenario.UserId);
   }
 
-  public void Add(UserCommandScenario userCommandScenario)
+  public void AddOrReplace(UserCommandScenario userCommandScenario)
   {
     if (userCommandScenario == null)
       return;
+    if (this.TryGet(userCommandScenario.UserId, out var _userCommandScenario))
+      this.Remove(_userCommandScenario);
     this._userScenarios.Add(userCommandScenario);
   }
 }

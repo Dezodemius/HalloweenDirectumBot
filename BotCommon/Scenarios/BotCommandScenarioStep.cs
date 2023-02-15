@@ -2,11 +2,11 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace Directum238Bot;
+namespace BotCommon.Scenarios;
 
 public class BotCommandScenarioStep
 {
-  public delegate Task StepActionDelegate(ITelegramBotClient bot, Update update);
+  public delegate Task StepActionDelegate(ITelegramBotClient bot, Update update, long chatId);
 
   public StepActionDelegate StepAction { get; }
 
