@@ -32,7 +32,7 @@ public abstract class DefaultDbContext<T> : DbContext
     this._connectionString = connectionString;
     Database.EnsureCreated();
 
-    var creator = this.Database.GetService<IRelationalDatabaseCreator>();
+    var creator = this.GetService<IRelationalDatabaseCreator>();
     if (!creator.Exists())
       creator.CreateTables();
   }

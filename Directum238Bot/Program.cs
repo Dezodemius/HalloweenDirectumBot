@@ -2,7 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using BotCommon;
+using BotCommon.Repository;
 using BotCommon.Scenarios;
+using Directum238Bot.Repository;
 using Directum238Bot.Scenarios;
 using Newtonsoft.Json;
 using NLog;
@@ -39,8 +41,8 @@ namespace Directum238Bot
     {
       _configManager = new BotConfigManager();
       _userScenarioRepository = new UserScenarioRepository();
-      _activeUsersManager = new ActiveUsersManager(_configManager.Config.DbConnectionString);
       _contentCache = new UserContentCache(_configManager.Config.DbConnectionString);
+      _activeUsersManager = new ActiveUsersManager(_configManager.Config.DbConnectionString);
     }
 
     private static void StartBot()
@@ -93,12 +95,12 @@ namespace Directum238Bot
         }
         case BotChatCommand.GetWish23:
         {
-          userScenario = new UserCommandScenario(userId, new SendWishScenario(_contentCache, WishDay.Day23));
+          userScenario = new UserCommandScenario(userId, new GetWishScenario(_contentCache, WishDay.Day23));
           break;
         }
         case BotChatCommand.GetWish8:
         {
-          userScenario = new UserCommandScenario(userId, new SendWishScenario(_contentCache, WishDay.Day8));
+          userScenario = new UserCommandScenario(userId, new GetWishScenario(_contentCache, WishDay.Day8));
           break;
         }
         case BotChatCommand.Broadcast:

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using BotCommon.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace BotCommon;
+namespace BotCommon.Repository;
 
 public sealed class ActiveUsersManager : DefaultDbContext<BotUser>
 {
@@ -45,10 +44,9 @@ public sealed class ActiveUsersManager : DefaultDbContext<BotUser>
   }
 }
 
-[PrimaryKey(nameof(Id))]
+[Table("BotUsers")]
 public class BotUser
 {
-  public Guid Id { get; set; }
   public long BotUserId { get; set; }
 
   public BotUser()
@@ -57,7 +55,6 @@ public class BotUser
 
   public BotUser(long id)
   {
-    this.Id = new Guid();
     this.BotUserId = id;
   }
 }

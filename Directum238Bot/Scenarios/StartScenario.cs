@@ -14,7 +14,7 @@ public class StartScenario : AutoStepBotCommandScenario
 
   public override string ScenarioCommand => BotChatCommand.Start;
 
-  private static readonly DateTime day23WishGetTime = new DateTime(2023, 2, 22);
+  private static readonly DateTime day23WishGetTime = DateTime.Now + new TimeSpan(0,0,0, 20);
   private static readonly DateTime day8WishGetTime = new DateTime(2023, 3, 7);
   private static readonly DateTime day8WishSendTime = new DateTime(2023, 3, 1);
 
@@ -31,7 +31,7 @@ public class StartScenario : AutoStepBotCommandScenario
     if (DateTime.Now.CompareTo(day8WishGetTime) >= 0)
       inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData("Получить поздравление с 8 марта", BotChatCommand.GetWish8) });
     var markup = new InlineKeyboardMarkup(inlineButtons);
-    await bot.SendTextMessageAsync(chatId, $"Привет!", replyMarkup: markup);
+    await bot.SendTextMessageAsync(chatId, "Привет!", replyMarkup: markup);
   }
 
   public StartScenario()

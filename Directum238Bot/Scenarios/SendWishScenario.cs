@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BotCommon.Scenarios;
+using Directum238Bot.Repository;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -13,7 +14,7 @@ namespace Directum238Bot.Scenarios;
 public class SendWishScenario : AutoStepBotCommandScenario
 {
   private UserContentCache cache;
-  private readonly WishDay wishDay;
+  private readonly string wishDay;
   public override Guid Id => new Guid("6A5102BE-668C-42D2-9FD2-818494DCDE8B");
 
   public override string ScenarioCommand => BotChatCommand.GetWish23;
@@ -99,7 +100,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
     }
   }
 
-  public SendWishScenario(UserContentCache cache, WishDay wishDay)
+  public SendWishScenario(UserContentCache cache, string wishDay)
   {
     this.cache = cache;
     this.wishDay = wishDay;

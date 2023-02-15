@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BotCommon.Scenarios;
+using Directum238Bot.Repository;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -11,7 +12,7 @@ namespace Directum238Bot.Scenarios;
 
 public class GetWishScenario : AutoStepBotCommandScenario
 {
-  private readonly WishDay wishDay;
+  private readonly string wishDay;
   private readonly UserContentCache cache;
   public override Guid Id => new Guid("3BFA76E9-D083-42D9-97E7-EAC8CE06A41D");
   public override string ScenarioCommand => string.Empty;
@@ -25,7 +26,7 @@ public class GetWishScenario : AutoStepBotCommandScenario
     });
     switch (wish.Type)
     {
-      case MessageType.Audio:
+      case MessageType.Voice:
       {
         await botClient.SendAudioAsync(chatId, new InputMedia(wish.Content), replyMarkup: markup);
         break;
@@ -43,7 +44,7 @@ public class GetWishScenario : AutoStepBotCommandScenario
     }
   }
 
-  public GetWishScenario(UserContentCache cache, WishDay wishDay)
+  public GetWishScenario(UserContentCache cache, string wishDay)
   {
     this.cache = cache;
     this.wishDay = wishDay;
