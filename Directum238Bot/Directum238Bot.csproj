@@ -24,4 +24,8 @@
       </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="GIFs\*.*" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
 </Project>
