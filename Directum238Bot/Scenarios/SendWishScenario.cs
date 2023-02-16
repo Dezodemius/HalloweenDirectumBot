@@ -35,8 +35,8 @@ public class SendWishScenario : AutoStepBotCommandScenario
 
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
-      new [] { InlineKeyboardButton.WithCallbackData("Отправить", "Отправить") },
-      new [] { InlineKeyboardButton.WithCallbackData("В главное меню ↩", BotChatCommand.Start)}
+      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.MessageSendConfirm, Directum238BotResources.MessageSendConfirm) },
+      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)}
     });
     switch (update.Message.Type)
     {
@@ -55,7 +55,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
             replyMarkup: inlineMarkup);
         break;
       default:
-        await botClient.SendTextMessageAsync(chatId, "Я такое не понимаю. Могу только текст, голосовые, и видеосообщения");
+        await botClient.SendTextMessageAsync(chatId, Directum238BotResources.UnknownMessageType);
         break;
     }
     await botClient.DeleteMessageAsync(chatId, update.Message.MessageId);
@@ -65,15 +65,36 @@ public class SendWishScenario : AutoStepBotCommandScenario
   {
     if (update.CallbackQuery != null)
     {
-      if (update.CallbackQuery.Data == "Отправить")
+      if (update.CallbackQuery.Data == Directum238BotResources.MessageSendConfirm)
       {
         var type = update.CallbackQuery.Message.Type;
         var inlineMarkup = new InlineKeyboardMarkup(new []
         {
-          InlineKeyboardButton.WithCallbackData("В главное меню ↩", BotChatCommand.Start)
+          InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)
         });
         await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
-        await botClient.SendTextMessageAsync(chatId, "твоё поздравление отправлено", replyMarkup: inlineMarkup);
+        string beforeWishDayDate;
+        switch (wishDay)
+        {
+          case WishDay.Day23:
+          {
+            beforeWishDayDate = "22 февраля";
+            break;
+          }
+          case WishDay.Day8:
+          {
+            beforeWishDayDate = "7 марта";
+            break;
+          }
+          default:
+          {
+            beforeWishDayDate = "после того, как все приготовят поздравления";
+            break;
+          }
+        }
+
+        await botClient.SendTextMessageAsync(chatId,
+          string.Format(Directum238BotResources.AfterMessageSaveMessage, beforeWishDayDate), replyMarkup: inlineMarkup);
 
         switch (type)
         {

@@ -9,4 +9,19 @@
       <ProjectReference Include="..\BotCommon\BotCommon.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Directum238BotResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Directum238BotResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Directum238BotResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Directum238BotResources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
