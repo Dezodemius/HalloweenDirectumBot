@@ -17,9 +17,9 @@ public class StartScenario : AutoStepBotCommandScenario
 
   public override string ScenarioCommand => BotChatCommand.Start;
 
-  private static readonly DateTime day23WishGetTime = DateTime.Now + new TimeSpan(0,0,0, 20);
+  private static readonly DateTime day23WishGetTime = new DateTime(2023, 2, 22);
   private static readonly DateTime day8WishGetTime = new DateTime(2023, 3, 7);
-  private static readonly DateTime day8WishSendTime = new DateTime(2023, 3, 1);
+  private static readonly DateTime day8WishSendTime = new DateTime(2023, 3, 3);
 
   private static async Task ShowStartMessage(ITelegramBotClient bot, Update update, long chatId)
   {
@@ -27,11 +27,11 @@ public class StartScenario : AutoStepBotCommandScenario
     {
       new []{InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWish23, BotChatCommand.SendWish23)},
     };
-    // if (DateTime.Now.CompareTo(day23WishGetTime) >= 0)
+    if (DateTime.Now.CompareTo(day23WishGetTime) >= 0)
       inlineButtons.Add(new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish23, BotChatCommand.GetWish23)});
-    // if (DateTime.Now.CompareTo(day8WishSendTime) >= 0)
+    if (DateTime.Now.CompareTo(day8WishSendTime) >= 0)
       inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWish8, BotChatCommand.SendWish8) });
-    // if (DateTime.Now.CompareTo(day8WishGetTime) >= 0)
+    if (DateTime.Now.CompareTo(day8WishGetTime) >= 0)
       inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish8, BotChatCommand.GetWish8) });
     var markup = new InlineKeyboardMarkup(inlineButtons);
     var gif = new InputOnlineFile(System.IO.File.OpenRead(GetGifPath("1.gif")), "hello.gif");
