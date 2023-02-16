@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using BotCommon.Scenarios;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Directum238Bot.Scenarios;
@@ -31,7 +34,17 @@ public class StartScenario : AutoStepBotCommandScenario
     // if (DateTime.Now.CompareTo(day8WishGetTime) >= 0)
       inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish8, BotChatCommand.GetWish8) });
     var markup = new InlineKeyboardMarkup(inlineButtons);
-    await bot.SendTextMessageAsync(chatId, Directum238BotResources.BotStartMessage, replyMarkup: markup);
+    var gif = new InputOnlineFile(System.IO.File.OpenRead(GetGifPath("1.gif")), "hello.gif");
+    await bot.SendAnimationAsync(chatId,
+      gif,
+      caption: Directum238BotResources.BotStartMessage,
+      replyMarkup: markup,
+      parseMode: ParseMode.Markdown);
+  }
+
+  private static string GetGifPath(string gifFileName)
+  {
+    return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GIFs", gifFileName);
   }
 
   public StartScenario()
