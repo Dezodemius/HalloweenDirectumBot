@@ -37,30 +37,29 @@ public class SendWishScenario : AutoStepBotCommandScenario
 
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
-      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.MessageSendConfirm, BotChatCommand.Send) },
+      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWishButton, BotChatCommand.Send) },
       new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)}
     });
     switch (update.Message.Type)
     {
       case MessageType.VideoNote:
         if (update.Message.VideoNote != null)
-          await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(update.Message.VideoNote.FileId),
-            replyMarkup: inlineMarkup);
+          await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(update.Message.VideoNote.FileId));
         break;
       case MessageType.Text:
         if (update.Message.Text != null)
-          await botClient.SendTextMessageAsync(chatId, update.Message.Text, replyMarkup: inlineMarkup);
+          await botClient.SendTextMessageAsync(chatId, update.Message.Text);
         break;
       case MessageType.Voice:
         if (update.Message.Voice != null)
-          await botClient.SendVoiceAsync(chatId, new InputOnlineFile(update.Message.Voice.FileId),
-            replyMarkup: inlineMarkup);
+          await botClient.SendVoiceAsync(chatId, new InputOnlineFile(update.Message.Voice.FileId));
         break;
       default:
         await botClient.SendTextMessageAsync(chatId, Directum238BotResources.UnknownMessageType);
         break;
     }
     await botClient.DeleteMessageAsync(chatId, update.Message.MessageId);
+    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishConfirmationMessage, replyMarkup: inlineMarkup);
   }
 
   public async Task ConfirmSending(ITelegramBotClient botClient, Update update, long chatId)

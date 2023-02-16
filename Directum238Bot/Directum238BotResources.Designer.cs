@@ -114,15 +114,6 @@ namespace Directum238Bot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Остановись, выдохни. Это поздравление ты смог бы сказать человеку лично? Если да, то жми отправить 💌)).
-        /// </summary>
-        internal static string MessageSendConfirm {
-            get {
-                return ResourceManager.GetString("MessageSendConfirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Пока что поздравлений нет. Зайди позже :).
         /// </summary>
         internal static string NoWishesYet {
@@ -146,6 +137,24 @@ namespace Directum238Bot {
         internal static string SendWish8 {
             get {
                 return ResourceManager.GetString("SendWish8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Отправить 💌.
+        /// </summary>
+        internal static string SendWishButton {
+            get {
+                return ResourceManager.GetString("SendWishButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Остановись, выдохни. Это поздравление ты смог бы сказать человеку лично? Если да, то жми отправить)).
+        /// </summary>
+        internal static string SendWishConfirmationMessage {
+            get {
+                return ResourceManager.GetString("SendWishConfirmationMessage", resourceCulture);
             }
         }
         
