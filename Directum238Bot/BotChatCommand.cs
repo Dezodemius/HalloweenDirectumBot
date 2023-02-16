@@ -1,4 +1,4 @@
-﻿namespace Directum238Bot;
+namespace Directum238Bot;
 
 public static class BotChatCommand
 {
