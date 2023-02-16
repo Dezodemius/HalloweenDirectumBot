@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using BotCommon.Scenarios;
 using Directum238Bot.Repository;
@@ -8,12 +9,13 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
+using File = System.IO.File;
 
 namespace Directum238Bot.Scenarios;
 
 public class SendWishScenario : AutoStepBotCommandScenario
 {
-  private UserContentCache cache;
+  private readonly UserContentCache cache;
   private readonly string wishDay;
   public override Guid Id => new Guid("6A5102BE-668C-42D2-9FD2-818494DCDE8B");
 
@@ -23,9 +25,9 @@ public class SendWishScenario : AutoStepBotCommandScenario
   {
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
-      InlineKeyboardButton.WithCallbackData("В главное меню ↩", BotChatCommand.Start)
+      InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)
     });
-    await botClient.SendTextMessageAsync(chatId, "пришли мне поздравление (текст, голосовое, видеосообщение)", replyMarkup: inlineMarkup);
+    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishToMe, replyMarkup: inlineMarkup);
   }
 
   public static async Task SendUserCheckMessage(ITelegramBotClient botClient, Update update, long chatId)
@@ -35,7 +37,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
 
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
-      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.MessageSendConfirm, Directum238BotResources.MessageSendConfirm) },
+      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.MessageSendConfirm, BotChatCommand.Send) },
       new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)}
     });
     switch (update.Message.Type)
@@ -65,14 +67,13 @@ public class SendWishScenario : AutoStepBotCommandScenario
   {
     if (update.CallbackQuery != null)
     {
-      if (update.CallbackQuery.Data == Directum238BotResources.MessageSendConfirm)
+      if (update.CallbackQuery.Data == BotChatCommand.Send)
       {
         var type = update.CallbackQuery.Message.Type;
         var inlineMarkup = new InlineKeyboardMarkup(new []
         {
           InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)
         });
-        await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
         string beforeWishDayDate;
         switch (wishDay)
         {
@@ -93,9 +94,15 @@ public class SendWishScenario : AutoStepBotCommandScenario
           }
         }
 
-        await botClient.SendTextMessageAsync(chatId,
-          string.Format(Directum238BotResources.AfterMessageSaveMessage, beforeWishDayDate), replyMarkup: inlineMarkup);
+        var gif = wishDay == WishDay.Day23
+            ? new InputOnlineFile(File.OpenRead(GetGifPath("2.gif")), "2.gif")
+            : new InputOnlineFile(File.OpenRead(GetGifPath("3.gif")), "3.gif");
+        await botClient.SendAnimationAsync(chatId,
+          gif,
+          caption: string.Format(Directum238BotResources.AfterMessageSaveMessage, beforeWishDayDate),
+          replyMarkup: inlineMarkup);
 
+        await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
         switch (type)
         {
           case MessageType.Text:
@@ -119,6 +126,11 @@ public class SendWishScenario : AutoStepBotCommandScenario
         }
       }
     }
+  }
+
+  private static string GetGifPath(string gifFileName)
+  {
+    return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GIFs", gifFileName);
   }
 
   public SendWishScenario(UserContentCache cache, string wishDay)
