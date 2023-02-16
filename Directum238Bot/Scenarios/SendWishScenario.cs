@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using BotCommon.Scenarios;
 using Directum238Bot.Repository;
@@ -8,12 +9,13 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 using Telegram.Bot.Types.ReplyMarkups;
+using File = System.IO.File;
 
 namespace Directum238Bot.Scenarios;
 
 public class SendWishScenario : AutoStepBotCommandScenario
 {
-  private UserContentCache cache;
+  private readonly UserContentCache cache;
   private readonly string wishDay;
   public override Guid Id => new Guid("6A5102BE-668C-42D2-9FD2-818494DCDE8B");
 
@@ -23,9 +25,9 @@ public class SendWishScenario : AutoStepBotCommandScenario
   {
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
-      InlineKeyboardButton.WithCallbackData("В главное меню ↩", BotChatCommand.Start)
+      InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)
     });
-    await botClient.SendTextMessageAsync(chatId, "пришли мне поздравление (текст, голосовое, видеосообщение)", replyMarkup: inlineMarkup);
+    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishToMe, replyMarkup: inlineMarkup);
   }
 
   public static async Task SendUserCheckMessage(ITelegramBotClient botClient, Update update, long chatId)
@@ -35,46 +37,71 @@ public class SendWishScenario : AutoStepBotCommandScenario
 
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
-      new [] { InlineKeyboardButton.WithCallbackData("Отправить", "Отправить") },
-      new [] { InlineKeyboardButton.WithCallbackData("В главное меню ↩", BotChatCommand.Start)}
+      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWishButton, BotChatCommand.Send) },
+      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)}
     });
     switch (update.Message.Type)
     {
       case MessageType.VideoNote:
         if (update.Message.VideoNote != null)
-          await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(update.Message.VideoNote.FileId),
-            replyMarkup: inlineMarkup);
+          await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(update.Message.VideoNote.FileId));
         break;
       case MessageType.Text:
         if (update.Message.Text != null)
-          await botClient.SendTextMessageAsync(chatId, update.Message.Text, replyMarkup: inlineMarkup);
+          await botClient.SendTextMessageAsync(chatId, update.Message.Text);
         break;
       case MessageType.Voice:
         if (update.Message.Voice != null)
-          await botClient.SendVoiceAsync(chatId, new InputOnlineFile(update.Message.Voice.FileId),
-            replyMarkup: inlineMarkup);
+          await botClient.SendVoiceAsync(chatId, new InputOnlineFile(update.Message.Voice.FileId));
         break;
       default:
-        await botClient.SendTextMessageAsync(chatId, "Я такое не понимаю. Могу только текст, голосовые, и видеосообщения");
+        await botClient.SendTextMessageAsync(chatId, Directum238BotResources.UnknownMessageType);
         break;
     }
     await botClient.DeleteMessageAsync(chatId, update.Message.MessageId);
+    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishConfirmationMessage, replyMarkup: inlineMarkup);
   }
 
   public async Task ConfirmSending(ITelegramBotClient botClient, Update update, long chatId)
   {
     if (update.CallbackQuery != null)
     {
-      if (update.CallbackQuery.Data == "Отправить")
+      if (update.CallbackQuery.Data == BotChatCommand.Send)
       {
         var type = update.CallbackQuery.Message.Type;
         var inlineMarkup = new InlineKeyboardMarkup(new []
         {
-          InlineKeyboardButton.WithCallbackData("В главное меню ↩", BotChatCommand.Start)
+          InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)
         });
-        await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
-        await botClient.SendTextMessageAsync(chatId, "твоё поздравление отправлено", replyMarkup: inlineMarkup);
+        string beforeWishDayDate;
+        switch (wishDay)
+        {
+          case WishDay.Day23:
+          {
+            beforeWishDayDate = "22 февраля";
+            break;
+          }
+          case WishDay.Day8:
+          {
+            beforeWishDayDate = "7 марта";
+            break;
+          }
+          default:
+          {
+            beforeWishDayDate = "после того, как все приготовят поздравления";
+            break;
+          }
+        }
 
+        var gif = wishDay == WishDay.Day23
+            ? new InputOnlineFile(File.OpenRead(GetGifPath("2.gif")), "2.gif")
+            : new InputOnlineFile(File.OpenRead(GetGifPath("3.gif")), "3.gif");
+        await botClient.SendAnimationAsync(chatId,
+          gif,
+          caption: string.Format(Directum238BotResources.AfterMessageSaveMessage, beforeWishDayDate),
+          replyMarkup: inlineMarkup);
+
+        await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
         switch (type)
         {
           case MessageType.Text:
@@ -98,6 +125,11 @@ public class SendWishScenario : AutoStepBotCommandScenario
         }
       }
     }
+  }
+
+  private static string GetGifPath(string gifFileName)
+  {
+    return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GIFs", gifFileName);
   }
 
   public SendWishScenario(UserContentCache cache, string wishDay)

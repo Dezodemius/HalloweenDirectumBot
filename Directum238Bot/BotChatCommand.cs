@@ -1,4 +1,4 @@
-﻿namespace Directum238Bot;
+namespace Directum238Bot;
 
 public static class BotChatCommand
 {
@@ -8,4 +8,5 @@ public static class BotChatCommand
   public const string SendWish8 = "/send_wish_8";
   public const string GetWish8 = "/get_wish_8";
   public const string Broadcast = "/broadcast";
+  public const string Send = "/send";
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BotCommon.Scenarios;
@@ -22,10 +22,10 @@ public class GetWishScenario : AutoStepBotCommandScenario
     var wish = this.cache.GetRandomContentExceptCurrent(chatId, this.wishDay);
     var markup = new InlineKeyboardMarkup(new []
     {
-      InlineKeyboardButton.WithCallbackData("В главное меню ↩", BotChatCommand.Start)
+      InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)
     });
     if (wish == null)
-      await botClient.SendTextMessageAsync(chatId, "Пока что поздравлений нет. Зайди позже :)", replyMarkup: markup);
+      await botClient.SendTextMessageAsync(chatId, Directum238BotResources.NoWishesYet, replyMarkup: markup);
     switch (wish.Type)
     {
       case MessageType.Voice:
