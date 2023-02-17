@@ -3,6 +3,7 @@
 public static class BotChatCommand
 {
   public const string Start = "/start";
+  public const string MainMenu = "/menu";
   public const string SendWish23 = "/send_wish_23";
   public const string GetWish23 = "/get_wish_23";
   public const string SendWish8 = "/send_wish_8";
