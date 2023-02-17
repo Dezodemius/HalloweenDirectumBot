@@ -45,12 +45,13 @@ public class SendWishScenario : AutoStepBotCommandScenario
     {
       string aiWish;
       await botClient.SendChatActionAsync(chatId, ChatAction.Typing);
-      await botClient.SendPhotoAsync(chatId,
-        new InputOnlineFile(File.OpenRead(GetImagePath("1.png"))),
+      await botClient.SendAnimationAsync(chatId,
+        new InputOnlineFile(File.OpenRead(GetGifPath("6.gif")), "6.gif"),
         caption:"Требуется немного времени. Нейросеть ChatGPT собирает самые лучшие слова для поздравления");
       try
       {
         aiWish = await GetAIWish();
+        aiWish = $"{aiWish}{Environment.NewLine}{Environment.NewLine}by нейросеть и твои коллеги";
       }
       catch (Exception e)
       {
