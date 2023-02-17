@@ -45,7 +45,9 @@ public class SendWishScenario : AutoStepBotCommandScenario
     {
       string aiWish;
       await botClient.SendChatActionAsync(chatId, ChatAction.Typing);
-      await botClient.SendPhotoAsync(chatId, new InputOnlineFile(File.OpenRead(GetImagePath("1.png"))),caption:"Требуется немного времени. Джарвис собирает самые лучшие слова для поздравления");
+      await botClient.SendPhotoAsync(chatId,
+        new InputOnlineFile(File.OpenRead(GetImagePath("1.png"))),
+        caption:"Требуется немного времени. Нейросеть ChatGPT собирает самые лучшие слова для поздравления");
       try
       {
         aiWish = await GetAIWish();
