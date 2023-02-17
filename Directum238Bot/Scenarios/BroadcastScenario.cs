@@ -49,6 +49,21 @@ public class BroadcastScenario : AutoStepBotCommandScenario
         await bot.SendTextMessageAsync(chatId, update.Message.Text, replyMarkup: keyboard);
         break;
       }
+      case MessageType.Audio:
+      {
+        await bot.SendAudioAsync(chatId, new InputOnlineFile(update.Message.Text), replyMarkup: keyboard);
+        break;
+      }
+      case MessageType.Video:
+      {
+        await bot.SendVideoAsync(chatId, new InputOnlineFile(update.Message.Text), replyMarkup: keyboard);
+        break;
+      }
+      case MessageType.Document:
+      {
+        await bot.SendDocumentAsync(chatId, new InputOnlineFile(update.Message.Text), replyMarkup: keyboard);
+        break;
+      }
     }
     await bot.DeleteMessageAsync(chatId, update.Message.MessageId);
   }

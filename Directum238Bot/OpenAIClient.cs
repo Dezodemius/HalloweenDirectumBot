@@ -1,27 +1,35 @@
 ﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Directum238Bot;
 
 public class OpenAIClient
 {
-  private const string apiKey = "";
+  private readonly string apiKey;
   private const string openAIUrl = "https://api.openai.com/v1/completions";
 
   public async Task<string> GetAnswer(string question)
   {
-    var answer = string.Empty;
+    if (string.IsNullOrEmpty(question))
+      return null;
     var client = new HttpClient();
     client.DefaultRequestHeaders.Add("authorization", $"Bearer {apiKey}");
 
     var content = new StringContent(
-      $"{{\"model\": \"text-davinci-003\",\"prompt\": \"{question}\",\"max_tokens\": 400,\"temperature\": 1}}",
+      $"{{\"model\": \"text-davinci-003\",\"prompt\": \"{question}\",\"max_tokens\": 400,\"temperature\": 0.3}}",
       Encoding.UTF8,
       "application/json");
 
     var response = await client.PostAsync(openAIUrl, content);
-    var responseString = await response.Content.ReadAsStringAsync();
-    return responseString;
+    var contentAsString = await response.Content.ReadAsStringAsync();
+    var answer = JsonConvert.DeserializeObject<dynamic>(contentAsString)!.choices[0].text;
+    return answer;
+  }
+
+  public OpenAIClient(string apiKey)
+  {
+    this.apiKey = apiKey;
   }
 }

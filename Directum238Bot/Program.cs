@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BotCommon;
@@ -29,6 +30,7 @@ namespace Directum238Bot
     {
       var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
       PrepareForStartBot(bot);
+      // StartScheduleMessages(bot);
       StartBot(bot);
       string command;
       do
@@ -38,6 +40,18 @@ namespace Directum238Bot
       log.Info("Bye bye");
       Environment.Exit(0);
     }
+
+    // private static void StartScheduleMessages(TelegramBotClient bot)
+    // {
+    //   var laserTagMessage = new Timer(_ =>
+    //   {
+    //     var usersId = _activeUsersManager.GetAll();
+    //     foreach (var user in usersId)
+    //     {
+    //       bot.SendTextMessageAsync(user.BotUserId, Directum238BotResources.LaserTagMessage);
+    //     }
+    //   });
+    // }
 
     private static void PrepareForStartBot(TelegramBotClient bot)
     {
@@ -108,7 +122,7 @@ namespace Directum238Bot
         }
         case BotChatCommand.Broadcast:
         {
-          if (userId == _configManager.Config.BotAdminId)
+          if (_configManager.Config.BotAdminId.Contains(userId))
             userScenario = new UserCommandScenario(userId, new BroadcastScenario(_activeUsersManager));
           break;
         }

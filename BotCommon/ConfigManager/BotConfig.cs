@@ -10,7 +10,9 @@ public class BotConfig
   /// </summary>
   public string BotToken { get; set; }
 
-  public long BotAdminId { get; set; }
+  public long[] BotAdminId { get; set; }
 
   public string DbConnectionString { get; set; }
+
+  public string OpenAiApiKey { get; set; }
 }

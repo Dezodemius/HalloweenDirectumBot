@@ -69,6 +69,28 @@ namespace Directum238Bot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Привет, коллега!
+        ///Сегодня самое время получить пожелание к 23 февраля. Для этого жми кнопку «получить поздравление».
+        ///.
+        /// </summary>
+        internal static string AnonsWish23 {
+            get {
+                return ResourceManager.GetString("AnonsWish23", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Привет, коллега!
+        ///Сегодня самое время получить пожелание к 8 марта. Для этого жми кнопку «получить поздравление».
+        ///.
+        /// </summary>
+        internal static string AnonsWish8 {
+            get {
+                return ResourceManager.GetString("AnonsWish8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Привет!
         ///
         ///Вот это быстро пролетело время с нового года. Теперь впереди новые праздники и приятные выходные :)
@@ -110,6 +132,32 @@ namespace Directum238Bot {
         internal static string GoStartMenu {
             get {
                 return ResourceManager.GetString("GoStartMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Привет, коллега! 
+        ///Уже завтра в БЦ «Сайгас» будут поздравлять всех, кто причастен к февральскому празднику. Напоминаю план:
+        ///с 8:30 до 9:30 — праздничная встреча
+        ///с 18:00 до 21:00 — лазертаг на парковке ([подробности есть на блоге](https://people.directum.ru/event/details/31549))
+        ///.
+        /// </summary>
+        internal static string LaserTagMessage {
+            get {
+                return ResourceManager.GetString("LaserTagMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Привет, коллега!
+        ///Уже завтра в БЦ «Сайгас» будут поздравлять всех девушек с 8 марта. Завтра для вас:
+        ///с 9:00 до 10:00 — утренняя встреча
+        ///с 18:00 до 21:00 — караоке в конференц-зале (810к)
+        ///.
+        /// </summary>
+        internal static string MorningMeetingWomenDay {
+            get {
+                return ResourceManager.GetString("MorningMeetingWomenDay", resourceCulture);
             }
         }
         
