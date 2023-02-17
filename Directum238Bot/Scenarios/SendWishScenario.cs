@@ -74,7 +74,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
         break;
       case MessageType.Text:
         if (update.Message.Text != null)
-          await botClient.SendTextMessageAsync(chatId, update.Message.Text);
+          await botClient.SendTextMessageAsync(chatId, update.Message.Text, replyMarkup: inlineMarkup);
         break;
       case MessageType.Voice:
         if (update.Message.Voice != null)

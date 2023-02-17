@@ -142,7 +142,7 @@ namespace Directum238Bot
     {
       log.Debug(JsonConvert.SerializeObject(update));
       var userId = GetUserId(update);
-      if (userId == default)
+      if (userId != default)
         return;
       _activeUsersManager.Add(new BotUser(userId));
 
