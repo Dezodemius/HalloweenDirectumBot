@@ -168,8 +168,8 @@ public class SendWishScenario : AutoStepBotCommandScenario
   {
     var questionToAi = wishDay switch
     {
-        WishDay.Day23 => "напиши поздравление для мужчин и женщин с днём защитника отечества на 23 февраля",
-        WishDay.Day8 => "напиши поздравление для прекрасных дам с этим прекрасным весенним праздников, международным женским днём 8 марта",
+        WishDay.Day23 => "напиши поздравление для мужчин и женщин с днём защитника отечества на 23 февраля. Можешь сделать это с юмором",
+        WishDay.Day8 => "напиши поздравление для прекрасных дам с этим прекрасным весенним праздников, международным женским днём 8 марта. Можешь сделать это с юмором",
         _ => string.Empty
     };
     return await new OpenAIClient(new BotConfigManager().Config.OpenAiApiKey).GetAnswer(questionToAi);

@@ -18,7 +18,7 @@ public class OpenAIClient
     client.DefaultRequestHeaders.Add("authorization", $"Bearer {apiKey}");
 
     var content = new StringContent(
-      $"{{\"model\": \"text-davinci-003\",\"prompt\": \"{question}\",\"max_tokens\": 400,\"temperature\": 0.35}}",
+      $"{{\"model\": \"text-davinci-003\",\"prompt\": \"{question}\",\"max_tokens\": 500,\"temperature\": 1}}",
       Encoding.UTF8,
       "application/json");
 
