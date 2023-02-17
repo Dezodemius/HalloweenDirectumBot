@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+using System;
+using System.Globalization;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,8 +19,9 @@ public class OpenAIClient
     var client = new HttpClient();
     client.DefaultRequestHeaders.Add("authorization", $"Bearer {apiKey}");
 
+    var randomTemp = new Random().NextDouble().ToString("0.##", CultureInfo.InvariantCulture);
     var content = new StringContent(
-      $"{{\"model\": \"text-davinci-003\",\"prompt\": \"{question}\",\"max_tokens\": 500,\"temperature\": 1}}",
+      $"{{\"model\": \"text-davinci-003\",\"prompt\": \"{question}\",\"max_tokens\": 500,\"temperature\": {randomTemp}}}",
       Encoding.UTF8,
       "application/json");
 
