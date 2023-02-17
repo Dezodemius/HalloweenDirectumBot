@@ -28,7 +28,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
       new []{ InlineKeyboardButton.WithCallbackData("Нажми, если не можешь придумать поздравление 🤖", BotChatCommand.GenerateWish) },
-      new []{ InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start) }
+      new []{ InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu) }
     });
     await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishToMe, replyMarkup: inlineMarkup);
   }
@@ -38,14 +38,14 @@ public class SendWishScenario : AutoStepBotCommandScenario
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
         new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWishButton, BotChatCommand.Send) },
-        new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)}
+        new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu)}
     });
 
     if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery.Data == BotChatCommand.GenerateWish)
     {
       string aiWish;
       await botClient.SendChatActionAsync(chatId, ChatAction.Typing);
-      await botClient.SendTextMessageAsync(chatId, "Требуется немного времени, чтобы ChatGPT придумал поздравление 🤖");
+      await botClient.SendPhotoAsync(chatId, new InputOnlineFile(File.OpenRead(GetImagePath("1.png"))),caption:"Требуется немного времени. Джарвис собирает самые лучшие слова для поздравления");
       try
       {
         aiWish = await GetAIWish();
@@ -53,7 +53,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
       catch (Exception e)
       {
         var backToMenuMarkup = new InlineKeyboardMarkup(
-          InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start));
+          InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu));
         await botClient.SendTextMessageAsync(chatId, "Упс... бот тоже не смог придумать поздравление. Вся надежда на тебя", replyMarkup: backToMenuMarkup);
         LogManager.GetCurrentClassLogger().Error(e);
         throw;
@@ -96,7 +96,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
         var type = update.CallbackQuery.Message.Type;
         var inlineMarkup = new InlineKeyboardMarkup(new []
         {
-          InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)
+          InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu)
         });
         string beforeWishDayDate;
         switch (wishDay)
@@ -155,6 +155,11 @@ public class SendWishScenario : AutoStepBotCommandScenario
   private static string GetGifPath(string gifFileName)
   {
     return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GIFs", gifFileName);
+  }
+
+  private static string GetImagePath(string imageFileName)
+  {
+    return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", imageFileName);
   }
 
   private async Task<string> GetAIWish()

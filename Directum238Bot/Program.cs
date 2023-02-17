@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -61,7 +62,7 @@ namespace Directum238Bot
         var gif = new InputOnlineFile(File.OpenRead(GetGifPath(gifName)), gifName);
         var markup =
             new InlineKeyboardMarkup(
-              InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start));
+              InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu));
         foreach (var user in usersId)
         {
           bot.SendAnimationAsync(user.BotUserId,
@@ -88,7 +89,7 @@ namespace Directum238Bot
         var usersId = _activeUsersManager.GetAll();
         var markup =
             new InlineKeyboardMarkup(
-              InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start));
+              InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu));
         foreach (var user in usersId)
         {
           bot.SendTextMessageAsync(user.BotUserId,
@@ -178,6 +179,24 @@ namespace Directum238Bot
         {
           if (_configManager.Config.BotAdminId.Contains(userId))
             userScenario = new UserCommandScenario(userId, new BroadcastScenario(_activeUsersManager));
+          break;
+        }
+        case BotChatCommand.MainMenu:
+        {
+          var inlineButtons = new List<InlineKeyboardButton[]>
+          {
+              new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWish23, BotChatCommand.SendWish23) },
+              new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWish8, BotChatCommand.SendWish8) }
+          };
+          if (DateTime.Now.CompareTo(Schedule.Day23AnonsMessageDateTime) >= 0)
+            inlineButtons.Add(new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish23, BotChatCommand.GetWish23)});
+          if (DateTime.Now.CompareTo(Schedule.Day8AnonsMessageDateTime) >= 0)
+            inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish8, BotChatCommand.GetWish8) });
+          var markup = new InlineKeyboardMarkup(inlineButtons);
+          await bot.SendTextMessageAsync(userId,
+            Directum238BotResources.MainMenuText,
+            replyMarkup: markup,
+            parseMode: ParseMode.Markdown, cancellationToken: ct);
           break;
         }
       }
