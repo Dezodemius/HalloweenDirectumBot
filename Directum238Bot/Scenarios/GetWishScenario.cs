@@ -22,7 +22,7 @@ public class GetWishScenario : AutoStepBotCommandScenario
     var wish = this.cache.GetRandomContentExceptCurrent(chatId, this.wishDay);
     var markup = new InlineKeyboardMarkup(new []
     {
-      InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.Start)
+      InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu)
     });
     if (wish == null)
       await botClient.SendTextMessageAsync(chatId, Directum238BotResources.NoWishesYet, replyMarkup: markup);
