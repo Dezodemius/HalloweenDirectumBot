@@ -10,5 +10,6 @@ public static class BotChatCommand
   public const string GetWish8 = "/get_wish_8";
   public const string Broadcast = "/broadcast";
   public const string Send = "/send";
-  public const string GenerateWish = "/generate";
+  public const string UserWish = "/user_wish";
+  public const string GenerateWish = "/bot_wish";
 }
