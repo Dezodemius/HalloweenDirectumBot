@@ -30,11 +30,11 @@ public class StartScenario : AutoStepBotCommandScenario
       inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish8, BotChatCommand.GetWish8) });
     var markup = new InlineKeyboardMarkup(inlineButtons);
     var gif = new InputOnlineFile(System.IO.File.OpenRead(GetGifPath("1.gif")), "hello.gif");
-    await bot.SendAnimationAsync(chatId,
-      gif,
-      caption: Directum238BotResources.BotStartMessage,
-      replyMarkup: markup,
-      parseMode: ParseMode.Markdown);
+    await bot.SendAnimationAsync(chatId, gif);
+    await bot.SendTextMessageAsync(chatId,
+      text: Directum238BotResources.BotStartMessage,
+      parseMode: ParseMode.Markdown,
+      replyMarkup: markup);
   }
 
   private static string GetGifPath(string gifFileName)

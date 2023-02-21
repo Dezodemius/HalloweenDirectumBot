@@ -1,16 +1,17 @@
-﻿using Telegram.Bot;
+﻿using System.Threading.Tasks;
+using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace BotCommon.Scenarios;
 
 public abstract class AutoStepBotCommandScenario : BotCommandScenario
 {
-  public override bool ExecuteStep(ITelegramBotClient telegramBotClient, Update update, long chatId)
+  public override async Task<bool> ExecuteStep(ITelegramBotClient telegramBotClient, Update update, long chatId)
   {
     if (!this.steps.MoveNext())
       return false;
 
     this.CurrentStep = this.steps.Current;
-    return base.ExecuteStep(telegramBotClient, update, chatId);
+    return await base.ExecuteStep(telegramBotClient, update, chatId);
   }
 }

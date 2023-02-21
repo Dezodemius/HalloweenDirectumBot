@@ -27,18 +27,22 @@ public class SendWishScenario : AutoStepBotCommandScenario
   {
     var inlineMarkup = new InlineKeyboardMarkup(new []
     {
-      new []{ InlineKeyboardButton.WithCallbackData("У меня есть идея поздравления", BotChatCommand.UserWish) },
-      new []{ InlineKeyboardButton.WithCallbackData("Нет идей 🤖", BotChatCommand.GenerateWish) },
+      new []{ InlineKeyboardButton.WithCallbackData(Directum238BotResources.IHaveWishMessage, BotChatCommand.UserWish) },
+      new []{ InlineKeyboardButton.WithCallbackData(Directum238BotResources.INeedBotHelpToWishMessage, BotChatCommand.GenerateWish) },
       new []{ InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu) }
     });
-    await botClient.SendTextMessageAsync(chatId, "Теперь придумай поздравление. Если нет идей, то нажми соответствующую кнопку", replyMarkup: inlineMarkup);
+    if (update.CallbackQuery is { Message: { } })
+    {
+      await botClient.EditMessageTextAsync(chatId, update.CallbackQuery.Message.MessageId,
+        Directum238BotResources.SendWishDescription, replyMarkup: inlineMarkup);
+    }
   }
 
   public async Task ChooseWishGenerator(ITelegramBotClient botClient, Update update, long chatId)
   {
     var buttons = new List<InlineKeyboardButton[]>
     {
-        new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu)}
+      new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu)}
     };
     if (update.Type == UpdateType.CallbackQuery)
     {
@@ -47,10 +51,9 @@ public class SendWishScenario : AutoStepBotCommandScenario
         case BotChatCommand.GenerateWish:
         {
           string aiWish;
-          await botClient.SendChatActionAsync(chatId, ChatAction.Typing);
-          await botClient.SendAnimationAsync(chatId,
-            new InputOnlineFile(File.OpenRead(GetGifPath("6.gif")), "6.gif"),
-            caption: "Требуется немного времени. Нейросеть ChatGPT собирает самые лучшие слова для поздравления");
+          await botClient.SendAnimationAsync(chatId, new InputOnlineFile(File.OpenRead(GetGifPath("6.gif")), "6.gif"));
+          await botClient.SendTextMessageAsync(chatId,
+            "Требуется немного времени. Нейросеть ChatGPT собирает самые лучшие слова для поздравления");
           try
           {
             aiWish = await GetAIWish();
@@ -63,7 +66,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
             await botClient.SendTextMessageAsync(chatId,
               "Упс... бот тоже не смог придумать поздравление. Вся надежда на тебя", replyMarkup: backToMenuMarkup);
             LogManager.GetCurrentClassLogger().Error(e);
-            throw;
+            return;
           }
 
           buttons.Insert(0, new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWishButton, BotChatCommand.Send)});
@@ -75,7 +78,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
         case BotChatCommand.UserWish:
         {
           var inlineMarkup = new InlineKeyboardMarkup(buttons);
-          await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishToMe, replyMarkup: inlineMarkup);
+          await botClient.EditMessageTextAsync(chatId, update.CallbackQuery.Message.MessageId, Directum238BotResources.SendWishToMe, replyMarkup: inlineMarkup);
           break;
         }
       }
@@ -92,27 +95,8 @@ public class SendWishScenario : AutoStepBotCommandScenario
 
     if (update.Type != UpdateType.Message || update.Message == null)
       return;
-    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishConfirmationMessage);
-    switch (update.Message.Type)
-    {
-      case MessageType.VideoNote:
-        if (update.Message.VideoNote != null)
-        {
-          await botClient.SendVideoNoteAsync(chatId, new InputOnlineFile(update.Message.VideoNote.FileId), replyMarkup: inlineMarkup);
-        }
-        break;
-      case MessageType.Text:
-        if (update.Message.Text != null)
-          await botClient.SendTextMessageAsync(chatId, update.Message.Text, replyMarkup: inlineMarkup);
-        break;
-      case MessageType.Voice:
-        if (update.Message.Voice != null)
-          await botClient.SendVoiceAsync(chatId, new InputOnlineFile(update.Message.Voice.FileId), replyMarkup: inlineMarkup);
-        break;
-      default:
-        await botClient.SendTextMessageAsync(chatId, Directum238BotResources.UnknownMessageType, replyMarkup: inlineMarkup);
-        break;
-    }
+    await botClient.CopyMessageAsync(chatId, chatId, update.Message.MessageId, caption: Directum238BotResources.SendWishConfirmationMessage);
+    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishConfirmationMessage, replyMarkup: inlineMarkup);
     await botClient.DeleteMessageAsync(chatId, update.Message.MessageId);
   }
 
@@ -150,33 +134,21 @@ public class SendWishScenario : AutoStepBotCommandScenario
         var gif = wishDay == WishDay.Day23
             ? new InputOnlineFile(File.OpenRead(GetGifPath("2.gif")), "2.gif")
             : new InputOnlineFile(File.OpenRead(GetGifPath("3.gif")), "3.gif");
-        await botClient.SendAnimationAsync(chatId,
-          gif,
-          caption: string.Format(Directum238BotResources.AfterMessageSaveMessage, beforeWishDayDate),
+        await botClient.SendAnimationAsync(chatId, gif);
+        await botClient.SendTextMessageAsync(chatId,
+          string.Format(Directum238BotResources.AfterMessageSaveMessage, beforeWishDayDate),
           replyMarkup: inlineMarkup);
 
         await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message.MessageId);
-        switch (type)
+        var content = type switch
         {
-          case MessageType.Text:
-          {
-            cache.Add(new UserContent(chatId, update.CallbackQuery.Message.Text,
-              update.CallbackQuery.Message.Type, wishDay));
-            break;
-          }
-          case MessageType.VideoNote:
-          {
-            cache.Add(new UserContent(chatId, update.CallbackQuery.Message.VideoNote.FileId,
-              update.CallbackQuery.Message.Type, wishDay));
-            break;
-          }
-          case MessageType.Voice:
-          {
-            cache.Add(new UserContent(chatId, update.CallbackQuery.Message.Voice.FileId,
-              update.CallbackQuery.Message.Type, wishDay));
-            break;
-          }
-        }
+            MessageType.Text => update.CallbackQuery.Message.Text,
+            MessageType.VideoNote => update.CallbackQuery.Message.VideoNote.FileId,
+            MessageType.Voice => update.CallbackQuery.Message.Voice.FileId,
+            _ => string.Empty
+        };
+
+        cache.Add(new UserContent(chatId, content, type, wishDay));
       }
     }
   }
@@ -184,11 +156,6 @@ public class SendWishScenario : AutoStepBotCommandScenario
   private static string GetGifPath(string gifFileName)
   {
     return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "GIFs", gifFileName);
-  }
-
-  private static string GetImagePath(string imageFileName)
-  {
-    return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", imageFileName);
   }
 
   private async Task<string> GetAIWish()
