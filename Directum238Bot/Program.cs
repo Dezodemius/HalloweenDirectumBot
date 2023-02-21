@@ -121,7 +121,7 @@ namespace Directum238Bot
       };
       bot.OnApiResponseReceived += (client, args, token) =>
       {
-        LogManager.GetCurrentClassLogger().Debug(args);
+        LogManager.GetCurrentClassLogger().Debug(JsonConvert.SerializeObject(args));
         return ValueTask.CompletedTask;
       };
       bot.OnApiResponseReceived += (client, args, token) =>
