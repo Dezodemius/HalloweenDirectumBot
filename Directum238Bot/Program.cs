@@ -22,7 +22,7 @@ namespace Directum238Bot
     private static ActiveUsersManager _activeUsersManager;
     private static BotConfigManager _configManager;
 
-    public static void Main(string[] args)
+    public static void Main()
     {
       var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
       PrepareForStartBot(bot);
@@ -43,7 +43,7 @@ namespace Directum238Bot
     {
       var timer = new System.Timers.Timer(TimeSpan.FromSeconds(5));
       timer.AutoReset = true;
-      timer.Elapsed += (a, b) =>
+      timer.Elapsed += async (a, b) =>
       {
         if (DateTime.Now.CompareTo(scheduleDate) < 0)
           return;
@@ -55,8 +55,8 @@ namespace Directum238Bot
               InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu));
         foreach (var user in usersId)
         {
-          bot.SendAnimationAsync(user.BotUserId, animation: gif);
-          bot.SendTextMessageAsync(user.BotUserId,
+          await bot.SendAnimationAsync(user.BotUserId, animation: gif);
+          await bot.SendTextMessageAsync(user.BotUserId,
             text: message,
             replyMarkup: markup,
             parseMode: ParseMode.Markdown);

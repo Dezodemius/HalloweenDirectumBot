@@ -95,8 +95,8 @@ public class SendWishScenario : AutoStepBotCommandScenario
 
     if (update.Type != UpdateType.Message || update.Message == null)
       return;
-    await botClient.CopyMessageAsync(chatId, chatId, update.Message.MessageId, caption: Directum238BotResources.SendWishConfirmationMessage);
-    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishConfirmationMessage, replyMarkup: inlineMarkup);
+    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishConfirmationMessage);
+    await botClient.CopyMessageAsync(chatId, chatId, update.Message.MessageId, replyMarkup: inlineMarkup);
     await botClient.DeleteMessageAsync(chatId, update.Message.MessageId);
   }
 

@@ -31,12 +31,12 @@ public class GetWishScenario : AutoStepBotCommandScenario
     {
       case MessageType.Voice:
       {
-        await botClient.SendAudioAsync(chatId, new InputMedia(wish.Content));
+        await botClient.SendVoiceAsync(chatId, new InputMedia(wish.Content));
         break;
       }
       case MessageType.VideoNote:
       {
-        await botClient.SendVideoAsync(chatId, new InputMedia(wish.Content));
+        await botClient.SendVideoNoteAsync(chatId, new InputMedia(wish.Content));
         break;
       }
       case MessageType.Text:

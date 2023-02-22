@@ -81,6 +81,17 @@ public class BotUpdateHandler : IUpdateHandler
         if (DateTime.Now.CompareTo(Schedule.Day8AnonsMessageDateTime) >= 0)
           inlineButtons.Add(new[] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish8, BotChatCommand.GetWish8) });
         var markup = new InlineKeyboardMarkup(inlineButtons);
+        if (update.CallbackQuery.Message.Type != MessageType.Text)
+        {
+          await bot.DeleteMessageAsync(userId,
+            update.CallbackQuery.Message.MessageId,
+            cancellationToken: cancellationToken);
+          await bot.SendTextMessageAsync(userId,
+            Directum238BotResources.MainMenuText,
+            replyMarkup: markup,
+            parseMode: ParseMode.Markdown,
+            cancellationToken: cancellationToken);
+        }
         await bot.EditMessageTextAsync(userId,
           update.CallbackQuery.Message.MessageId,
           Directum238BotResources.MainMenuText,
@@ -123,7 +134,8 @@ public class BotUpdateHandler : IUpdateHandler
 
   public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
   {
-    await Task.Run(() => LogManager.GetCurrentClassLogger().Debug(exception), cancellationToken);
+    LogManager.GetCurrentClassLogger().Debug(exception);
+    throw exception;
   }
 
   public BotUpdateHandler()
