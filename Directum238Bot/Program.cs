@@ -26,7 +26,7 @@ namespace Directum238Bot
     {
       var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
       PrepareForStartBot(bot);
-      StartAnimationScheduleMessage(bot, Schedule.Day23AnonsMessageDateTime, Directum238BotResources.AnonsWish23, "4.gif");
+      StartAnimationScheduleMessage(bot, "Wish23Anons.json", Schedule.Day23AnonsMessageDateTime, Directum238BotResources.AnonsWish23, "4.gif");
       // StartAnimationScheduleMessage(bot, Schedule.Day8AnonsMessageDateTime, Directum238BotResources.AnonsWish8, "5.gif");
       // StartTextScheduleMessage(bot, Schedule.MorningMeetingMessageDateTime, Directum238BotResources.MorningMeetingWomenDay);
       StartBot(bot);
@@ -39,30 +39,51 @@ namespace Directum238Bot
       Environment.Exit(0);
     }
 
-    private static void StartAnimationScheduleMessage(ITelegramBotClient bot, DateTime scheduleDate, string message, string gifName)
+    private static void StartAnimationScheduleMessage(ITelegramBotClient bot, string fileName, DateTime scheduleDate,
+      string message, string gifName)
     {
+      bool needToNotificate;
+      var scheduledMessageInfoFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+      if (!File.Exists(scheduledMessageInfoFilePath))
+      {
+        needToNotificate = true;
+      }
+      else
+      {
+        var scheduledMessageInfo = JsonConvert.DeserializeObject<ScheduledMessageInfo>(File.ReadAllText(scheduledMessageInfoFilePath));
+        needToNotificate = scheduledMessageInfo.NeedToNotificate;
+        scheduleDate = scheduledMessageInfo.MessageDateTime;
+      }
+
+      if (!needToNotificate)
+        return;
+
       var timer = new System.Timers.Timer(TimeSpan.FromSeconds(5));
       timer.AutoReset = true;
-      timer.Elapsed += async (a, b) =>
+      timer.Elapsed += (sender, b) =>
       {
         if (DateTime.Now.CompareTo(scheduleDate) < 0)
           return;
-
+        System.Timers.Timer timer = null;
+        if (sender is System.Timers.Timer)
+          timer = (System.Timers.Timer)sender;
+        timer.Enabled = false;
+        var scheduleMessageInfo = new ScheduledMessageInfo { NeedToNotificate = false, };
+        File.WriteAllText(scheduledMessageInfoFilePath, JsonConvert.SerializeObject(scheduleMessageInfo));
         var usersId = _activeUsersManager.GetAll();
-        var gif = new InputOnlineFile(File.OpenRead(GetGifPath(gifName)), gifName);
-        var markup =
-            new InlineKeyboardMarkup(
-              InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu));
+        var markup = new InlineKeyboardMarkup(InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu));
         foreach (var user in usersId)
         {
-          await bot.SendAnimationAsync(user.BotUserId, animation: gif);
-          await bot.SendTextMessageAsync(user.BotUserId,
+          var userInfo = bot.GetChatMemberAsync(user.BotUserId, user.BotUserId).Result;
+          log.Info($"Message sent to: {userInfo.User.FirstName} {userInfo.User}");
+          _ = bot.SendAnimationAsync(user.BotUserId,
+            animation: new InputOnlineFile(File.OpenRead(GetGifPath(gifName)), gifName)).Result;
+          _ = bot.SendTextMessageAsync(user.BotUserId,
             text: message,
             replyMarkup: markup,
-            parseMode: ParseMode.Markdown);
+            parseMode: ParseMode.Markdown).Result;
         }
-        if (a is System.Timers.Timer timer)
-          timer.Dispose();
+        timer.Dispose();
       };
       timer.Start();
     }
@@ -136,6 +157,13 @@ namespace Directum238Bot
       // bot.StartReceiving(UpdateHandler, PollingErrorHandler, receiverOptions: opts);
       bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
     }
+  }
+
+  public class ScheduledMessageInfo
+  {
+    public DateTime MessageDateTime { get; set; }
+    public bool NeedToNotificate { get; set; }
+    public string MessageName { get; set; }
   }
 }
 
