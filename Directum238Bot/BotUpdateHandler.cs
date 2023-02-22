@@ -11,6 +11,7 @@ using Directum238Bot.Scenarios;
 using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
+using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -135,7 +136,11 @@ public class BotUpdateHandler : IUpdateHandler
   public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
   {
     LogManager.GetCurrentClassLogger().Error(exception);
-    throw exception;
+    foreach (var botAdmin in _configManager.Config.BotAdminId)
+      await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
+    // Cooldown in case of network connection error
+    if (exception is RequestException)
+      await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
   }
 
   public BotUpdateHandler()
