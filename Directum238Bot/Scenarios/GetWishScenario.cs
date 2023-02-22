@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BotCommon.Scenarios;
 using Directum238Bot.Repository;
+using NLog;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -26,6 +27,7 @@ public class GetWishScenario : AutoStepBotCommandScenario
     });
     if (wish == null)
       await botClient.SendTextMessageAsync(chatId, Directum238BotResources.NoWishesYet, replyMarkup: markup);
+    LogManager.GetCurrentClassLogger().Debug($"Wish content: {wish.Content}. Wish type: {wish.Type}. Wish id: {wish.Id}");
     await botClient.SendTextMessageAsync(chatId, Directum238BotResources.GetWishMessage);
     switch (wish.Type)
     {

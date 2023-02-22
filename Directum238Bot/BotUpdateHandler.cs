@@ -134,7 +134,7 @@ public class BotUpdateHandler : IUpdateHandler
 
   public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
   {
-    LogManager.GetCurrentClassLogger().Debug(exception);
+    LogManager.GetCurrentClassLogger().Error(exception);
     throw exception;
   }
 
