@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.KeepAlive;
-using BotCommon.Repository;
 using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
@@ -15,14 +14,19 @@ namespace Directum238Bot
   {
     private static readonly ILogger log = LogManager.GetCurrentClassLogger();
 
-    private static ActiveUsersManager _activeUsersManager;
-    private static BotConfigManager _configManager;
-
     public static void Main()
     {
-      var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
-      PrepareForStartBot(bot);
-      StartBot(bot);
+      try
+      {
+        var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
+        PrepareForStartBot(bot);
+        StartBot(bot);
+      }
+      catch (Exception e)
+      {
+        log.Fatal(e);
+        throw;
+      }
       string command;
       do
       {
@@ -34,8 +38,6 @@ namespace Directum238Bot
 
     private static void PrepareForStartBot(ITelegramBotClient bot)
     {
-      _configManager = new BotConfigManager();
-      _activeUsersManager = new ActiveUsersManager(_configManager.Config.DbConnectionString);
       var botKeepAlive = new BotKeepAlive(bot);
       botKeepAlive.StartKeepAlive();
     }
@@ -43,7 +45,7 @@ namespace Directum238Bot
     private static void StartBot(ITelegramBotClient bot)
     {
       log.Debug("Start Bot");
-      var opts = new ReceiverOptions()
+      var opts = new ReceiverOptions
       {
         AllowedUpdates = new []
         {
@@ -63,6 +65,11 @@ namespace Directum238Bot
         return ValueTask.CompletedTask;
       };
 
+      BotUpdateHandler.OnErrorHandling += () =>
+      {
+        log.Warn("Bot going to restart");
+        bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
+      };
       bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
     }
   }
