@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.KeepAlive;
@@ -7,6 +9,7 @@ using BotCommon.Repository;
 using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
+using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
@@ -67,20 +70,37 @@ namespace Directum238Bot
         timer.Enabled = false;
         var scheduleMessageInfo = new ScheduledMessageInfo { NeedToNotificate = false, };
         File.WriteAllText(scheduledMessageInfoFilePath, JsonConvert.SerializeObject(scheduleMessageInfo));
-        var usersId = _activeUsersManager.GetAll();
+        var usersId = _activeUsersManager.GetAll().GetEnumerator();
         var markup = new InlineKeyboardMarkup(InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu));
-        foreach (var user in usersId)
+
+        var hasUsersToBroadcast = usersId.MoveNext();
+        while (hasUsersToBroadcast)
         {
+          var user = usersId.Current;
           var userInfo = bot.GetChatMemberAsync(user.BotUserId, user.BotUserId).Result;
+          try
+          {
+            log.Info($"Sending message to: {userInfo.User.FirstName} {userInfo.User}");
+            _ = bot.SendAnimationAsync(user.BotUserId,
+              animation: new InputOnlineFile(File.OpenRead(GetGifPath(gifName)), gifName)).Result;
+            _ = bot.SendTextMessageAsync(user.BotUserId,
+              text: message,
+              replyMarkup: markup,
+              parseMode: ParseMode.Markdown).Result;
+            Thread.Sleep(3000);
+          }
+          catch (AggregateException e)
+              when(e.InnerException is ApiRequestException apiRequestException
+                   && apiRequestException.ErrorCode == (int)HttpStatusCode.TooManyRequests)
+          {
+            log.Warn($"Failed to send message to {user.BotUserId}", e);
+            Thread.Sleep(TimeSpan.FromSeconds((double)apiRequestException.Parameters.RetryAfter));
+            continue;
+          }
+
           log.Info($"Message sent to: {userInfo.User.FirstName} {userInfo.User}");
-          _ = bot.SendAnimationAsync(user.BotUserId,
-            animation: new InputOnlineFile(File.OpenRead(GetGifPath(gifName)), gifName)).Result;
-          _ = bot.SendTextMessageAsync(user.BotUserId,
-            text: message,
-            replyMarkup: markup,
-            parseMode: ParseMode.Markdown).Result;
+          hasUsersToBroadcast = usersId.MoveNext();
         }
-        timer.Dispose();
       };
       timer.Start();
     }
