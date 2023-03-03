@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BotCommon;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using Telegram.Bot;

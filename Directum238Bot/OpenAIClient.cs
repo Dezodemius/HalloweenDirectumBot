@@ -26,9 +26,15 @@ public class OpenAIClient
       "application/json");
 
     var response = await client.PostAsync(openAIUrl, content);
-    var contentAsString = await response.Content.ReadAsStringAsync();
-    var answer = JsonConvert.DeserializeObject<dynamic>(contentAsString)!.choices[0].text;
-    return answer;
+    if (response.IsSuccessStatusCode)
+    {
+      var contentAsString = await response.Content.ReadAsStringAsync();
+      return JsonConvert.DeserializeObject<dynamic>(contentAsString)!.choices[0].text;
+    }
+    else
+    {
+      throw new HttpRequestException(response.ToString());
+    }
   }
 
   public OpenAIClient(string apiKey)

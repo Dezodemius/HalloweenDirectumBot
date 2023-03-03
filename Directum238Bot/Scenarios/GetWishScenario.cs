@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BotCommon.Scenarios;
 using Directum238Bot.Repository;
+using NLog;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -26,24 +27,30 @@ public class GetWishScenario : AutoStepBotCommandScenario
     });
     if (wish == null)
       await botClient.SendTextMessageAsync(chatId, Directum238BotResources.NoWishesYet, replyMarkup: markup);
+    LogManager.GetCurrentClassLogger().Debug($"Wish content: {wish.Content}. Wish type: {wish.Type}. Wish id: {wish.Id}");
+    await botClient.SendTextMessageAsync(chatId, Directum238BotResources.GetWishMessage);
     switch (wish.Type)
     {
       case MessageType.Voice:
       {
-        await botClient.SendAudioAsync(chatId, new InputMedia(wish.Content), replyMarkup: markup);
+        await botClient.SendVoiceAsync(chatId, new InputMedia(wish.Content));
         break;
       }
       case MessageType.VideoNote:
       {
-        await botClient.SendVideoAsync(chatId, new InputMedia(wish.Content), replyMarkup: markup);
+        await botClient.SendVideoNoteAsync(chatId, new InputMedia(wish.Content));
         break;
       }
       case MessageType.Text:
       {
-        await botClient.SendTextMessageAsync(chatId, wish.Content, replyMarkup: markup);
+        await botClient.SendTextMessageAsync(chatId, wish.Content);
         break;
       }
     }
+
+    await botClient.SendTextMessageAsync(chatId,
+      text: Directum238BotResources.AfterGetWishMessage,
+      replyMarkup: markup);
   }
 
   public GetWishScenario(UserContentCache cache, string wishDay)

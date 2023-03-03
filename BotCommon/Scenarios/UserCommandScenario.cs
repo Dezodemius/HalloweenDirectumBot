@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -19,9 +20,9 @@ public class UserCommandScenario
   [NotMapped]
   public BotCommandScenario CommandScenario { get; set; }
 
-  public bool Run(ITelegramBotClient bot, Update update, long chatId)
+  public async Task<bool> Run(ITelegramBotClient bot, Update update, long chatId)
   {
-     return CommandScenario.ExecuteStep(bot, update, chatId);
+     return await CommandScenario.ExecuteStep(bot, update, chatId);
   }
 
   public UserCommandScenario() { }
