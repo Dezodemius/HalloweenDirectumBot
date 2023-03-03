@@ -26,9 +26,6 @@ namespace Directum238Bot
     {
       var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
       PrepareForStartBot(bot);
-      StartAnimationScheduleMessage(bot, "Wish23Anons.json", Schedule.Day23AnonsMessageDateTime, Directum238BotResources.AnonsWish23, "4.gif");
-      // StartAnimationScheduleMessage(bot, Schedule.Day8AnonsMessageDateTime, Directum238BotResources.AnonsWish8, "5.gif");
-      // StartTextScheduleMessage(bot, Schedule.MorningMeetingMessageDateTime, Directum238BotResources.MorningMeetingWomenDay);
       StartBot(bot);
       string command;
       do

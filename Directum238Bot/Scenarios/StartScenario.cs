@@ -21,11 +21,11 @@ public class StartScenario : AutoStepBotCommandScenario
   {
     var inlineButtons = new List<InlineKeyboardButton[]>
     {
-      new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWish23, BotChatCommand.SendWish23) },
+      // new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWish23, BotChatCommand.SendWish23) },
       new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWish8, BotChatCommand.SendWish8) }
     };
-    if (DateTime.Now.CompareTo(Schedule.Day23AnonsMessageDateTime) >= 0)
-      inlineButtons.Add(new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish23, BotChatCommand.GetWish23)});
+    // if (DateTime.Now.CompareTo(Schedule.Day23AnonsMessageDateTime) >= 0)
+      // inlineButtons.Add(new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish23, BotChatCommand.GetWish23)});
     if (DateTime.Now.CompareTo(Schedule.Day8AnonsMessageDateTime) >= 0)
       inlineButtons.Add(new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GetWish8, BotChatCommand.GetWish8) });
     var markup = new InlineKeyboardMarkup(inlineButtons);
