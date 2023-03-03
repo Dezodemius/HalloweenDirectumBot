@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -17,11 +18,11 @@ public abstract class BotCommandScenario
 
   protected IEnumerator<BotCommandScenarioStep> steps;
 
-  public virtual bool ExecuteStep(ITelegramBotClient telegramBotClient, Update update, long chatId)
+  public virtual async Task<bool> ExecuteStep(ITelegramBotClient telegramBotClient, Update update, long chatId)
   {
     var canExecute = this.CurrentStep != null;
     if (canExecute)
-      this.CurrentStep?.StepAction(telegramBotClient, update, chatId);
+      await this.CurrentStep.StepAction(telegramBotClient, update, chatId)!;
     return canExecute;
   }
 

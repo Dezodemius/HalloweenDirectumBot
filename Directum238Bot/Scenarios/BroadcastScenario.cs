@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BotCommon;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using Telegram.Bot;
@@ -47,6 +46,21 @@ public class BroadcastScenario : AutoStepBotCommandScenario
       case MessageType.Text:
       {
         await bot.SendTextMessageAsync(chatId, update.Message.Text, replyMarkup: keyboard);
+        break;
+      }
+      case MessageType.Audio:
+      {
+        await bot.SendAudioAsync(chatId, new InputOnlineFile(update.Message.Text), replyMarkup: keyboard);
+        break;
+      }
+      case MessageType.Video:
+      {
+        await bot.SendVideoAsync(chatId, new InputOnlineFile(update.Message.Text), replyMarkup: keyboard);
+        break;
+      }
+      case MessageType.Document:
+      {
+        await bot.SendDocumentAsync(chatId, new InputOnlineFile(update.Message.Text), replyMarkup: keyboard);
         break;
       }
     }

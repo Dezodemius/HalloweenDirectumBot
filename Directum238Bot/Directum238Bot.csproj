@@ -27,5 +27,8 @@
     <ItemGroup>
         <None Include="GIFs\*.*" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
+    <ItemGroup>
+        <None Include="Images\*.*" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
 
 </Project>
