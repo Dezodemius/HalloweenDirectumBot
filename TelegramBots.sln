@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6FB595AD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Directum238.Tests", "Directum238.Tests\Directum238.Tests.csproj", "{F72CE86D-249D-46F0-B398-7080171229D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotWorkerService", "BotWorkerService\BotWorkerService.csproj", "{1C03164A-5F2E-4C35-870B-BB182B76D324}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{F72CE86D-249D-46F0-B398-7080171229D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F72CE86D-249D-46F0-B398-7080171229D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F72CE86D-249D-46F0-B398-7080171229D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C03164A-5F2E-4C35-870B-BB182B76D324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C03164A-5F2E-4C35-870B-BB182B76D324}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C03164A-5F2E-4C35-870B-BB182B76D324}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C03164A-5F2E-4C35-870B-BB182B76D324}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C320C0CA-8573-49DD-9D65-102E8995B8BF} = {6FB595AD-78E7-43D8-B399-C2296313645C}
