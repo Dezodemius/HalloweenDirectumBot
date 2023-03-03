@@ -12,9 +12,6 @@ using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InputFiles;
-using Telegram.Bot.Types.ReplyMarkups;
-using File = System.IO.File;
 
 namespace Directum238Bot
 {
@@ -39,8 +36,7 @@ namespace Directum238Bot
       Environment.Exit(0);
     }
 
-    private static void StartAnimationScheduleMessage(ITelegramBotClient bot, string fileName, DateTime scheduleDate,
-      string message, string gifName)
+    private static void PrepareForStartBot(ITelegramBotClient bot)
     {
       bool needToNotificate;
       var scheduledMessageInfoFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
@@ -156,31 +152,19 @@ namespace Directum238Bot
         },
         ThrowPendingUpdates = true
       };
-      bot.OnApiResponseReceived += (client, args, token) =>
+      bot.OnApiResponseReceived += (_, args, _) =>
       {
-        LogManager.GetCurrentClassLogger().Debug(JsonConvert.SerializeObject(args));
+        log.Debug($" <<<< {JsonConvert.SerializeObject(args)}");
         return ValueTask.CompletedTask;
       };
-      bot.OnApiResponseReceived += (client, args, token) =>
+      bot.OnMakingApiRequest += (_, args, _) =>
       {
-        LogManager.GetCurrentClassLogger().Debug(JsonConvert.SerializeObject(args));
+        log.Debug($" >>>> {JsonConvert.SerializeObject(args)}");
         return ValueTask.CompletedTask;
       };
-      bot.OnMakingApiRequest += (client, args, token) =>
-      {
-        LogManager.GetCurrentClassLogger().Debug(JsonConvert.SerializeObject(args));
-        return ValueTask.CompletedTask;
-      };
-      // bot.StartReceiving(UpdateHandler, PollingErrorHandler, receiverOptions: opts);
+
       bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
     }
-  }
-
-  public class ScheduledMessageInfo
-  {
-    public DateTime MessageDateTime { get; set; }
-    public bool NeedToNotificate { get; set; }
-    public string MessageName { get; set; }
   }
 }
 
