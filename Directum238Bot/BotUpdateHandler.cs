@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -27,6 +27,7 @@ public class BotUpdateHandler : IUpdateHandler
   private static BotConfigManager _configManager;
   private static UserContentCache _contentCache;
 
+  public static event Action OnErrorHandling;
   public async Task HandleUpdateAsync(ITelegramBotClient bot, Update update, CancellationToken cancellationToken)
   {
     log.Info(JsonConvert.SerializeObject(update));
@@ -138,9 +139,7 @@ public class BotUpdateHandler : IUpdateHandler
     LogManager.GetCurrentClassLogger().Error(exception);
     foreach (var botAdmin in _configManager.Config.BotAdminId)
       await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
-    // Cooldown in case of network connection error
-    if (exception is RequestException)
-      await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
+    OnErrorHandling?.Invoke();
   }
 
   public BotUpdateHandler()
