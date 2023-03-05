@@ -135,10 +135,19 @@ public class BotUpdateHandler : IUpdateHandler
   public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
   {
     LogManager.GetCurrentClassLogger().Error(exception);
-    foreach (var botAdmin in _configManager.Config.BotAdminId)
-      await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
-
-    Environment.Exit(1);
+    try
+    {
+      foreach (var botAdmin in _configManager.Config.BotAdminId)
+        await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
+    }
+    catch (Exception e)
+    {
+      log.Error(e);
+    }
+    finally
+    {
+      Environment.Exit(1);
+    }
   }
 
   public BotUpdateHandler()
