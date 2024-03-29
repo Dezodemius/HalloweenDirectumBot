@@ -129,7 +129,6 @@ public class BotUpdateHandler : IUpdateHandler
         UpdateType.CallbackQuery => update.CallbackQuery.Data,
         _ => null
     };
-
   }
 
   public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
