@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.KeepAlive;
@@ -63,12 +64,6 @@ namespace Directum238Bot
       {
         log.Debug($" >>>> {JsonConvert.SerializeObject(args)}");
         return ValueTask.CompletedTask;
-      };
-
-      BotUpdateHandler.OnErrorHandling += () =>
-      {
-        log.Warn("Bot going to restart");
-        bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
       };
       bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
     }

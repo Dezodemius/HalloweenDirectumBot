@@ -25,11 +25,18 @@ public class SendWishScenario : AutoStepBotCommandScenario
 
   public static async Task SendInstruction(ITelegramBotClient botClient, Update update, long chatId)
   {
-    var inlineMarkup = new InlineKeyboardMarkup(new []
+    var inlineMarkup = new InlineKeyboardMarkup(new[]
     {
-      new []{ InlineKeyboardButton.WithCallbackData(Directum238BotResources.IHaveWishMessage, BotChatCommand.UserWish) },
-      new []{ InlineKeyboardButton.WithCallbackData(Directum238BotResources.INeedBotHelpToWishMessage, BotChatCommand.GenerateWish) },
-      new []{ InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu) }
+        new[]
+        {
+            InlineKeyboardButton.WithCallbackData(Directum238BotResources.IHaveWishMessage, BotChatCommand.UserWish)
+        },
+        new[]
+        {
+            InlineKeyboardButton.WithCallbackData(Directum238BotResources.INeedBotHelpToWishMessage,
+              BotChatCommand.GenerateWish)
+        },
+        new[] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu) }
     });
     if (update.CallbackQuery is { Message: { } })
     {
@@ -42,7 +49,7 @@ public class SendWishScenario : AutoStepBotCommandScenario
   {
     var buttons = new List<InlineKeyboardButton[]>
     {
-      new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu)}
+        new[] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu) }
     };
     if (update.Type == UpdateType.CallbackQuery)
     {
@@ -69,7 +76,11 @@ public class SendWishScenario : AutoStepBotCommandScenario
             return;
           }
 
-          buttons.Insert(0, new [] {InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWishButton, BotChatCommand.Send)});
+          buttons.Insert(0,
+            new[]
+            {
+                InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWishButton, BotChatCommand.Send)
+            });
           var inlineMarkup = new InlineKeyboardMarkup(buttons);
           await botClient.SendTextMessageAsync(chatId, aiWish, replyMarkup: inlineMarkup);
           this.steps.MoveNext();
@@ -78,7 +89,8 @@ public class SendWishScenario : AutoStepBotCommandScenario
         case BotChatCommand.UserWish:
         {
           var inlineMarkup = new InlineKeyboardMarkup(buttons);
-          await botClient.EditMessageTextAsync(chatId, update.CallbackQuery.Message.MessageId, Directum238BotResources.SendWishToMe, replyMarkup: inlineMarkup);
+          await botClient.EditMessageTextAsync(chatId, update.CallbackQuery.Message.MessageId,
+            Directum238BotResources.SendWishToMe, replyMarkup: inlineMarkup);
           break;
         }
       }
@@ -87,14 +99,23 @@ public class SendWishScenario : AutoStepBotCommandScenario
 
   public async Task SendUserCheckMessage(ITelegramBotClient botClient, Update update, long chatId)
   {
-    var inlineMarkup = new InlineKeyboardMarkup(new []
+    var inlineMarkup = new InlineKeyboardMarkup(new[]
     {
-        new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWishButton, BotChatCommand.Send) },
-        new [] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu)}
+        new[] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.SendWishButton, BotChatCommand.Send) },
+        new[] { InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu) }
     });
 
     if (update.Type != UpdateType.Message || update.Message == null)
       return;
+
+    var messageType = update.Message.Type;
+    if (messageType != MessageType.Text && messageType != MessageType.VideoNote && messageType == MessageType.Voice)
+    {
+      await botClient.SendTextMessageAsync(chatId, 
+        "Упс... Я не поддерживаю такие форматы поздравлений :( Попробуй отправить текст, голосовое, либо видео-кружок",
+        replyMarkup: new InlineKeyboardMarkup(InlineKeyboardButton.WithCallbackData(Directum238BotResources.GoStartMenu, BotChatCommand.MainMenu)));
+      return;
+    }
     await botClient.SendTextMessageAsync(chatId, Directum238BotResources.SendWishConfirmationMessage);
     await botClient.CopyMessageAsync(chatId, chatId, update.Message.MessageId, replyMarkup: inlineMarkup);
     await botClient.DeleteMessageAsync(chatId, update.Message.MessageId);

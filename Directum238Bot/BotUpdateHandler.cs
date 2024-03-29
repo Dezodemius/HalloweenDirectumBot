@@ -11,7 +11,6 @@ using Directum238Bot.Scenarios;
 using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
-using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -27,7 +26,6 @@ public class BotUpdateHandler : IUpdateHandler
   private static BotConfigManager _configManager;
   private static UserContentCache _contentCache;
 
-  public static event Action OnErrorHandling;
   public async Task HandleUpdateAsync(ITelegramBotClient bot, Update update, CancellationToken cancellationToken)
   {
     log.Info(JsonConvert.SerializeObject(update));
@@ -137,9 +135,19 @@ public class BotUpdateHandler : IUpdateHandler
   public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
   {
     LogManager.GetCurrentClassLogger().Error(exception);
-    foreach (var botAdmin in _configManager.Config.BotAdminId)
-      await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
-    OnErrorHandling?.Invoke();
+    try
+    {
+      foreach (var botAdmin in _configManager.Config.BotAdminId)
+        await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
+    }
+    catch (Exception e)
+    {
+      log.Error(e);
+    }
+    finally
+    {
+      Environment.Exit(1);
+    }
   }
 
   public BotUpdateHandler()
