@@ -1,0 +1,51 @@
+﻿using System.Threading.Tasks;
+using BotCommon;
+using BotCommon.KeepAlive;
+using Newtonsoft.Json;
+using NLog;
+using Telegram.Bot;
+using Telegram.Bot.Polling;
+using Telegram.Bot.Types.Enums;
+
+namespace DirectumCareerNightBot;
+
+internal class Program
+{
+    private static readonly ILogger log = LogManager.GetCurrentClassLogger();
+
+    public static void Main(string[] args)
+    {
+        var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
+        PrepareForStartBot(bot);
+    }
+
+    private static void PrepareForStartBot(ITelegramBotClient bot)
+    {
+        var botKeepAlive = new BotKeepAlive(bot);
+        botKeepAlive.StartKeepAlive();
+    }
+    private static void StartBot(ITelegramBotClient bot)
+    {
+        log.Debug("Start Bot");
+        var opts = new ReceiverOptions
+        {
+            AllowedUpdates = new []
+            {
+                UpdateType.Message,
+                UpdateType.CallbackQuery
+            },
+            ThrowPendingUpdates = true
+        };
+        bot.OnApiResponseReceived += (_, args, _) =>
+        {
+            log.Debug($" <<<< {JsonConvert.SerializeObject(args)}");
+            return ValueTask.CompletedTask;
+        };
+        bot.OnMakingApiRequest += (_, args, _) =>
+        {
+            log.Debug($" >>>> {JsonConvert.SerializeObject(args)}");
+            return ValueTask.CompletedTask;
+        };
+        bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
+    }
+}
