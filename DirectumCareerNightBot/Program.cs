@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.KeepAlive;
 using Newtonsoft.Json;
@@ -17,6 +18,14 @@ internal class Program
     {
         var bot = new TelegramBotClient(new BotConfigManager().Config.BotToken);
         PrepareForStartBot(bot);
+        StartBot(bot);
+        string command;
+        do
+        {
+            command = Console.ReadLine();
+        } while (!command.Equals("/exit", StringComparison.InvariantCulture));
+        log.Info("Bye bye");
+        Environment.Exit(0);
     }
 
     private static void PrepareForStartBot(ITelegramBotClient bot)
