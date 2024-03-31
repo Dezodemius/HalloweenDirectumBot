@@ -34,6 +34,24 @@ public class BotUpdateHandler : IUpdateHandler
                 break;
             case BotChatCommands.MainMenu:
                 break;
+            case BotChatCommands.Practice:
+                break;
+            case BotChatCommands.Alumnus:
+                break;
+            case BotChatCommands.Worker:
+                break;
+            case BotChatCommands.Student:
+                break;
+            case BotChatCommands.ITDeptWorker:
+                break;
+            case BotChatCommands.Q15:
+                break;
+            case BotChatCommands.Raffle:
+                break;
+            case BotChatCommands.Career:
+                break;
+            case BotChatCommands.Socials:
+                break;
             
         }
         _activeUsersManager.Add(new BotUser(userId));
@@ -43,8 +61,8 @@ public class BotUpdateHandler : IUpdateHandler
     {
         try
         {
-            foreach (var botAdmin in _configManager.Config.BotAdminId)
-                await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
+            // foreach (var botAdmin in _configManager.Config.BotAdminId)
+            //     await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
         }
         catch (Exception e)
         {
