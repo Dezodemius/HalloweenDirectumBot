@@ -4,13 +4,13 @@ public class BotChatCommands
 {
     public const string Start = "/start";
     public const string MainMenu = "/m";
-    public const string Practice = "/p";
-    public const string Alumnus = "/a";
-    public const string Worker = "/w";
-    public const string Student = "/s";
-    public const string ITDeptWorker = "/i";
-    public const string Q15 = "/f";
-    public const string Raffle = "/r";
-    public const string Career = "/c";
-    public const string Socials = "/so";
+    public const string WantToPractice = "WantToPractice";
+    public const string NotStudentButWantInIT = "NotStudentButWantInIT";
+    public const string WorkInITButWantToChangeCompany = "WorkInITButWantToChangeCompany";
+    public const string StudentWithExperience = "StudentWithExperience";
+    public const string WorkerInITDept = "WorkerInITDept";
+    public const string Directum15Questions = "Directum15Questions";
+    public const string RafflePrizes = "RafflePrizes";
+    public const string Career = "Career";
+    public const string DirectumVK = "DirectumVK";
 }

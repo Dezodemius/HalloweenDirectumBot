@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BotCommon;
@@ -10,6 +11,7 @@ using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DirectumCareerNightBot;
 
@@ -30,27 +32,42 @@ public class BotUpdateHandler : IUpdateHandler
         switch (GetMessage(update))
         {
             case BotChatCommands.Start:
-                await botClient.SendTextMessageAsync(userId, BotMessages.BotStartMessage, cancellationToken: cancellationToken);
+            {
+                var replyMarkup = MainMenuCommand.GetMainMenuInlineMarkup();
+                await botClient.SendTextMessageAsync(userId, 
+                    BotMessages.BotStartMessage, 
+                    replyMarkup: replyMarkup, 
+                    cancellationToken: cancellationToken);
                 break;
+            }
             case BotChatCommands.MainMenu:
+            {
+                var replyMarkup = MainMenuCommand.GetMainMenuInlineMarkup();
+                if (update.CallbackQuery?.Message != null)
+                    await botClient.EditMessageCaptionAsync(userId,
+                        update.CallbackQuery.Message.MessageId,
+                        "Тыкай! Не бойся!:",
+                        replyMarkup: replyMarkup,
+                        cancellationToken: cancellationToken);
                 break;
-            case BotChatCommands.Practice:
+            }
+            case BotChatCommands.WantToPractice:
                 break;
-            case BotChatCommands.Alumnus:
+            case BotChatCommands.NotStudentButWantInIT:
                 break;
-            case BotChatCommands.Worker:
+            case BotChatCommands.WorkInITButWantToChangeCompany:
                 break;
-            case BotChatCommands.Student:
+            case BotChatCommands.StudentWithExperience:
                 break;
-            case BotChatCommands.ITDeptWorker:
+            case BotChatCommands.WorkerInITDept:
                 break;
-            case BotChatCommands.Q15:
+            case BotChatCommands.Directum15Questions:
                 break;
-            case BotChatCommands.Raffle:
+            case BotChatCommands.RafflePrizes:
                 break;
             case BotChatCommands.Career:
                 break;
-            case BotChatCommands.Socials:
+            case BotChatCommands.DirectumVK:
                 break;
             
         }
@@ -59,19 +76,7 @@ public class BotUpdateHandler : IUpdateHandler
 
     public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
-        try
-        {
-            // foreach (var botAdmin in _configManager.Config.BotAdminId)
-            //     await botClient.SendTextMessageAsync(botAdmin, "Бот упал", cancellationToken: cancellationToken);
-        }
-        catch (Exception e)
-        {
-            log.Error(e);
-        }
-        finally
-        {
-            Environment.Exit(1);
-        }
+        log.Error(exception);
     }
 
     private static string GetMessage(Update update)
