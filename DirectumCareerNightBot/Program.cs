@@ -45,16 +45,6 @@ internal class Program
             },
             ThrowPendingUpdates = true
         };
-        bot.OnApiResponseReceived += (_, args, _) =>
-        {
-            log.Debug($" <<<< {JsonConvert.SerializeObject(args)}");
-            return ValueTask.CompletedTask;
-        };
-        bot.OnMakingApiRequest += (_, args, _) =>
-        {
-            log.Debug($" >>>> {JsonConvert.SerializeObject(args)}");
-            return ValueTask.CompletedTask;
-        };
         bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
     }
 }
