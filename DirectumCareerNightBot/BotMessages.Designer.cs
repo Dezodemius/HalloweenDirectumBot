@@ -61,15 +61,105 @@ namespace DirectumCareerNightBot {
         
         /// <summary>
         ///   Looks up a localized string similar to Привет, это команда Directum.
-        ///        
+        ///            
         ///35 лет мы создаём решения, которые упрощают электронный документооборот, бизнес-процессы и жизнь в целом.
-        ///
+        ///    
         ///Этот чат-бот был создан специально для Ночи карьеры. С его помощью ты сможешь попасть на собеседование, узнать о направлениях работ в компании, получить мерч и откликнуться на практику.
-        ///    .
+        ///        .
         /// </summary>
         internal static string BotStartMessage {
             get {
                 return ResourceManager.GetString("BotStartMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Узнать о вакансиях.
+        /// </summary>
+        internal static string Career {
+            get {
+                return ResourceManager.GetString("Career", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 15 вопросов Directum.
+        /// </summary>
+        internal static string Directum15Questions {
+            get {
+                return ResourceManager.GetString("Directum15Questions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Компания Directum в VK.
+        /// </summary>
+        internal static string DirectumCompanyVK {
+            get {
+                return ResourceManager.GetString("DirectumCompanyVK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Студенты Directum в VK.
+        /// </summary>
+        internal static string DirectumStudentsVK {
+            get {
+                return ResourceManager.GetString("DirectumStudentsVK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Уже не студент, но хочу в ИТ.
+        /// </summary>
+        internal static string NotStudentButWantInIT {
+            get {
+                return ResourceManager.GetString("NotStudentButWantInIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Розыгрыш мерча.
+        /// </summary>
+        internal static string RafflePrizes {
+            get {
+                return ResourceManager.GetString("RafflePrizes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Старшекурсник с опытом в ИТ, хочу в Directum.
+        /// </summary>
+        internal static string StudentWithExperience {
+            get {
+                return ResourceManager.GetString("StudentWithExperience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Хочу на практику!.
+        /// </summary>
+        internal static string WantToPractice {
+            get {
+                return ResourceManager.GetString("WantToPractice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Работаю в ИТ-департаменте/отделе.
+        /// </summary>
+        internal static string WorkerInITDept {
+            get {
+                return ResourceManager.GetString("WorkerInITDept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Работаю в ИТ, хочу сменить компанию.
+        /// </summary>
+        internal static string WorkInITButWantToChangeCompany {
+            get {
+                return ResourceManager.GetString("WorkInITButWantToChangeCompany", resourceCulture);
             }
         }
     }

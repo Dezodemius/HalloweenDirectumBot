@@ -19,11 +19,41 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="BotStartMessage" xml:space="preserve">
-    <value>Привет, это команда Directum.
-        
+        <value>Привет, это команда Directum.
+            
 35 лет мы создаём решения, которые упрощают электронный документооборот, бизнес-процессы и жизнь в целом.
-
+    
 Этот чат-бот был создан специально для Ночи карьеры. С его помощью ты сможешь попасть на собеседование, узнать о направлениях работ в компании, получить мерч и откликнуться на практику.
-    </value>
+        </value>
+    </data>
+    <data name="WantToPractice" xml:space="preserve">
+        <value>Хочу на практику!</value>
+    </data>
+    <data name="NotStudentButWantInIT" xml:space="preserve">
+        <value>Уже не студент, но хочу в ИТ</value>
+    </data>
+    <data name="WorkInITButWantToChangeCompany" xml:space="preserve">
+        <value>Работаю в ИТ, хочу сменить компанию</value>
+    </data>
+    <data name="StudentWithExperience" xml:space="preserve">
+        <value>Старшекурсник с опытом в ИТ, хочу в Directum</value>
+    </data>
+    <data name="WorkerInITDept" xml:space="preserve">
+        <value>Работаю в ИТ-департаменте/отделе</value>
+    </data>
+    <data name="Directum15Questions" xml:space="preserve">
+        <value>15 вопросов Directum</value>
+    </data>
+    <data name="RafflePrizes" xml:space="preserve">
+        <value>Розыгрыш мерча</value>
+    </data>
+    <data name="Career" xml:space="preserve">
+        <value>Узнать о вакансиях</value>
+    </data>
+    <data name="DirectumCompanyVK" xml:space="preserve">
+        <value>Компания Directum в VK</value>
+    </data>
+    <data name="DirectumStudentsVK" xml:space="preserve">
+        <value>Студенты Directum в VK</value>
     </data>
 </root>
