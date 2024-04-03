@@ -56,4 +56,40 @@
     <data name="DirectumStudentsVK" xml:space="preserve">
         <value>Студенты Directum в VK</value>
     </data>
+    <data name="MainMenu" xml:space="preserve">
+        <value>Главное меню</value>
+    </data>
+    <data name="IntroduceYourself" xml:space="preserve">
+        <value>Давай знакомиться, напиши свои фамилию, имя и отчество</value>
+    </data>
+    <data name="HowToContact" xml:space="preserve">
+        <value>Как удобнее будет поддерживать связь с нашим HR-ом — напиши свои телефон/почту/vk</value>
+    </data>
+    <data name="Programming" xml:space="preserve">
+        <value>Программирование</value>
+    </data>
+    <data name="Testing" xml:space="preserve">
+        <value>Тестирование</value>
+    </data>
+    <data name="Marketing" xml:space="preserve">
+        <value>Маркетинг</value>
+    </data>
+    <data name="Sails" xml:space="preserve">
+        <value>Продажи</value>
+    </data>
+    <data name="Other" xml:space="preserve">
+        <value>Другое</value>
+    </data>
+    <data name="InterestingDirection" xml:space="preserve">
+        <value>Какое направление тебе интересно?</value>
+    </data>
+    <data name="TellAboutChosenDirection" xml:space="preserve">
+        <value>Расскажи про свой опыт в этом направлении</value>
+    </data>
+    <data name="ThankYou" xml:space="preserve">
+        <value>Спасибо! 
+Мы передадим твою анкету рекрутеру, в случае положительного решения он свяжется с тобой до **30 апреля**. Не забудь взять трубку с незнакомого номера, если указал телефон предпочтительным способом связи. 
+
+Если остались вопросы, за правой кулисой на сцене группе от 6 человек Настя расскажет о практике</value>
+    </data>
 </root>

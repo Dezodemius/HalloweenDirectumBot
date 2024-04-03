@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using BotCommon.Scenarios;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DirectumCareerNightBot.Scenarios;
 
@@ -12,21 +14,43 @@ public class PracticeScenario : AutoStepBotCommandScenario
     public override Guid Id { get; } = new Guid("87036BA3-710B-4742-86E0-A1FD8F699741");
     public override string ScenarioCommand => string.Empty;
 
-    private Task StepAction1(ITelegramBotClient bot, Update update, long chatid)
+    private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        // TODO: Давай знакомиться, напиши свои фамилию, имя и отчество
+        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself, ParseMode.Markdown);
     }
-    private Task StepAction2(ITelegramBotClient bot, Update update, long chatid)
+    private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
-        // TODO: Как удобнее будет поддерживать связь с нашим HR-ом — напиши свои телефон/почту/vk
+        Console.WriteLine(update.Message.Text);
+        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact, ParseMode.Markdown);
     }
-    private Task StepAction3(ITelegramBotClient bot, Update update, long chatid)
+    private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
-        // TODO: Какое направление тебе интересно: Программирование Тестирование Маркетинг Продажи Другое (сам вписывает)
+        Console.WriteLine(update.Message.Text);
+        var buttons = new List<KeyboardButton[]>
+        {
+            new []{ new KeyboardButton(BotMessages.Programming)},
+            new []{ new KeyboardButton(BotMessages.Testing)},
+            new []{ new KeyboardButton(BotMessages.Marketing)},
+            new []{ new KeyboardButton(BotMessages.Sails)},
+            new []{ new KeyboardButton(BotMessages.Other)},
+        };
+        var markup = new ReplyKeyboardMarkup(buttons);
+        await bot.SendTextMessageAsync(chatId, BotMessages.InterestingDirection, ParseMode.Markdown, replyMarkup: markup);
     }
-    private Task StepAction4(ITelegramBotClient bot, Update update, long chatid)
+    private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
-        // TODO: Расскажи про свой опыт в программировании/ тестировании/ маркетинге/ продажах (в зависимости от того, что выбрал)
+        Console.WriteLine(update.Message.Text);
+        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutChosenDirection, ParseMode.Markdown, replyMarkup: new ReplyKeyboardRemove());
+    }
+    private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
+    {
+        Console.WriteLine(update.Message.Text);
+        var buttons = new List<InlineKeyboardButton[]>
+        {
+            new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenu, BotChatCommands.MainMenu) }
+        };
+        var markup = new InlineKeyboardMarkup(buttons);
+        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYou, ParseMode.Markdown, replyMarkup: markup);
     }
 
     public PracticeScenario()
@@ -37,6 +61,7 @@ public class PracticeScenario : AutoStepBotCommandScenario
             new (StepAction2),
             new (StepAction3),
             new (StepAction4),
+            new (StepAction5),
 
         }.GetEnumerator();
     }

@@ -110,11 +110,74 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Как удобнее будет поддерживать связь с нашим HR-ом — напиши свои телефон/почту/vk.
+        /// </summary>
+        internal static string HowToContact {
+            get {
+                return ResourceManager.GetString("HowToContact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Какое направление тебе интересно?.
+        /// </summary>
+        internal static string InterestingDirection {
+            get {
+                return ResourceManager.GetString("InterestingDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Давай знакомиться, напиши свои фамилию, имя и отчество.
+        /// </summary>
+        internal static string IntroduceYourself {
+            get {
+                return ResourceManager.GetString("IntroduceYourself", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Главное меню.
+        /// </summary>
+        internal static string MainMenu {
+            get {
+                return ResourceManager.GetString("MainMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Маркетинг.
+        /// </summary>
+        internal static string Marketing {
+            get {
+                return ResourceManager.GetString("Marketing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Уже не студент, но хочу в ИТ.
         /// </summary>
         internal static string NotStudentButWantInIT {
             get {
                 return ResourceManager.GetString("NotStudentButWantInIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Другое.
+        /// </summary>
+        internal static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Программирование.
+        /// </summary>
+        internal static string Programming {
+            get {
+                return ResourceManager.GetString("Programming", resourceCulture);
             }
         }
         
@@ -128,11 +191,50 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Продажи.
+        /// </summary>
+        internal static string Sails {
+            get {
+                return ResourceManager.GetString("Sails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Старшекурсник с опытом в ИТ, хочу в Directum.
         /// </summary>
         internal static string StudentWithExperience {
             get {
                 return ResourceManager.GetString("StudentWithExperience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Расскажи про свой опыт в этом направлении.
+        /// </summary>
+        internal static string TellAboutChosenDirection {
+            get {
+                return ResourceManager.GetString("TellAboutChosenDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Тестирование.
+        /// </summary>
+        internal static string Testing {
+            get {
+                return ResourceManager.GetString("Testing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Спасибо! 
+        ///Мы передадим твою анкету рекрутеру, в случае положительного решения он свяжется с тобой до **30 апреля**. Не забудь взять трубку с незнакомого номера, если указал телефон предпочтительным способом связи. 
+        ///
+        ///Если остались вопросы, за правой кулисой на сцене группе от 6 человек Настя расскажет о практике.
+        /// </summary>
+        internal static string ThankYou {
+            get {
+                return ResourceManager.GetString("ThankYou", resourceCulture);
             }
         }
         

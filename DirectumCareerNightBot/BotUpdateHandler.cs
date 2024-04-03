@@ -54,6 +54,7 @@ public class BotUpdateHandler : IUpdateHandler
                 break;
             }
             case BotChatCommands.WantToPractice:
+                userScenario = new UserCommandScenario(userId, new PracticeScenario());
                 break;
             case BotChatCommands.NotStudentButWantInIT:
                 break;
