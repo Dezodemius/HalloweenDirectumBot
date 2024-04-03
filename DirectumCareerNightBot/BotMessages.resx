@@ -93,10 +93,13 @@
         <value>Расскажи о своём последнем месте работы, опыте</value>
     </data>
     <data name="TellAboutITExpirience" xml:space="preserve">
-        <value>Расскажи о своём опыты в IT, в какой компании работал, на какой должности</value>
+        <value>Расскажи о своём опыте в IT, в какой компании работал, на какой должности</value>
     </data>
     <data name="TellAboutYourCompany" xml:space="preserve">
         <value>Расскажи в какой компании ты сейчас работаешь, на какой должности, если хочешь напиши подробнее про свой опыт</value>
+    </data>
+    <data name="TellAboutYourCompanyPlace" xml:space="preserve">
+        <value>Расскажи какие задачи ты выполняешь на своей должности</value>
     </data>
     <data name="WhatYouAlreadyLearned" xml:space="preserve">
         <value>Что уже изучал в ИТ? Ответь в свободной форме</value>
@@ -114,5 +117,8 @@
     </data>
     <data name="ThankYouInIT" xml:space="preserve">
         <value>Поднимайся на сцену. За столом с табличкой **«Мы тебя ждали»** пройдёт твоё собеседование. Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист.</value>
+    </data>
+    <data name="ThankYouInITDept" xml:space="preserve">
+        <value>Поднимайся на сцену. За столом с табличкой «Мы тебя ждали» тебе расскажут о возможностях в Directum. Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист.</value>
     </data>
 </root>

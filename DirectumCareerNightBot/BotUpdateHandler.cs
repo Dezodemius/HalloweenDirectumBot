@@ -74,6 +74,7 @@ public class BotUpdateHandler : IUpdateHandler
                 userScenario = new UserCommandScenario(userId, new StudentWithExperienceScenario());
                 break;
             case BotChatCommands.WorkerInITDept:
+                userScenario = new UserCommandScenario(userId, new WorkingITDeptScenario());
                 break;
             case BotChatCommands.Directum15Questions:
                 break;

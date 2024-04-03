@@ -227,7 +227,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Расскажи о своём опыты в IT, в какой компании работал, на какой должности.
+        ///   Looks up a localized string similar to Расскажи о своём опыте в IT, в какой компании работал, на какой должности.
         /// </summary>
         internal static string TellAboutITExpirience {
             get {
@@ -250,6 +250,15 @@ namespace DirectumCareerNightBot {
         internal static string TellAboutYourCompany {
             get {
                 return ResourceManager.GetString("TellAboutYourCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Расскажи какие задачи ты выполняешь на своей должности.
+        /// </summary>
+        internal static string TellAboutYourCompanyPlace {
+            get {
+                return ResourceManager.GetString("TellAboutYourCompanyPlace", resourceCulture);
             }
         }
         
@@ -277,6 +286,15 @@ namespace DirectumCareerNightBot {
         internal static string ThankYouInIT {
             get {
                 return ResourceManager.GetString("ThankYouInIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Поднимайся на сцену. За столом с табличкой «Мы тебя ждали» тебе расскажут о возможностях в Directum. Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист..
+        /// </summary>
+        internal static string ThankYouInITDept {
+            get {
+                return ResourceManager.GetString("ThankYouInITDept", resourceCulture);
             }
         }
         
