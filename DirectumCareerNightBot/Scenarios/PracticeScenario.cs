@@ -47,10 +47,10 @@ public class PracticeScenario : AutoStepBotCommandScenario
         Console.WriteLine(update.Message.Text);
         var buttons = new List<InlineKeyboardButton[]>
         {
-            new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenu, BotChatCommands.MainMenu) }
+            new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
         };
         var markup = new InlineKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYou, ParseMode.Markdown, replyMarkup: markup);
+        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouPractice, ParseMode.Markdown, replyMarkup: markup);
     }
 
     public PracticeScenario()

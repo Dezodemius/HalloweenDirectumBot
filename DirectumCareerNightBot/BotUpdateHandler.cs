@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
+using DirectumCareerNightBot.Scenarios;
 using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
@@ -48,15 +49,23 @@ public class BotUpdateHandler : IUpdateHandler
                 if (update.CallbackQuery?.Message != null)
                     await botClient.EditMessageTextAsync(userId,
                         update.CallbackQuery.Message.MessageId,
-                        "Тыкай! Не бойся!:",
+                        BotMessages.MainMenu,
                         replyMarkup: replyMarkup,
                         cancellationToken: cancellationToken);
+                else
+                {
+                    await botClient.SendTextMessageAsync(userId,
+                        BotMessages.MainMenu,
+                        replyMarkup: replyMarkup,
+                        cancellationToken: cancellationToken);
+                }
                 break;
             }
             case BotChatCommands.WantToPractice:
                 userScenario = new UserCommandScenario(userId, new PracticeScenario());
                 break;
             case BotChatCommands.NotStudentButWantInIT:
+                userScenario = new UserCommandScenario(userId, new NotStudentButWantInITScenario());
                 break;
             case BotChatCommands.WorkInITButWantToChangeCompany:
                 break;

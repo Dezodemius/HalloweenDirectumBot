@@ -3,7 +3,7 @@
 public class BotChatCommands
 {
     public const string Start = "/start";
-    public const string MainMenu = "/m";
+    public const string MainMenu = "/menu";
     public const string WantToPractice = "WantToPractice";
     public const string NotStudentButWantInIT = "NotStudentButWantInIT";
     public const string WorkInITButWantToChangeCompany = "WorkInITButWantToChangeCompany";

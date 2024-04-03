@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -57,7 +57,10 @@
         <value>Студенты Directum в VK</value>
     </data>
     <data name="MainMenu" xml:space="preserve">
-        <value>Главное меню</value>
+        <value>Выбирай, что тебе интересно!</value>
+    </data>
+    <data name="MainMenuButton" xml:space="preserve">
+        <value>Вернуться в меню</value>
     </data>
     <data name="IntroduceYourself" xml:space="preserve">
         <value>Давай знакомиться, напиши свои фамилию, имя и отчество</value>
