@@ -70,6 +70,7 @@ public class BotUpdateHandler : IUpdateHandler
             case BotChatCommands.WorkInITButWantToChangeCompany:
                 break;
             case BotChatCommands.StudentWithExperience:
+                userScenario = new UserCommandScenario(userId, new StudentWithExperienceScenario());
                 break;
             case BotChatCommands.WorkerInITDept:
                 break;

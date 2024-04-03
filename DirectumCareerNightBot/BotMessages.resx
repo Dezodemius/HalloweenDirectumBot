@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -92,6 +92,9 @@
     <data name="TellAboutLastWork" xml:space="preserve">
         <value>Расскажи о своём последнем месте работы, опыте</value>
     </data>
+    <data name="TellAboutITExpirience" xml:space="preserve">
+        <value>Расскажи о своём опыты в IT, в какой компании работал, на какой должности</value>
+    </data>
     <data name="WhatYouAlreadyLearned" xml:space="preserve">
         <value>Что уже изучал в ИТ? Ответь в свободной форме</value>
     </data>
@@ -102,5 +105,8 @@
     </data>
     <data name="ThankYouNotStudent" xml:space="preserve">
         <value>Поднимайся на сцену! За столом с табличкой **«Попасть в ИТ»** тебе расскажут о возможностях. Крепись, ты можешь оказаться 30м в очереди на общение. А  пока есть время, и ты уже занял очередь, можешь прогуляться к нашему стенду.</value>
+    </data>
+    <data name="ThankYouAlumnus" xml:space="preserve">
+        <value>Поднимайся на сцену. За столом с табличкой **«Мы тебя ждали»** пройдёт твоё собеседование. Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист.</value>
     </data>
 </root>
