@@ -245,6 +245,15 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Расскажи в какой компании ты сейчас работаешь, на какой должности, если хочешь напиши подробнее про свой опыт.
+        /// </summary>
+        internal static string TellAboutYourCompany {
+            get {
+                return ResourceManager.GetString("TellAboutYourCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Тестирование.
         /// </summary>
         internal static string Testing {
@@ -259,6 +268,15 @@ namespace DirectumCareerNightBot {
         internal static string ThankYouAlumnus {
             get {
                 return ResourceManager.GetString("ThankYouAlumnus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Поднимайся на сцену. За столом с табличкой **«Мы тебя ждали»** пройдёт твоё собеседование. Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист..
+        /// </summary>
+        internal static string ThankYouInIT {
+            get {
+                return ResourceManager.GetString("ThankYouInIT", resourceCulture);
             }
         }
         

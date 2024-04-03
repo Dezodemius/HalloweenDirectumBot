@@ -68,6 +68,7 @@ public class BotUpdateHandler : IUpdateHandler
                 userScenario = new UserCommandScenario(userId, new NotStudentButWantInITScenario());
                 break;
             case BotChatCommands.WorkInITButWantToChangeCompany:
+                userScenario = new UserCommandScenario(userId, new WorkInITButWantToChangeCompanyScenario());
                 break;
             case BotChatCommands.StudentWithExperience:
                 userScenario = new UserCommandScenario(userId, new StudentWithExperienceScenario());
@@ -78,11 +79,6 @@ public class BotUpdateHandler : IUpdateHandler
                 break;
             case BotChatCommands.RafflePrizes:
                 break;
-            case BotChatCommands.Career:
-                break;
-            case BotChatCommands.DirectumVK:
-                break;
-            
         }
         _activeUsersManager.Add(new BotUser(userId));
         if (userScenario == null && _userScenarioRepository.TryGet(userId, out var _userScenario))
