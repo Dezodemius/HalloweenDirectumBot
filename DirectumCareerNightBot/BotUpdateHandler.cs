@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,6 +29,8 @@ public class BotUpdateHandler : IUpdateHandler
         var userId = GetUserId(update);
         if (userId == default)
             return;
+
+        UserCommandScenario userScenario = null;
         switch (GetMessage(update))
         {
             case BotChatCommands.Start:
@@ -44,7 +46,7 @@ public class BotUpdateHandler : IUpdateHandler
             {
                 var replyMarkup = MainMenuCommand.GetMainMenuInlineMarkup();
                 if (update.CallbackQuery?.Message != null)
-                    await botClient.EditMessageCaptionAsync(userId,
+                    await botClient.EditMessageTextAsync(userId,
                         update.CallbackQuery.Message.MessageId,
                         "Тыкай! Не бойся!:",
                         replyMarkup: replyMarkup,
@@ -72,6 +74,13 @@ public class BotUpdateHandler : IUpdateHandler
             
         }
         _activeUsersManager.Add(new BotUser(userId));
+        if (userScenario == null && _userScenarioRepository.TryGet(userId, out var _userScenario))
+            userScenario = _userScenario;
+        else
+            _userScenarioRepository.AddOrReplace(userScenario);
+
+        if (userScenario != null && !(await userScenario.Run(botClient, update, userId)))
+            _userScenarioRepository.Remove(userScenario);
     }
 
     public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
