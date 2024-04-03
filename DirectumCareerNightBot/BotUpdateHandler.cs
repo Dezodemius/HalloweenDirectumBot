@@ -31,6 +31,8 @@ public class BotUpdateHandler : IUpdateHandler
         if (userId == default)
             return;
 
+        _activeUsersManager.Add(new BotUser(userId));
+
         UserCommandScenario userScenario = null;
         switch (GetMessage(update))
         {
@@ -41,7 +43,8 @@ public class BotUpdateHandler : IUpdateHandler
                     BotMessages.BotStartMessage, 
                     replyMarkup: replyMarkup, 
                     cancellationToken: cancellationToken);
-                break;
+                _userScenarioRepository.Remove(userId);
+                return;
             }
             case BotChatCommands.MainMenu:
             {
@@ -59,7 +62,8 @@ public class BotUpdateHandler : IUpdateHandler
                         replyMarkup: replyMarkup,
                         cancellationToken: cancellationToken);
                 }
-                break;
+                _userScenarioRepository.Remove(userId);
+                return;
             }
             case BotChatCommands.WantToPractice:
                 userScenario = new UserCommandScenario(userId, new PracticeScenario());
@@ -92,7 +96,6 @@ public class BotUpdateHandler : IUpdateHandler
             case BotChatCommands.RafflePrizes:
                 break;
         }
-        _activeUsersManager.Add(new BotUser(userId));
         if (userScenario == null && _userScenarioRepository.TryGet(userId, out var _userScenario))
             userScenario = _userScenario;
         else
