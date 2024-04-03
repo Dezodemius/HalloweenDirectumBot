@@ -77,6 +77,17 @@ public class BotUpdateHandler : IUpdateHandler
                 userScenario = new UserCommandScenario(userId, new WorkingITDeptScenario());
                 break;
             case BotChatCommands.Directum15Questions:
+                var buttons = new List<InlineKeyboardButton[]>
+                {
+                    new [] {InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu), }
+                };
+                var markup = new InlineKeyboardMarkup(buttons);
+                await botClient.SendTextMessageAsync(
+                    userId, 
+                    BotMessages.Directum15QuestionsMessage, 
+                    ParseMode.Markdown, 
+                    replyMarkup: markup, 
+                    cancellationToken: cancellationToken);
                 break;
             case BotChatCommands.RafflePrizes:
                 break;

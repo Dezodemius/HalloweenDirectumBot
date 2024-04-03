@@ -92,6 +92,20 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ищи на сцене 3 больших стола Directum:
+        ///-  Стол «про разработку».
+        ///-  Стол «про тестирование».
+        ///-  Стол «про аналитику, маркетинг, внедрение, продажи».
+        ///
+        ///Группе от 6 человек специалисты рассказывают  о своих направлениях..
+        /// </summary>
+        internal static string Directum15QuestionsMessage {
+            get {
+                return ResourceManager.GetString("Directum15QuestionsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Компания Directum в VK.
         /// </summary>
         internal static string DirectumCompanyVK {
