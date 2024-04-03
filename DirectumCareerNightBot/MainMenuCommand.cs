@@ -34,10 +34,6 @@ public static class MainMenuCommand
             },
             new []
             {                
-                InlineKeyboardButton.WithUrl(BotMessages.DirectumCompanyVK, "https://vk.com/directum_people"),
-            },
-            new []
-            {                
                 InlineKeyboardButton.WithUrl(BotMessages.DirectumStudentsVK, "https://vk.com/student_directum"),
             }
         };
