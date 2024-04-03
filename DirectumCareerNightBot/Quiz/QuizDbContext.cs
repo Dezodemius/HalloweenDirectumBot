@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DirectumCareerNightBot;
 
-public class QuizContext : DbContext
+public sealed class QuizContext : DbContext
 {
     public DbSet<QuizQuestion> Questions { get; set; }
     public DbSet<QuizChoice> Choices { get; set; }
