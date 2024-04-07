@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using BotCommon.Repository;
 
 namespace DirectumCareerNightBot.Quiz;
@@ -22,7 +21,6 @@ public class QuizPossibleAnswer
     public int Id { get; set; }
     public string Text { get; set; }
     
-    // [ForeignKey(nameof(QuestionId))]
     public int QuestionId { get; set; }
     public QuizQuestion Question { get; set; }
 }

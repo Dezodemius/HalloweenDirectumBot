@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.KeepAlive;
-using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;

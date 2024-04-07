@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Telegram.Bot.Types;
@@ -51,7 +50,6 @@ public class UserDbContext : DefaultDbContext<BotUser>
   }
 }
 
-// [Table("BotUsers")]
 public class BotUser
 {
   [Key]
