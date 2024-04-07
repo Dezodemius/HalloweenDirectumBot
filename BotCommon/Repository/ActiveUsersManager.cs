@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,11 @@ public sealed class ActiveUsersManager : DefaultDbContext<BotUser>
     optionsBuilder.UseSqlite(this._connectionString);
   }
 
-
+  public ActiveUsersManager() : this("Filename=user.db")
+  {
+    
+  }
+  
   public ActiveUsersManager(string connectionString) : base(connectionString)
   {
   }
@@ -48,13 +53,23 @@ public sealed class ActiveUsersManager : DefaultDbContext<BotUser>
 public class BotUser
 {
   public long BotUserId { get; set; }
+  public string UserNickname { get; set; }
+  public string UserFirstName { get; set; }
+  public string UserSurname { get; set; }
+  public string UserLanguage { get; set; }
+  public DateTime UserFirstMeet { get; set; }
 
   public BotUser()
   {
   }
 
-  public BotUser(long id)
+  public BotUser(long id, string userNickname, string userFirstName, string userSurname, string userLanguage)
   {
     this.BotUserId = id;
+    this.UserNickname = userNickname;
+    this.UserFirstName = userFirstName;
+    this.UserSurname = userSurname;
+    this.UserLanguage = userLanguage;
+    this.UserFirstMeet = DateTime.Now;
   }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using BotCommon;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using DirectumCareerNightBot.Scenarios;
@@ -20,20 +19,23 @@ public class BotUpdateHandler : IUpdateHandler
 {
     private static readonly ILogger log = LogManager.GetCurrentClassLogger();
 
-    private static BotConfigManager _configManager;
-    private static ActiveUsersManager _activeUsersManager;
-    private static UserScenarioRepository _userScenarioRepository;
+    private static ActiveUsersManager? _activeUsersManager;
+    private static UserScenarioRepository? _userScenarioRepository;
 
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         log.Info(JsonConvert.SerializeObject(update));
-        var userId = GetUserId(update);
-        if (userId == default)
-            return;
+        var userInfo = GetUserInfo(update);
+        var userId = userInfo.Id;
 
-        _activeUsersManager.Add(new BotUser(userId));
+        _activeUsersManager?.Add(new BotUser(
+            userId, 
+            userInfo.Username,
+            userInfo.FirstName,
+            userInfo.LastName,
+            userInfo.LanguageCode));
 
-        UserCommandScenario userScenario = null;
+        UserCommandScenario? userScenario = null;
         switch (GetMessage(update))
         {
             case BotChatCommands.Start:
@@ -43,7 +45,7 @@ public class BotUpdateHandler : IUpdateHandler
                     BotMessages.BotStartMessage, 
                     replyMarkup: replyMarkup, 
                     cancellationToken: cancellationToken);
-                _userScenarioRepository.Remove(userId);
+                _userScenarioRepository?.Remove(userId);
                 return;
             }
             case BotChatCommands.MainMenu:
@@ -120,20 +122,19 @@ public class BotUpdateHandler : IUpdateHandler
         };
     }
 
-    private static long GetUserId(Update update)
+    private static User GetUserInfo(Update update)
     {
         return update.Type switch
         {
-            UpdateType.Message => update.Message.From.Id,
-            UpdateType.CallbackQuery => update.CallbackQuery.From.Id,
+            UpdateType.Message => update.Message.From,
+            UpdateType.CallbackQuery => update.CallbackQuery.From,
             _ => default
         };
     }
 
     public BotUpdateHandler()
     {
-        _configManager = new BotConfigManager();
-        _activeUsersManager = new ActiveUsersManager(_configManager.Config.DbConnectionString);
+        _activeUsersManager = new ActiveUsersManager();
         _userScenarioRepository = new UserScenarioRepository();
     }
 }
