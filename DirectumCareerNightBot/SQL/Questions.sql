@@ -24,6 +24,6 @@ INSERT INTO Questions (QuestionId, QuestionText, CorrectChoiceId) VALUES (14, '�
 INSERT INTO Questions (QuestionId, QuestionText, CorrectChoiceId) VALUES (15, 'Какого языка программирования не существует?', 60);
 INSERT INTO Questions (QuestionId, QuestionText, CorrectChoiceId) VALUES (16, 'Вычислите выражение ''1 2 + 3 * 100 -'':', 61);
 INSERT INTO Questions (QuestionId, QuestionText, CorrectChoiceId) VALUES (17, 'Все мужики в зале знают, что 40 + 40 будет равно...', 65);
-INSERT INTO Questions (QuestionId, QuestionText, CorrectChoiceId) VALUES (18, 'Старое название компании Directum:', 70);
+INSERT INTO Questions (QuestionId, QuestionText, CorrectChoiceId) VALUES (18, 'Что Senior .Net разработчица наносит на губы перед тем, как залить фичу?', 70);
 INSERT INTO Questions (QuestionId, QuestionText, CorrectChoiceId) VALUES (19, 'Что это? ''/@([A-Za-z0-9_]{1,15})/ ''', 75);
 INSERT INTO Questions (QuestionId, QuestionText, CorrectChoiceId) VALUES (20, 'Один из ответов верный', 77);
