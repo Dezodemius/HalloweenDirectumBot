@@ -62,6 +62,9 @@
     <data name="MainMenuButton" xml:space="preserve">
         <value>Вернуться в меню</value>
     </data>
+    <data name="QuizStartMessage" xml:space="preserve">
+        <value>Ответь верно на 5 вопросов и получи подарок от Directum!</value>
+    </data>
     <data name="IntroduceYourself" xml:space="preserve">
         <value>Давай знакомиться, напиши свои фамилию, имя и отчество</value>
     </data>

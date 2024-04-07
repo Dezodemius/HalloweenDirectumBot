@@ -22,7 +22,7 @@ public class BotUpdateHandler : IUpdateHandler
 {
   private static readonly ILogger log = LogManager.GetCurrentClassLogger();
   private static UserScenarioRepository _userScenarioRepository;
-  private static ActiveUsersManager _activeUsersManager;
+  private static UserDbContext _userDbContext;
   private static BotConfigManager _configManager;
   private static UserContentCache _contentCache;
 
@@ -33,7 +33,7 @@ public class BotUpdateHandler : IUpdateHandler
     if (userId == default)
       return;
 
-    _activeUsersManager.Add(new BotUser(userId));
+    _userDbContext.Add(new BotUser(userId));
 
     UserCommandScenario userScenario = null;
     switch (GetMessage(update))
@@ -66,7 +66,7 @@ public class BotUpdateHandler : IUpdateHandler
       case BotChatCommand.Broadcast:
       {
         if (_configManager.Config.BotAdminId.Contains(userId))
-          userScenario = new UserCommandScenario(userId, new BroadcastScenario(_activeUsersManager));
+          userScenario = new UserCommandScenario(userId, new BroadcastScenario(_userDbContext));
         break;
       }
       case BotChatCommand.MainMenu:
@@ -121,16 +121,6 @@ public class BotUpdateHandler : IUpdateHandler
     };
   }
 
-  private static string GetMessage(Update update)
-  {
-    return update.Type switch
-    {
-        UpdateType.Message => update.Message.Text,
-        UpdateType.CallbackQuery => update.CallbackQuery.Data,
-        _ => null
-    };
-  }
-
   public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
   {
     LogManager.GetCurrentClassLogger().Error(exception);
@@ -154,6 +144,6 @@ public class BotUpdateHandler : IUpdateHandler
     _configManager = new BotConfigManager();
     _userScenarioRepository = new UserScenarioRepository();
     _contentCache = new UserContentCache(_configManager.Config.DbConnectionString);
-    _activeUsersManager = new ActiveUsersManager(_configManager.Config.DbConnectionString);
+    _userDbContext = new UserDbContext(_configManager.Config.DbConnectionString);
   }
 }

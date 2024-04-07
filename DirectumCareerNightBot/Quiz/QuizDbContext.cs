@@ -1,18 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BotCommon.Repository;
+using DirectumCareerNightBot.Quiz;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DirectumCareerNightBot;
 
-public sealed class QuizContext : DbContext
+public sealed class BotDbContext : UserDbContext
 {
     public DbSet<QuizQuestion> Questions { get; set; }
-    public DbSet<QuizChoice> Choices { get; set; }
+    public DbSet<QuizPossibleAnswer> Choices { get; set; }
+    public DbSet<QuizUserQuestion> UserQuestions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlite("Filename=quiz.db");
+        => options.UseSqlite(_connectionString);
 
-    public QuizContext()
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<QuizQuestion>()
+            .HasOne(q => q.CorrectChoice)
+            .WithMany()
+            .HasForeignKey(q => q.CorrectChoiceId);
+
+        modelBuilder.Entity<QuizPossibleAnswer>()
+            .HasOne(pa => pa.Question)
+            .WithMany(q => q.Choices)
+            .HasForeignKey(pa => pa.QuestionId);
+
+        modelBuilder.Entity<QuizUserQuestion>()
+            .HasOne(quq => quq.User)
+            .WithMany()
+            .HasForeignKey(quq => quq.UserId);
+    }
+
+    public BotDbContext() : base("Filename=quiz.db")
     {
         Database.EnsureCreated();
 

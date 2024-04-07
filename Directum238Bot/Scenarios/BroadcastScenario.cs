@@ -13,7 +13,7 @@ namespace Directum238Bot.Scenarios;
 
 public class BroadcastScenario : AutoStepBotCommandScenario
 {
-  private readonly ActiveUsersManager cache;
+  private readonly UserDbContext cache;
 
   public override Guid Id => new Guid("8F2DD0DC-E84B-4319-8277-58222A671FC5");
 
@@ -80,17 +80,17 @@ public class BroadcastScenario : AutoStepBotCommandScenario
           {
             case MessageType.Voice:
             {
-              await bot.SendVoiceAsync(user.BotUserId, new InputOnlineFile(update.CallbackQuery.Message.Voice.FileId));
+              await bot.SendVoiceAsync(user.Id, new InputOnlineFile(update.CallbackQuery.Message.Voice.FileId));
               break;
             }
             case MessageType.VideoNote:
             {
-              await bot.SendVideoNoteAsync(user.BotUserId, new InputOnlineFile(update.CallbackQuery.Message.VideoNote.FileId));
+              await bot.SendVideoNoteAsync(user.Id, new InputOnlineFile(update.CallbackQuery.Message.VideoNote.FileId));
               break;
             }
             case MessageType.Text:
             {
-              await bot.SendTextMessageAsync(user.BotUserId, update.CallbackQuery.Message.Text);
+              await bot.SendTextMessageAsync(user.Id, update.CallbackQuery.Message.Text);
               break;
             }
           }
@@ -105,7 +105,7 @@ public class BroadcastScenario : AutoStepBotCommandScenario
     }
   }
 
-  public BroadcastScenario(ActiveUsersManager cache)
+  public BroadcastScenario(UserDbContext cache)
   {
     this.cache = cache;
     this.steps = new List<BotCommandScenarioStep>

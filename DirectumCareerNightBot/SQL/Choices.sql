@@ -4,12 +4,12 @@ create table Choices
         constraint PK_Choices
             primary key autoincrement,
     ChoiceText             TEXT    not null,
-    QuizQuestionQuestionId INTEGER
-        constraint FK_Choices_Questions_QuizQuestionQuestionId
+    QuizQuestion INTEGER
+        constraint FK_Choices_Questions_QuizQuestion
             references Questions
 );
 
-create index IX_Choices_QuizQuestionQuestionId
+create index IX_Choices_QuizQuestion
     on Choices (QuizQuestionQuestionId);
 
 INSERT INTO Choices (ChoiceId, ChoiceText, QuizQuestionQuestionId) VALUES (1, 'con', 1);
