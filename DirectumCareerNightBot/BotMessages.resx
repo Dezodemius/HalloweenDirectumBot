@@ -104,10 +104,10 @@
         <value>Расскажи о своём последнем месте работы, опыте</value>
     </data>
     <data name="TellAboutITExpirience" xml:space="preserve">
-        <value>Расскажи в какой компании работаешь, на какой должности, кратко опиши свои задачи</value>
+        <value>Расскажи о своём опыте в IT, в какой компании работал, на какой должности</value>
     </data>
     <data name="TellAboutYourCompany" xml:space="preserve">
-        <value>Расскажи в какой компании ты сейчас работаешь, на какой должности, если хочешь напиши подробнее про свой опыт</value>
+        <value>Расскажи в какой компании работаешь, на какой должности, кратко опиши свои задачи</value>
     </data>
     <data name="TellAboutYourCompanyPlace" xml:space="preserve">
         <value>Расскажи какие задачи ты выполняешь на своей должности</value>

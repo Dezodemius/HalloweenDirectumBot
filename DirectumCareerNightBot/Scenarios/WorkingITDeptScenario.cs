@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.Scenarios;
+using DirectumCareerNightBot.GoogleSheets;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -60,27 +61,9 @@ public class WorkingITDeptScenario : AutoStepBotCommandScenario
         userData.Contact = BotHelper.GetMessage(update);
         await dbContext.SaveChangesAsync();
         
-        var buttons = new List<InlineKeyboardButton[]>
-        {
-            new[] { InlineKeyboardButton.WithCallbackData("Да", BotChatCommands.YesWork) },
-            new[] { InlineKeyboardButton.WithCallbackData("Нет", BotChatCommands.NoWork) }
-        };
-        await bot.SendTextMessageAsync(chatId, "Работал ли ты в ИТ-компании или ИТ-отделе?", replyMarkup: new InlineKeyboardMarkup(buttons));
+        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutLastWork);
     }
-
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
-    {
-        if (BotHelper.GetMessage(update) == BotChatCommands.YesWork)
-        {
-            await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutITExpirience);
-            this.steps.MoveNext();
-        }
-        else if (BotHelper.GetMessage(update) == BotChatCommands.NoWork)
-        {
-            await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutLastWork);
-        }
-    }
-    private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
     {
         await using var dbContext = new BotDbContext();
         var user = BotHelper.GetUserInfo(update);
@@ -90,6 +73,9 @@ public class WorkingITDeptScenario : AutoStepBotCommandScenario
             .First();
         userData.Experience = BotHelper.GetMessage(update);
         await dbContext.SaveChangesAsync();
+        
+        var sheetManager = new GoogleSheetsManager();
+        sheetManager.AddUserToMatureSheet(userData.Fullname, userData.Contact, userData.SomeField, userData.Experience, userData.TelegramName);
 
         var buttons = new List<InlineKeyboardButton[]>
         {
@@ -106,7 +92,6 @@ public class WorkingITDeptScenario : AutoStepBotCommandScenario
             new (StepAction2),
             new (StepAction3),
             new (StepAction4),
-            new (StepAction5),
 
         }.GetEnumerator();
     }
