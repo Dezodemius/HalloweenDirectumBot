@@ -27,7 +27,7 @@
         </value>
     </data>
     <data name="WantToPractice" xml:space="preserve">
-        <value>Хочу на практику!</value>
+        <value>На практику!</value>
     </data>
     <data name="NotStudentButWantInIT" xml:space="preserve">
         <value>Уже не студент, но хочу в ИТ</value>
@@ -36,13 +36,13 @@
         <value>Работаю в ИТ, хочу сменить компанию</value>
     </data>
     <data name="StudentWithExperience" xml:space="preserve">
-        <value>Старшекурсник с опытом в ИТ, хочу в Directum</value>
+        <value>На работу!</value>
     </data>
     <data name="WorkerInITDept" xml:space="preserve">
         <value>Работаю в ИТ-департаменте/отделе</value>
     </data>
     <data name="Directum15Questions" xml:space="preserve">
-        <value>15 вопросов Directum</value>
+        <value>Узнать о направлениях работ</value>
     </data>
     <data name="RafflePrizes" xml:space="preserve">
         <value>Розыгрыш мерча</value>
@@ -82,6 +82,12 @@
     </data>
     <data name="Sails" xml:space="preserve">
         <value>Продажи</value>
+    </data>
+    <data name="Support" xml:space="preserve">
+        <value>Тех. поддержка</value>
+    </data>
+    <data name="Analitycs" xml:space="preserve">
+        <value>Аналитика</value>
     </data>
     <data name="Other" xml:space="preserve">
         <value>Другое</value>
@@ -131,5 +137,22 @@
 -  Стол «про аналитику, маркетинг, внедрение, продажи».
 
 Группе от 6 человек специалисты рассказывают  о своих направлениях.</value>
+    </data>
+    <data name="Student" xml:space="preserve">
+        <value>Я студент</value>
+    </data>    
+    <data name="NotStudent" xml:space="preserve">
+        <value>Я уже не студент</value>
+    </data>
+    <data name="StudentMessage" xml:space="preserve">
+        <value>Да, в Directum можно работать со студенчества. 
+У нас можно пройти летнюю практику, работать по 4 или 8 часов в день. И самое главное развиваться.
+Чего хочешь ты?
+</value>
+    </data>
+    <data name="NotStudentMessage" xml:space="preserve">
+        <value>В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику. 
+Сейчас Directum готов принимать опытных специалистов, и такие есть среди участников Ночи карьеры.
+</value>
     </data>
 </root>

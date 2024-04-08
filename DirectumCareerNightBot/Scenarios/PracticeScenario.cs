@@ -32,6 +32,8 @@ public class PracticeScenario : AutoStepBotCommandScenario
             new []{ new KeyboardButton(BotMessages.Testing)},
             new []{ new KeyboardButton(BotMessages.Marketing)},
             new []{ new KeyboardButton(BotMessages.Sails)},
+            new []{ new KeyboardButton(BotMessages.Support)},
+            new []{ new KeyboardButton(BotMessages.Analitycs)},
             new []{ new KeyboardButton(BotMessages.Other)},
         };
         var markup = new ReplyKeyboardMarkup(buttons);
@@ -55,7 +57,7 @@ public class PracticeScenario : AutoStepBotCommandScenario
 
     public PracticeScenario()
     {
-        this.steps = new List<BotCommandScenarioStep>()
+        this.steps = new List<BotCommandScenarioStep>
         {
             new (StepAction1),
             new (StepAction2),

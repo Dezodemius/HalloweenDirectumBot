@@ -65,8 +65,43 @@ public class BotUpdateHandler : IUpdateHandler
                         replyMarkup: replyMarkup,
                         cancellationToken: cancellationToken);
                 }
-                _userScenarioRepository.Remove(userId);
+                _userScenarioRepository?.Remove(userId);
                 return;
+            }
+            case BotChatCommands.Student:
+            {
+                var buttons = new List<InlineKeyboardButton[]>
+                {
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WantToPractice, BotChatCommands.WantToPractice), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.StudentWithExperience, BotChatCommands.StudentWithExperience), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.Directum15Questions, BotChatCommands.Directum15Questions), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu), },
+                };
+
+                var replyMarkup = new InlineKeyboardMarkup(buttons);
+                await botClient.SendTextMessageAsync(userId,
+                    BotMessages.StudentMessage,
+                    replyMarkup: replyMarkup,
+                    cancellationToken: cancellationToken);
+                _userScenarioRepository?.Remove(userId);
+                break;
+            }
+            case BotChatCommands.NotStudent:
+            {
+                var buttons = new List<InlineKeyboardButton[]>
+                {
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.NotStudentButWantInIT, BotChatCommands.NotStudentButWantInIT), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkerInITDept, BotChatCommands.WorkerInITDept), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu), },
+                };
+
+                var replyMarkup = new InlineKeyboardMarkup(buttons);
+                await botClient.SendTextMessageAsync(userId,
+                    BotMessages.NotStudentMessage,
+                    replyMarkup: replyMarkup,
+                    cancellationToken: cancellationToken);
+                _userScenarioRepository?.Remove(userId);
+                break;
             }
             case BotChatCommands.WantToPractice:
                 userScenario = new UserCommandScenario(userId, new PracticeScenario());
@@ -84,18 +119,23 @@ public class BotUpdateHandler : IUpdateHandler
                 userScenario = new UserCommandScenario(userId, new WorkingITDeptScenario());
                 break;
             case BotChatCommands.Directum15Questions:
+            {
                 var buttons = new List<InlineKeyboardButton[]>
                 {
-                    new [] {InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu), }
+                    new[]
+                    {
+                        InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu),
+                    }
                 };
                 var markup = new InlineKeyboardMarkup(buttons);
                 await botClient.SendTextMessageAsync(
-                    userId, 
-                    BotMessages.Directum15QuestionsMessage, 
-                    ParseMode.Markdown, 
-                    replyMarkup: markup, 
+                    userId,
+                    BotMessages.Directum15QuestionsMessage,
+                    ParseMode.Markdown,
+                    replyMarkup: markup,
                     cancellationToken: cancellationToken);
                 break;
+            }
             case BotChatCommands.RafflePrizes:
                 userScenario = new UserCommandScenario(userId, new QuizScenario());
                 break;

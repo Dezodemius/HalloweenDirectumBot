@@ -60,6 +60,15 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Аналитика.
+        /// </summary>
+        internal static string Analitycs {
+            get {
+                return ResourceManager.GetString("Analitycs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Привет, это команда Directum.
         ///            
         ///35 лет мы создаём решения, которые упрощают электронный документооборот, бизнес-процессы и жизнь в целом.
@@ -83,7 +92,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 15 вопросов Directum.
+        ///   Looks up a localized string similar to Узнать о направлениях работ.
         /// </summary>
         internal static string Directum15Questions {
             get {
@@ -178,11 +187,31 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Я уже не студент.
+        /// </summary>
+        internal static string NotStudent {
+            get {
+                return ResourceManager.GetString("NotStudent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Уже не студент, но хочу в ИТ.
         /// </summary>
         internal static string NotStudentButWantInIT {
             get {
                 return ResourceManager.GetString("NotStudentButWantInIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику. 
+        ///Сейчас Directum готов принимать опытных специалистов, и такие есть среди участников Ночи карьеры.
+        ///.
+        /// </summary>
+        internal static string NotStudentMessage {
+            get {
+                return ResourceManager.GetString("NotStudentMessage", resourceCulture);
             }
         }
         
@@ -232,11 +261,41 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Старшекурсник с опытом в ИТ, хочу в Directum.
+        ///   Looks up a localized string similar to Я студент.
+        /// </summary>
+        internal static string Student {
+            get {
+                return ResourceManager.GetString("Student", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Да, в Directum можно работать со студенчества. 
+        ///У нас можно пройти летнюю практику, работать по 4 или 8 часов в день. И самое главное развиваться.
+        ///Чего хочешь ты?
+        ///.
+        /// </summary>
+        internal static string StudentMessage {
+            get {
+                return ResourceManager.GetString("StudentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to На работу!.
         /// </summary>
         internal static string StudentWithExperience {
             get {
                 return ResourceManager.GetString("StudentWithExperience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Тех. поддержка.
+        /// </summary>
+        internal static string Support {
+            get {
+                return ResourceManager.GetString("Support", resourceCulture);
             }
         }
         
@@ -342,7 +401,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Хочу на практику!.
+        ///   Looks up a localized string similar to На практику!.
         /// </summary>
         internal static string WantToPractice {
             get {

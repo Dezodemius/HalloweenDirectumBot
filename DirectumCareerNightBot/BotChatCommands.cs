@@ -13,4 +13,6 @@ public class BotChatCommands
     public const string RafflePrizes = "RafflePrizes";
     public const string Career = "Career";
     public const string DirectumVK = "DirectumVK";
+    public const string Student = "Student";
+    public const string NotStudent = "NotStudent";
 }

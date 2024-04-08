@@ -40,7 +40,7 @@ public class WorkingITDeptScenario : AutoStepBotCommandScenario
     }
     public WorkingITDeptScenario()
     {
-        this.steps = new List<BotCommandScenarioStep>()
+        this.steps = new List<BotCommandScenarioStep>
         {
             new (StepAction1),
             new (StepAction2),

@@ -40,7 +40,7 @@ public class StudentWithExperienceScenario : AutoStepBotCommandScenario
     }
     public StudentWithExperienceScenario()
     {
-        this.steps = new List<BotCommandScenarioStep>()
+        this.steps = new List<BotCommandScenarioStep>
         {
             new (StepAction1),
             new (StepAction2),

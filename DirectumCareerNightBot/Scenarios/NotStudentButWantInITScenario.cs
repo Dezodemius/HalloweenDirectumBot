@@ -48,7 +48,7 @@ public class NotStudentButWantInITScenario : AutoStepBotCommandScenario
 
     public NotStudentButWantInITScenario()
     {
-        this.steps = new List<BotCommandScenarioStep>()
+        this.steps = new List<BotCommandScenarioStep>
         {
             new (StepAction1),
             new (StepAction2),
