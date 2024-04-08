@@ -183,26 +183,28 @@ public class QuizScenario : AutoStepBotCommandScenario
         var botGiftMessage = "Держи код для бота @nochit2024_bot: **p1bzk**";
         if (quizResult == 0)
             resultMessage = "Кажется ты подустал, зарядись и пройди тест ещё раз.";
-        else if (quizResult == 5)
-            resultMessage = $"Балдею от твоих ответов! Ты такой умный Дядька (Тётька)! {botGiftMessage}";    
-        else if (quizResult > 1 && quizResult < 5)
-            resultMessage = $"Поздравляем! {botGiftMessage}";
         else if (quizResult == 1)
             resultMessage = $"Not good, not terrible. {botGiftMessage}";
+        else if (quizResult > 1 && quizResult < 5)
+            resultMessage = $"Поздравляем! {botGiftMessage}";
+        else if (quizResult == 5)
+            resultMessage = $"Балдею от твоих ответов! Ты такой умный Дядька (Тётька)! {botGiftMessage}";
         
         var userResult = botDbContext.UserResults.SingleOrDefault(r => r.UserId == botUser.Id);
+        await botDbContext.SaveChangesAsync();
 
         if (userResult == null)
         {
-            botDbContext.UserResults.Add(new QuizUserResult(botUser.Id, quizResult > 0));
+            botDbContext.UserResults.Add(new QuizUserResult(botUser.Id, quizIsDone));
         }
         else
         {
             userResult.IsQuizDone = quizIsDone;
+            if (quizIsDone)
             resultMessage = string.Empty;
         }
         await botDbContext.SaveChangesAsync();
-        
+
         var buttons = new List<InlineKeyboardButton[]>
         {
             new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
