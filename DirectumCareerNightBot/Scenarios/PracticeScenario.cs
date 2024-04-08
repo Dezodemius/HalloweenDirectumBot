@@ -49,6 +49,7 @@ public class PracticeScenario : AutoStepBotCommandScenario
         Console.WriteLine(update.Message.Text);
         var buttons = new List<InlineKeyboardButton[]>
         {
+            new[] { InlineKeyboardButton.WithUrl(BotMessages.DirectumStudentsVK, "https://vk.com/student_directum") },
             new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
         };
         var markup = new InlineKeyboardMarkup(buttons);

@@ -52,19 +52,10 @@ public class BotUpdateHandler : IUpdateHandler
             case BotChatCommands.MainMenu:
             {
                 var replyMarkup = MainMenuCommand.GetMainMenuInlineMarkup();
-                if (update.CallbackQuery?.Message != null)
-                    await botClient.EditMessageTextAsync(userId,
-                        update.CallbackQuery.Message.MessageId,
-                        BotMessages.MainMenu,
-                        replyMarkup: replyMarkup,
-                        cancellationToken: cancellationToken);
-                else
-                {
-                    await botClient.SendTextMessageAsync(userId,
-                        BotMessages.MainMenu,
-                        replyMarkup: replyMarkup,
-                        cancellationToken: cancellationToken);
-                }
+                await botClient.SendTextMessageAsync(userId,
+                    BotMessages.MainMenu,
+                    replyMarkup: replyMarkup,
+                    cancellationToken: cancellationToken);
                 _userScenarioRepository?.Remove(userId);
                 return;
             }
