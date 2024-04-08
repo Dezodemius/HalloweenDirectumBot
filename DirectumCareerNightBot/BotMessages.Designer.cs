@@ -255,6 +255,15 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Пройти ещё раз 🎁.
+        /// </summary>
+        internal static string RafflePrizesAgain {
+            get {
+                return ResourceManager.GetString("RafflePrizesAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Продажи 💰.
         /// </summary>
         internal static string Sails {

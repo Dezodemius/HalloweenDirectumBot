@@ -52,6 +52,9 @@
     <data name="RafflePrizes" xml:space="preserve">
         <value>Розыгрыш мерча 🎁</value>
     </data>
+    <data name="RafflePrizesAgain" xml:space="preserve">
+        <value>Пройти ещё раз 🎁</value>
+    </data>
     <data name="Career" xml:space="preserve">
         <value>Узнать о вакансиях</value>
     </data>
