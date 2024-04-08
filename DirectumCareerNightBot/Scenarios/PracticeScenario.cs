@@ -16,12 +16,12 @@ public class PracticeScenario : AutoStepBotCommandScenario
 
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself);
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
         Console.WriteLine(update.Message.Text);
-        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact);
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -37,12 +37,12 @@ public class PracticeScenario : AutoStepBotCommandScenario
             new []{ new KeyboardButton(BotMessages.Other)},
         };
         var markup = new ReplyKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.InterestingDirection, ParseMode.Markdown, replyMarkup: markup);
+        await bot.SendTextMessageAsync(chatId, BotMessages.InterestingDirection, replyMarkup: markup);
     }
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
         Console.WriteLine(update.Message.Text);
-        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutChosenDirection, ParseMode.Markdown, replyMarkup: new ReplyKeyboardRemove());
+        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutChosenDirection, replyMarkup: new ReplyKeyboardRemove());
     }
     private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -53,7 +53,7 @@ public class PracticeScenario : AutoStepBotCommandScenario
             new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
         };
         var markup = new InlineKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouPractice, ParseMode.Markdown, replyMarkup: markup);
+        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouPractice, replyMarkup: markup);
     }
 
     public PracticeScenario()

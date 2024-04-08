@@ -122,7 +122,6 @@ public class BotUpdateHandler : IUpdateHandler
                 await botClient.SendTextMessageAsync(
                     userId,
                     BotMessages.Directum15QuestionsMessage,
-                    ParseMode.Markdown,
                     replyMarkup: markup,
                     cancellationToken: cancellationToken);
                 break;

@@ -35,8 +35,7 @@ public class QuizScenario : AutoStepBotCommandScenario
             chatId,
             update.CallbackQuery.Message.MessageId, 
         $"{BotMessages.QuizStartMessage}\n{question.Text}", 
-            replyMarkup: replyMarkup,
-            parseMode: ParseMode.Markdown);
+            replyMarkup: replyMarkup);
     }
 
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
@@ -201,7 +200,7 @@ public class QuizScenario : AutoStepBotCommandScenario
         {
             userResult.IsQuizDone = quizIsDone;
             if (quizIsDone)
-            resultMessage = string.Empty;
+                resultMessage = string.Empty;
         }
         await botDbContext.SaveChangesAsync();
 
@@ -214,9 +213,7 @@ public class QuizScenario : AutoStepBotCommandScenario
             chatId, 
             update.CallbackQuery.Message.MessageId,
             $"Твой результат {quizResult} из 5.\n{resultMessage}", 
-            replyMarkup: markup, 
-            parseMode: ParseMode.Markdown);
-
+            replyMarkup: markup);
     }
 
     private static QuizQuestion GetQuizQuestion(BotDbContext botDbContext, int questionId)

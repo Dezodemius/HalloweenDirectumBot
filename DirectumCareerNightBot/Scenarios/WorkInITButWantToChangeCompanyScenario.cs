@@ -15,17 +15,17 @@ public class WorkInITButWantToChangeCompanyScenario : AutoStepBotCommandScenario
     public override string ScenarioCommand => string.Empty;
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself);
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
         Console.WriteLine(update.Message.Text);
-        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact);
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
         Console.WriteLine(update.Message.Text);
-        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutYourCompany, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutYourCompany);
     }
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -35,7 +35,7 @@ public class WorkInITButWantToChangeCompanyScenario : AutoStepBotCommandScenario
             new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
         };
         var markup = new InlineKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouInIT, ParseMode.Markdown, replyMarkup: markup);
+        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouInIT, replyMarkup: markup);
     }
     public WorkInITButWantToChangeCompanyScenario()
     {

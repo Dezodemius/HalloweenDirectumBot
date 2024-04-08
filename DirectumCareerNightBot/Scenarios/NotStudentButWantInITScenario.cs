@@ -16,23 +16,23 @@ public class NotStudentButWantInITScenario : AutoStepBotCommandScenario
 
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself);
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
         Console.WriteLine(update.Message.Text);
-        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact);
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
         Console.WriteLine(update.Message.Text);
-        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutLastWork, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutLastWork);
     }
 
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
         Console.WriteLine(update.Message.Text);
-        await bot.SendTextMessageAsync(chatId, BotMessages.WhatYouAlreadyLearned, ParseMode.Markdown);
+        await bot.SendTextMessageAsync(chatId, BotMessages.WhatYouAlreadyLearned);
     }
 
     private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
@@ -43,7 +43,7 @@ public class NotStudentButWantInITScenario : AutoStepBotCommandScenario
             new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
         };
         var markup = new InlineKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouNotStudent, ParseMode.Markdown, replyMarkup: markup);
+        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouNotStudent, replyMarkup: markup);
     }
 
     public NotStudentButWantInITScenario()
