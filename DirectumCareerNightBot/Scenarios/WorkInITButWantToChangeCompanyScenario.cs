@@ -7,6 +7,7 @@ using BotCommon.Scenarios;
 using DirectumCareerNightBot.GoogleSheets;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DirectumCareerNightBot.Scenarios;
@@ -33,7 +34,8 @@ public class WorkInITButWantToChangeCompanyScenario : AutoStepBotCommandScenario
         dbContext.UserDatas.Add(userData);
         await dbContext.SaveChangesAsync();
 
-        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself);
+        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -46,7 +48,8 @@ public class WorkInITButWantToChangeCompanyScenario : AutoStepBotCommandScenario
         userData.Fullname = BotHelper.GetMessage(update);
         await dbContext.SaveChangesAsync();
 
-        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact);
+        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -59,7 +62,8 @@ public class WorkInITButWantToChangeCompanyScenario : AutoStepBotCommandScenario
         userData.Contact = BotHelper.GetMessage(update);
         await dbContext.SaveChangesAsync();
 
-        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutYourCompany);
+        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutYourCompany,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -80,7 +84,8 @@ public class WorkInITButWantToChangeCompanyScenario : AutoStepBotCommandScenario
             new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
         };
         var markup = new InlineKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouInIT, replyMarkup: markup);
+        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouInIT, replyMarkup: markup,
+            parseMode: ParseMode.MarkdownV2);
     }
     public WorkInITButWantToChangeCompanyScenario()
     {

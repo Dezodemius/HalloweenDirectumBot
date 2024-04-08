@@ -35,7 +35,8 @@ public class WorkingITDeptScenario : AutoStepBotCommandScenario
         dbContext.UserDatas.Add(userData);
         await dbContext.SaveChangesAsync();
 
-        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself);
+        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -48,7 +49,8 @@ public class WorkingITDeptScenario : AutoStepBotCommandScenario
         userData.Fullname = BotHelper.GetMessage(update);
         await dbContext.SaveChangesAsync();
         
-        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact);
+        await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -61,7 +63,8 @@ public class WorkingITDeptScenario : AutoStepBotCommandScenario
         userData.Contact = BotHelper.GetMessage(update);
         await dbContext.SaveChangesAsync();
         
-        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutLastWork);
+        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutLastWork,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -82,7 +85,8 @@ public class WorkingITDeptScenario : AutoStepBotCommandScenario
             new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
         };
         var markup = new InlineKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouInITDept, replyMarkup: markup);
+        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouInITDept, replyMarkup: markup,
+            parseMode: ParseMode.MarkdownV2);
     }
     public WorkingITDeptScenario()
     {
