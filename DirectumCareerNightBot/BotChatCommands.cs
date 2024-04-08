@@ -15,4 +15,6 @@ public class BotChatCommands
     public const string DirectumVK = "DirectumVK";
     public const string Student = "Student";
     public const string NotStudent = "NotStudent";
+    public const string YesWork = "YesWork";
+    public const string NoWork = "NoWork";
 }

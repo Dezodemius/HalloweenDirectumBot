@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.Scenarios;
-using DirectumCareerNightBot.Quiz;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;

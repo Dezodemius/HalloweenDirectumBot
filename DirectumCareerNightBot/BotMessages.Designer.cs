@@ -312,7 +312,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Расскажи о своём опыте в IT, в какой компании работал, на какой должности.
+        ///   Looks up a localized string similar to Расскажи в какой компании работаешь, на какой должности, кратко опиши свои задачи.
         /// </summary>
         internal static string TellAboutITExpirience {
             get {
