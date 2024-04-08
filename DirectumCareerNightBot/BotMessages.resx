@@ -32,16 +32,19 @@
         <value>На практику!</value>
     </data>
     <data name="NotStudentButWantInIT" xml:space="preserve">
-        <value>Уже не студент, но хочу в ИТ</value>
+        <value>Хочу в IT</value>
     </data>
     <data name="WorkInITButWantToChangeCompany" xml:space="preserve">
-        <value>Работаю в ИТ, хочу сменить компанию</value>
+        <value>Хочу на собеседование</value>
     </data>
     <data name="StudentWithExperience" xml:space="preserve">
         <value>На работу!</value>
     </data>
+    <data name="Vacancies" xml:space="preserve">
+        <value>Открытые вакансии</value>
+    </data>
     <data name="WorkerInITDept" xml:space="preserve">
-        <value>Работаю в ИТ-департаменте/отделе</value>
+        <value>Хочу в IT</value>
     </data>
     <data name="Directum15Questions" xml:space="preserve">
         <value>Узнать о направлениях работ</value>

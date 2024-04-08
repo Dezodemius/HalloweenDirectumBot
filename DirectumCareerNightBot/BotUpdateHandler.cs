@@ -81,8 +81,9 @@ public class BotUpdateHandler : IUpdateHandler
             {
                 var buttons = new List<InlineKeyboardButton[]>
                 {
-                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.NotStudentButWantInIT, BotChatCommands.NotStudentButWantInIT), },
                     new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkerInITDept, BotChatCommands.WorkerInITDept), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkInITButWantToChangeCompany, BotChatCommands.WorkInITButWantToChangeCompany), },
+                    new [] { InlineKeyboardButton.WithUrl(BotMessages.Vacancies, "https://career.directum.ru/vacancy"), },
                     new [] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu), },
                 };
 
@@ -96,9 +97,6 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.WantToPractice:
                 userScenario = new UserCommandScenario(userId, new PracticeScenario());
-                break;
-            case BotChatCommands.NotStudentButWantInIT:
-                userScenario = new UserCommandScenario(userId, new NotStudentButWantInITScenario());
                 break;
             case BotChatCommands.WorkInITButWantToChangeCompany:
                 userScenario = new UserCommandScenario(userId, new WorkInITButWantToChangeCompanyScenario());

@@ -198,7 +198,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Уже не студент, но хочу в ИТ.
+        ///   Looks up a localized string similar to Хочу в IT.
         /// </summary>
         internal static string NotStudentButWantInIT {
             get {
@@ -407,6 +407,15 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Открытые вакансии.
+        /// </summary>
+        internal static string Vacancies {
+            get {
+                return ResourceManager.GetString("Vacancies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to На практику!.
         /// </summary>
         internal static string WantToPractice {
@@ -425,7 +434,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Работаю в ИТ-департаменте/отделе.
+        ///   Looks up a localized string similar to Хочу в IT.
         /// </summary>
         internal static string WorkerInITDept {
             get {
@@ -434,7 +443,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Работаю в ИТ, хочу сменить компанию.
+        ///   Looks up a localized string similar to Хочу на собеседование.
         /// </summary>
         internal static string WorkInITButWantToChangeCompany {
             get {
