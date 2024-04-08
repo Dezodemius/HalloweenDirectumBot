@@ -14,7 +14,7 @@ INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (4, 'Какая аббр
 INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (5, 'На production-е обнаружен критичный баг. Кто первый получит по шапке?', 20);
 INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (6, 'Какое число нужно вписать в пропуск? 89, 144, 233, 377, ___', 22);
 INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (7, 'Какую игру можно запустить почти на любом устройстве?', 26);
-INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (8, 'В дверь постучали 1024 раз... Сколько осьминогов и сороконожек постучали?', 30);
+INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (8, 'В дверь постучали 1000 раз... Сколько осьминогов и сороконожек постучали?', 30);
 INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (9, 'Как назвать человека, который портит жизнь разработчикам?', 36);
 INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (10, '킒⃐뫐냐뫐뻐뤠킺킾킴킸톀킾킲킺킵⃐병謠킾톂킾킱톀킰킷킸킻킸⃑跑苐뻑舠톂킵킺톁톂�', 37);
 INSERT INTO Questions (Id, Text, CorrectChoiceId)VALUES (11, 'Crjkmrj gfkmwtd yf ktdjq hert&', 43);

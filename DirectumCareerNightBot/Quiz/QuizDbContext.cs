@@ -11,6 +11,7 @@ public sealed class BotDbContext : UserDbContext
     public DbSet<QuizQuestion> Questions { get; set; }
     public DbSet<QuizPossibleAnswer> Choices { get; set; }
     public DbSet<QuizUserQuestion> UserQuestions { get; set; }
+    public DbSet<QuizUserResult> UserResults { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite(_connectionString);
@@ -31,6 +32,10 @@ public sealed class BotDbContext : UserDbContext
             .HasOne(quq => quq.User)
             .WithMany()
             .HasForeignKey(quq => quq.UserId);
+        modelBuilder.Entity<QuizUserResult>()
+            .HasOne(r => r.BotUser)
+            .WithMany()
+            .HasForeignKey(r => r.UserId);
     }
 
     public BotDbContext() : base("Filename=quiz.db")

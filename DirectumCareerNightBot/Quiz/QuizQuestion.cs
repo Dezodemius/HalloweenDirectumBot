@@ -10,7 +10,6 @@ public class QuizQuestion
     public int Id { get; set; }
     public string Text { get; set; }
     public List<QuizPossibleAnswer> Choices { get; set; }
-    // [ForeignKey(nameof(CorrectChoiceId))]
     public int CorrectChoiceId { get; set; }
     public QuizPossibleAnswer CorrectChoice { get; set; }
 }
@@ -27,6 +26,7 @@ public class QuizPossibleAnswer
 
 public record QuizUserQuestion
 {
+    [Key]
     public int Id { get; set; }
     public long UserId { get; set; }
     public BotUser User { get; init; }
@@ -45,5 +45,21 @@ public record QuizUserQuestion
         this.User = User;
         this.Question = Question;
         this.IsCorrectAnswered = IsCorrectAnswered;
+    }
+}
+
+public record QuizUserResult
+{
+    [Key]
+    public int Id { get; set; }
+    public long UserId { get; set; }
+    public BotUser BotUser { get; set; }
+    public bool IsQuizDone { get; set; }
+    public QuizUserResult() { }
+
+    public QuizUserResult(long userId, bool isQuizDone)
+    {
+        this.UserId = userId;
+        this.IsQuizDone = isQuizDone;
     }
 }

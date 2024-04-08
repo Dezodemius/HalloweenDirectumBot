@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BotCommon;
-using BotCommon.Repository;
 using BotCommon.Scenarios;
 using DirectumCareerNightBot.Quiz;
-using Microsoft.EntityFrameworkCore;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -20,40 +18,41 @@ public class QuizScenario : AutoStepBotCommandScenario
     public override string ScenarioCommand { get; }
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        await bot.SendTextMessageAsync(chatId, BotMessages.QuizStartMessage, ParseMode.Markdown);
-
-        await using var quizContext = new BotDbContext();
-        await using var userContext = new UserDbContext();
+        await using var botDbContext = new BotDbContext();
+        var botUser = botDbContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var userQuestions = botDbContext.UserQuestions.Where(q => q.UserId == botUser.Id);
+        if (userQuestions.Any())
+            botDbContext.UserQuestions.RemoveRange(userQuestions);
         
-        var question = GetQuizQuestion(quizContext, new Random().Next(1, 5));
+        var question = GetQuizQuestion(botDbContext, new Random().Next(1, 5));
 
-        var botUser = userContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
-        await quizContext.SaveChangesAsync();
+        botDbContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await botDbContext.SaveChangesAsync();
         
-        var questionChoices = GetQuestionChoices(quizContext, question);
+        var questionChoices = GetQuestionChoices(botDbContext, question);
         var replyMarkup = GetChoicesReplyMarkup(questionChoices);
-        await bot.SendTextMessageAsync(
+        await bot.EditMessageTextAsync(
             chatId,
-            text: question.Text,
-            replyMarkup: replyMarkup);
+            update.CallbackQuery.Message.MessageId, 
+        $"{BotMessages.QuizStartMessage}\n{question.Text}", 
+            replyMarkup: replyMarkup,
+            parseMode: ParseMode.Markdown);
     }
 
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
-        await bot.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "Ответ принят!");
-
         await using var quizContext = new BotDbContext();
         var botUser = quizContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
 
         var userChoiceId = quizContext.Choices
-            .Single(c => c.Id == int.Parse(update.CallbackQuery.Message.Text));
+            .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
         var lastUserQuestion = quizContext.UserQuestions
-            .Include(quizUserQuestion => quizUserQuestion.Question)
-            .ThenInclude(quizQuestion => quizQuestion.CorrectChoice)
-            .Last(q => q.User.Id == botUser.Id);
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, lastUserQuestion.Question, 
-            lastUserQuestion.Question.CorrectChoice.Id == userChoiceId.Id));
+            .Where(c => c.User.Id == botUser.Id)
+            .OrderByDescending(i => i.Id)
+            .FirstOrDefault();
+        var quizQuestion = quizContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+            quizQuestion.CorrectChoiceId == userChoiceId.Id));
 
         var question = GetQuizQuestion(quizContext, new Random().Next(5, 9));
 
@@ -63,90 +62,160 @@ public class QuizScenario : AutoStepBotCommandScenario
 
         var questionChoices = GetQuestionChoices(quizContext, question);
         var replyMarkup = GetChoicesReplyMarkup(questionChoices);
-        await bot.SendTextMessageAsync(
+        await bot.EditMessageTextAsync(
             chatId,
+            update.CallbackQuery.Message.MessageId,
             text: question.Text,
             replyMarkup: replyMarkup);
     }
-    // private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
-    // {
-    //     await using var quizContext = new QuizContext();
-    //     var randomQuestionId = new Random().Next(9, 12);
-    //     var question = quizContext.Questions.Single(q => q.QuestionId == randomQuestionId);
-    //     var questionChoices = quizContext.Choices.Where(c => c.QuizQuestion.QuestionId == question.QuestionId).ToList();
-    //     var choicesKeyboard = new List<InlineKeyboardButton[]>
-    //     {
-    //         new []
-    //         {
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[0].ChoiceText, "/1" ),
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[1].ChoiceText, "/2" ),
-    //         },new []
-    //         {
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[2].ChoiceText, "/3" ),
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[3].ChoiceText, "/4" ),
-    //         },
-    //     };
-    //     var replyMarkup = new InlineKeyboardMarkup(choicesKeyboard);
-    //     await bot.EditMessageTextAsync(
-    //         chatId,
-    //         update.CallbackQuery.Message.MessageId, 
-    //         text: question.QuestionText,
-    //         replyMarkup: replyMarkup);
-    // }
-    // private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
-    // {
-    //     await using var quizContext = new QuizContext();
-    //     var randomQuestionId = new Random().Next(13, 16);
-    //     var question = quizContext.Questions.Single(q => q.QuestionId == randomQuestionId);
-    //     var questionChoices = quizContext.Choices.Where(c => c.QuizQuestion.QuestionId == question.QuestionId).ToList();
-    //     var choicesKeyboard = new List<InlineKeyboardButton[]>
-    //     {
-    //         new []
-    //         {
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[0].ChoiceText, "/1" ),
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[1].ChoiceText, "/2" ),
-    //         },new []
-    //         {
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[2].ChoiceText, "/3" ),
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[3].ChoiceText, "/4" ),
-    //         },
-    //     };
-    //     var replyMarkup = new InlineKeyboardMarkup(choicesKeyboard);
-    //     await bot.EditMessageTextAsync(
-    //         chatId,
-    //         update.CallbackQuery.Message.MessageId, 
-    //         text: question.QuestionText,
-    //         replyMarkup: replyMarkup);
-    // }
-    // private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
-    // {
-    //     await using var quizContext = new QuizContext();
-    //     var randomQuestionId = new Random().Next(17, 20);
-    //     var question = quizContext.Questions.Single(q => q.QuestionId == randomQuestionId);
-    //     var questionChoices = quizContext.Choices.Where(c => c.QuizQuestion.QuestionId == question.QuestionId).ToList();
-    //     var choicesKeyboard = new List<InlineKeyboardButton[]>
-    //     {
-    //         new []
-    //         {
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[0].ChoiceText, "/1" ),
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[1].ChoiceText, "/2" ),
-    //         },new []
-    //         {
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[2].ChoiceText, "/3" ),
-    //             InlineKeyboardButton.WithCallbackData(questionChoices[3].ChoiceText, "/4" ),
-    //         },
-    //     };
-    //     var replyMarkup = new InlineKeyboardMarkup(choicesKeyboard);
-    //     await bot.EditMessageTextAsync(
-    //         chatId,
-    //         update.CallbackQuery.Message.MessageId, 
-    //         text: question.QuestionText,
-    //         replyMarkup: replyMarkup);
-    // }
-    // private async Task StepAction6(ITelegramBotClient bot, Update update, long chatId)
-    // {
-    //     await bot.SendTextMessageAsync(chatId, "Ура!", ParseMode.Markdown);
-    // }
+    private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
+    {
+        await using var quizContext = new BotDbContext();
+        var botUser = quizContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+
+        var userChoiceId = quizContext.Choices
+            .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
+        var lastUserQuestion = quizContext.UserQuestions
+            .Where(c => c.User.Id == botUser.Id)
+            .OrderByDescending(i => i.Id)
+            .FirstOrDefault();
+        var quizQuestion = quizContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+            quizQuestion.CorrectChoiceId == userChoiceId.Id));
+
+        var question = GetQuizQuestion(quizContext, new Random().Next(9, 13));
+
+
+        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await quizContext.SaveChangesAsync();
+
+        var questionChoices = GetQuestionChoices(quizContext, question);
+        var replyMarkup = GetChoicesReplyMarkup(questionChoices);
+        await bot.EditMessageTextAsync(
+            chatId,
+            update.CallbackQuery.Message.MessageId,
+            text: question.Text,
+            replyMarkup: replyMarkup);
+    }
+    private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
+    {
+        await using var quizContext = new BotDbContext();
+        var botUser = quizContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+
+        var userChoiceId = quizContext.Choices
+            .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
+        var lastUserQuestion = quizContext.UserQuestions
+            .Where(c => c.User.Id == botUser.Id)
+            .OrderByDescending(i => i.Id)
+            .FirstOrDefault();
+        var quizQuestion = quizContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+            quizQuestion.CorrectChoiceId == userChoiceId.Id));
+
+        var question = GetQuizQuestion(quizContext, new Random().Next(13, 17));
+
+
+        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await quizContext.SaveChangesAsync();
+
+        var questionChoices = GetQuestionChoices(quizContext, question);
+        var replyMarkup = GetChoicesReplyMarkup(questionChoices);
+        await bot.EditMessageTextAsync(
+            chatId,
+            update.CallbackQuery.Message.MessageId,
+            text: question.Text,
+            replyMarkup: replyMarkup);
+    }
+    private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
+    {
+        await using var quizContext = new BotDbContext();
+        var botUser = quizContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+
+        var userChoiceId = quizContext.Choices
+            .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
+        var lastUserQuestion = quizContext.UserQuestions
+            .Where(c => c.User.Id == botUser.Id)
+            .OrderByDescending(i => i.Id)
+            .FirstOrDefault();
+        var quizQuestion = quizContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+            quizQuestion.CorrectChoiceId == userChoiceId.Id));
+
+        var question = GetQuizQuestion(quizContext, new Random().Next(17, 21));
+
+
+        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await quizContext.SaveChangesAsync();
+
+        var questionChoices = GetQuestionChoices(quizContext, question);
+        var replyMarkup = GetChoicesReplyMarkup(questionChoices);
+        await bot.EditMessageTextAsync(
+            chatId,
+            update.CallbackQuery.Message.MessageId,
+            text: question.Text,
+            replyMarkup: replyMarkup);
+    }
+    private async Task StepAction6(ITelegramBotClient bot, Update update, long chatId)
+    {
+        await using var botDbContext = new BotDbContext();
+
+        var botUser = botDbContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+
+        var userChoiceId = botDbContext.Choices
+            .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
+        var lastUserQuestion = botDbContext.UserQuestions
+            .Where(c => c.User.Id == botUser.Id)
+            .OrderByDescending(i => i.Id)
+            .FirstOrDefault();
+        var quizQuestion = botDbContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        botDbContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+            quizQuestion.CorrectChoiceId == userChoiceId.Id));
+        await botDbContext.SaveChangesAsync();
+
+        var userQuestions = botDbContext.UserQuestions.Where(q => q.UserId == botUser.Id);
+        var quizResult = userQuestions.Count(q => q.IsCorrectAnswered.Value);
+        
+        botDbContext.UserQuestions.RemoveRange(userQuestions);
+        
+        var quizIsDone = quizResult > 0;
+        
+        var resultMessage = string.Empty;
+        var botGiftMessage = "Держи код для бота @nochit2024_bot: **p1bzk**";
+        if (quizResult == 0)
+            resultMessage = "Кажется ты подустал, зарядись и пройди тест ещё раз.";
+        else if (quizResult == 5)
+            resultMessage = $"Балдею от твоих ответов! Ты такой умный Дядька (Тётька)! {botGiftMessage}";    
+        else if (quizResult > 1 && quizResult < 5)
+            resultMessage = $"Поздравляем! {botGiftMessage}";
+        else if (quizResult == 1)
+            resultMessage = $"Not good, not terrible. {botGiftMessage}";
+        
+        var userResult = botDbContext.UserResults.SingleOrDefault(r => r.UserId == botUser.Id);
+
+        if (userResult == null)
+        {
+            botDbContext.UserResults.Add(new QuizUserResult(botUser.Id, quizResult > 0));
+        }
+        else
+        {
+            userResult.IsQuizDone = quizIsDone;
+            resultMessage = string.Empty;
+        }
+        await botDbContext.SaveChangesAsync();
+        
+        var buttons = new List<InlineKeyboardButton[]>
+        {
+            new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
+        };
+        var markup = new InlineKeyboardMarkup(buttons);
+        await bot.EditMessageTextAsync(
+            chatId, 
+            update.CallbackQuery.Message.MessageId,
+            $"Твой результат {quizResult} из 5.\n{resultMessage}", 
+            replyMarkup: markup, 
+            parseMode: ParseMode.Markdown);
+
+    }
 
     private static QuizQuestion GetQuizQuestion(BotDbContext botDbContext, int questionId)
     {
@@ -183,10 +252,10 @@ public class QuizScenario : AutoStepBotCommandScenario
         {
             new (StepAction1),
             new (StepAction2),
-            // new (StepAction3),
-            // new (StepAction4),
-            // new (StepAction5),
-            // new (StepAction6),
+            new (StepAction3),
+            new (StepAction4),
+            new (StepAction5),
+            new (StepAction6),
 
         }.GetEnumerator();
     }
