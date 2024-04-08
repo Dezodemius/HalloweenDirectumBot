@@ -60,7 +60,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Аналитика.
+        ///   Looks up a localized string similar to Аналитика 🦉.
         /// </summary>
         internal static string Analitycs {
             get {
@@ -69,13 +69,13 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Привет, это команда Directum.
-        ///            
-        ///35 лет мы создаём решения, которые упрощают электронный документооборот, бизнес-процессы и жизнь в целом.
-        ///    
-        ///Этот чат-бот был создан специально для Ночи карьеры. С его помощью ты сможешь попасть на собеседование, узнать о направлениях работ в компании, получить мерч и откликнуться на практику.
+        ///   Looks up a localized string similar to 👋 *Привет, это команда Directum\.*
         ///
-        ///Поехали!
+        ///35 лет мы создаём решения, которые упрощают электронный документооборот, бизнес\-процессы и жизнь в целом\.
+        ///
+        ///Этот чат\-бот был создан специально для Ночи карьеры\. ✨ *С его помощью ты сможешь попасть на собеседование, узнать о направлениях работ в компании, получить мерч и откликнуться на практику\.*✨
+        ///
+        ///Поехали\!🚀
         ///        .
         /// </summary>
         internal static string BotStartMessage {
@@ -103,12 +103,12 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ищи на сцене 3 больших стола Directum:
-        ///-  Стол «про разработку».
-        ///-  Стол «про тестирование».
-        ///-  Стол «про аналитику, маркетинг, внедрение, продажи».
+        ///   Looks up a localized string similar to 🔎*Ищи на сцене 3 больших стола Directum:*
+        ///\-  Стол «про разработку»\.
+        ///\-  Стол «про тестирование и тех\. поддержку»\.
+        ///\-  Стол «про аналитику, маркетинг, внедрение, продажи»\.
         ///
-        ///Группе от 6 человек специалисты рассказывают  о своих направлениях..
+        ///*Группе от 6 человек специалисты рассказывают  о своих направлениях\.*.
         /// </summary>
         internal static string Directum15QuestionsMessage {
             get {
@@ -135,7 +135,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Как удобнее будет поддерживать связь с нашим HR-ом — напиши свои телефон/почту/vk.
+        ///   Looks up a localized string similar to Как удобнее будет поддерживать связь с нашим HR\-ом — *напиши свои телефон/почту/vk*.
         /// </summary>
         internal static string HowToContact {
             get {
@@ -153,7 +153,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Давай знакомиться, напиши свои фамилию, имя и отчество.
+        ///   Looks up a localized string similar to Давай знакомиться, *напиши свои фамилию, имя и отчество*.
         /// </summary>
         internal static string IntroduceYourself {
             get {
@@ -162,7 +162,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Выбирай, что тебе интересно!.
+        ///   Looks up a localized string similar to Выбирай, что тебе интересно\!.
         /// </summary>
         internal static string MainMenu {
             get {
@@ -171,7 +171,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Вернуться в меню.
+        ///   Looks up a localized string similar to Вернуться в меню 🔙.
         /// </summary>
         internal static string MainMenuButton {
             get {
@@ -180,7 +180,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Маркетинг.
+        ///   Looks up a localized string similar to Маркетинг 📢.
         /// </summary>
         internal static string Marketing {
             get {
@@ -189,7 +189,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Я уже не студент.
+        ///   Looks up a localized string similar to Я уже не студент 😎.
         /// </summary>
         internal static string NotStudent {
             get {
@@ -198,7 +198,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Уже не студент, но хочу в ИТ.
+        ///   Looks up a localized string similar to Хочу в IT.
         /// </summary>
         internal static string NotStudentButWantInIT {
             get {
@@ -207,9 +207,9 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику. 
+        ///   Looks up a localized string similar to ⚡*В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику\.*⚡ 
         ///
-        ///Сейчас Directum готов принимать опытных специалистов, и такие есть среди участников Ночи карьеры.
+        ///Сейчас *Directum готов принимать опытных специалистов*, и такие есть среди участников Ночи карьеры\.
         ///.
         /// </summary>
         internal static string NotStudentMessage {
@@ -228,7 +228,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Программирование.
+        ///   Looks up a localized string similar to Программирование 🕸️.
         /// </summary>
         internal static string Programming {
             get {
@@ -237,7 +237,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ответь верно на 5 вопросов и получи подарок от Directum!.
+        ///   Looks up a localized string similar to 🎁*Ответь верно на 5 вопросов и получи подарок от Directum\!*.
         /// </summary>
         internal static string QuizStartMessage {
             get {
@@ -246,7 +246,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Розыгрыш мерча.
+        ///   Looks up a localized string similar to Розыгрыш мерча 🎁.
         /// </summary>
         internal static string RafflePrizes {
             get {
@@ -255,7 +255,16 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продажи.
+        ///   Looks up a localized string similar to Пройти ещё раз 🎁.
+        /// </summary>
+        internal static string RafflePrizesAgain {
+            get {
+                return ResourceManager.GetString("RafflePrizesAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Продажи 💰.
         /// </summary>
         internal static string Sails {
             get {
@@ -264,7 +273,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Я студент.
+        ///   Looks up a localized string similar to Я студент 🤓.
         /// </summary>
         internal static string Student {
             get {
@@ -273,8 +282,8 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Да, в Directum можно работать со студенчества. 
-        ///У нас можно пройти летнюю практику, работать по 4 или 8 часов в день. И самое главное развиваться.
+        ///   Looks up a localized string similar to ⚡*Да, в Directum можно работать со студенчества\.*⚡ 
+        ///У нас можно пройти летнюю практику, *работать по 4 или 8 часов в день\.* И самое главное развиваться\.
         ///Чего хочешь ты?
         ///.
         /// </summary>
@@ -294,7 +303,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Тех. поддержка.
+        ///   Looks up a localized string similar to Тех. поддержка 🙏.
         /// </summary>
         internal static string Support {
             get {
@@ -330,7 +339,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Расскажи в какой компании ты сейчас работаешь, на какой должности, если хочешь напиши подробнее про свой опыт.
+        ///   Looks up a localized string similar to Расскажи в какой компании работаешь, на какой должности, кратко опиши свои задачи.
         /// </summary>
         internal static string TellAboutYourCompany {
             get {
@@ -348,7 +357,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Тестирование.
+        ///   Looks up a localized string similar to Тестирование 🐞.
         /// </summary>
         internal static string Testing {
             get {
@@ -357,7 +366,8 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Поднимайся на сцену. За столом с табличкой «Мы тебя ждали» пройдёт твоё собеседование. Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист..
+        ///   Looks up a localized string similar to ⚡*Поднимайся на сцену\. За столом с табличкой «Мы тебя ждали» пройдёт твоё собеседование\.⚡* 
+        ///Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист.
         /// </summary>
         internal static string ThankYouAlumnus {
             get {
@@ -366,7 +376,8 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Поднимайся на сцену. За столом с табличкой «Мы тебя ждали» пройдёт твоё собеседование. Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист..
+        ///   Looks up a localized string similar to ⚡*Поднимайся на сцену\. За столом с табличкой «Мы тебя ждали» пройдёт твоё собеседование\.⚡* 
+        ///Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист\..
         /// </summary>
         internal static string ThankYouInIT {
             get {
@@ -375,7 +386,8 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Поднимайся на сцену. За столом с табличкой «Мы тебя ждали» тебе расскажут о возможностях в Directum. Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист..
+        ///   Looks up a localized string similar to ⚡*Поднимайся на сцену\. За столом с табличкой «Мы тебя ждали» тебе расскажут о возможностях в Directum\.⚡* 
+        ///Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист\..
         /// </summary>
         internal static string ThankYouInITDept {
             get {
@@ -384,7 +396,8 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Поднимайся на сцену! За столом с табличкой «Попасть в ИТ» тебе расскажут о возможностях. Крепись, ты можешь оказаться 30м в очереди на общение. А  пока есть время, и ты уже занял очередь, можешь прогуляться к нашему стенду..
+        ///   Looks up a localized string similar to  ⚡*Поднимайся на сцену\! За столом с табличкой «Попасть в ИТ» тебе расскажут о возможностях\.⚡* Крепись, ты можешь оказаться 30м в очереди на общение\.
+        ///А  пока есть время, и ты уже занял очередь, можешь прогуляться к нашему стенду🍊\..
         /// </summary>
         internal static string ThankYouNotStudent {
             get {
@@ -393,16 +406,25 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Спасибо! Мы передадим твою анкету рекрутеру, в случае положительного решения он свяжется с тобой до 30 апреля. Не забудь взять трубку с незнакомого номера, если указал телефон предпочтительным способом связи. 
+        ///   Looks up a localized string similar to ⚡*Спасибо\! Мы передадим твою анкету рекрутеру, в случае положительного решения он свяжется с тобой до 30 апреля ⏳\.*  Не забудь взять трубку с незнакомого номера, если указал телефон предпочтительным способом связи\. 
         ///
-        ///Подписывайся на группу Студенты Directum по кнопке ниже. 
+        ///Подписывайся на группу Студенты Directum по кнопке ниже\.⬇️ 
         ///
-        ///Если остались вопросы, за правой кулисой на сцене, как только соберётся группа из 6 человек, HR Настя расскажет о практике.
+        ///Если остались вопросы, за правой кулисой на сцене, как только соберётся группа из 6 человек, HR\-менеджер Настя расскажет о практике\.
         ///        .
         /// </summary>
         internal static string ThankYouPractice {
             get {
                 return ResourceManager.GetString("ThankYouPractice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Открытые вакансии.
+        /// </summary>
+        internal static string Vacancies {
+            get {
+                return ResourceManager.GetString("Vacancies", resourceCulture);
             }
         }
         
@@ -425,7 +447,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Работаю в ИТ-департаменте/отделе.
+        ///   Looks up a localized string similar to Хочу в IT.
         /// </summary>
         internal static string WorkerInITDept {
             get {
@@ -434,7 +456,7 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Работаю в ИТ, хочу сменить компанию.
+        ///   Looks up a localized string similar to Хочу на собеседование.
         /// </summary>
         internal static string WorkInITButWantToChangeCompany {
             get {

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.Scenarios;
-using DirectumCareerNightBot.Quiz;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -35,7 +34,8 @@ public class QuizScenario : AutoStepBotCommandScenario
             chatId,
             update.CallbackQuery.Message.MessageId, 
         $"{BotMessages.QuizStartMessage}\n{question.Text}", 
-            replyMarkup: replyMarkup);
+            replyMarkup: replyMarkup,
+            parseMode: ParseMode.MarkdownV2);
     }
 
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
@@ -65,7 +65,8 @@ public class QuizScenario : AutoStepBotCommandScenario
             chatId,
             update.CallbackQuery.Message.MessageId,
             text: question.Text,
-            replyMarkup: replyMarkup);
+            replyMarkup: replyMarkup,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -94,7 +95,8 @@ public class QuizScenario : AutoStepBotCommandScenario
             chatId,
             update.CallbackQuery.Message.MessageId,
             text: question.Text,
-            replyMarkup: replyMarkup);
+            replyMarkup: replyMarkup,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -123,7 +125,8 @@ public class QuizScenario : AutoStepBotCommandScenario
             chatId,
             update.CallbackQuery.Message.MessageId,
             text: question.Text,
-            replyMarkup: replyMarkup);
+            replyMarkup: replyMarkup,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -152,7 +155,8 @@ public class QuizScenario : AutoStepBotCommandScenario
             chatId,
             update.CallbackQuery.Message.MessageId,
             text: question.Text,
-            replyMarkup: replyMarkup);
+            replyMarkup: replyMarkup,
+            parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction6(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -179,15 +183,16 @@ public class QuizScenario : AutoStepBotCommandScenario
         var quizIsDone = quizResult > 0;
         
         var resultMessage = string.Empty;
-        var botGiftMessage = "Держи код для бота @nochit2024_bot: **p1bzk**";
+        var botGiftMessage = "Держи код для бота \\@nochit2024\\_bot: *p1bzk*";
+        var repeatQuizMessage = "Ты можешь ещё раз ответить на вопросы, но уже без приза \ud83d\ude09";
         if (quizResult == 0)
-            resultMessage = "Кажется ты подустал, зарядись и пройди тест ещё раз.";
+            resultMessage = "Кажется ты подустал, зарядись и пройди тест ещё раз \ud83d\ude35\u200d\ud83d\udcab";
         else if (quizResult == 1)
-            resultMessage = $"Not good, not terrible. {botGiftMessage}";
+            resultMessage = $"Not good, not terrible \ud83d\ude10\\. {botGiftMessage}\n\n{repeatQuizMessage}";
         else if (quizResult > 1 && quizResult < 5)
-            resultMessage = $"Поздравляем! {botGiftMessage}";
+            resultMessage = $"Поздравляем\\! {botGiftMessage}\n\n{repeatQuizMessage}";
         else if (quizResult == 5)
-            resultMessage = $"Балдею от твоих ответов! Ты такой умный Дядька (Тётька)! {botGiftMessage}";
+            resultMessage = $"Балдею от твоих ответов\ud83e\udee6\\! Ты такой умный Дядька \\(Тётька\\)\\! {botGiftMessage}\n\n{repeatQuizMessage}";
         
         var userResult = botDbContext.UserResults.SingleOrDefault(r => r.UserId == botUser.Id);
         await botDbContext.SaveChangesAsync();
@@ -199,21 +204,23 @@ public class QuizScenario : AutoStepBotCommandScenario
         else
         {
             userResult.IsQuizDone = quizIsDone;
-            if (quizIsDone)
-                resultMessage = string.Empty;
+            // if (quizIsDone)
+            //     resultMessage = string.Empty;
         }
         await botDbContext.SaveChangesAsync();
 
         var buttons = new List<InlineKeyboardButton[]>
         {
-            new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
+            new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) },
+            new[] { InlineKeyboardButton.WithCallbackData(BotMessages.RafflePrizesAgain, BotChatCommands.RafflePrizes) }
         };
         var markup = new InlineKeyboardMarkup(buttons);
         await bot.EditMessageTextAsync(
             chatId, 
             update.CallbackQuery.Message.MessageId,
-            $"Твой результат {quizResult} из 5.\n{resultMessage}", 
-            replyMarkup: markup);
+            $"Твой результат {quizResult} из 5\\.\n{resultMessage}", 
+            replyMarkup: markup,
+            parseMode: ParseMode.MarkdownV2);
     }
 
     private static QuizQuestion GetQuizQuestion(BotDbContext botDbContext, int questionId)

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using BotCommon.Repository;
 
-namespace DirectumCareerNightBot.Quiz;
+namespace DirectumCareerNightBot;
 
 public class QuizQuestion
 {
@@ -62,4 +63,21 @@ public record QuizUserResult
         this.UserId = userId;
         this.IsQuizDone = isQuizDone;
     }
+}
+
+public record UserData
+{
+    [Key]
+    public int Id { get; set; }
+    public long UserId { get; set; }
+    public BotUser BotUser { get; set; }
+    [AllowNull]
+    public string Fullname { get; set; }
+    [AllowNull]
+    public string Contact { get; set; }
+    public string TelegramName { get; set; }
+    [AllowNull]
+    public string SomeField { get; set; }
+    [AllowNull]
+    public string Experience { get; set; }
 }

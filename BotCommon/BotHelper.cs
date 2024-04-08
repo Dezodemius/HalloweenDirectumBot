@@ -14,7 +14,19 @@ public static class BotHelper
             _ => default
         };
     }
+    
+    public static string GetUsername(Update update)
+    {
+        return GetUsername(GetUserInfo(update));
+    }
 
+    public static string GetUsername(User user)
+    {
+        return string.IsNullOrEmpty(user.Username)
+            ? $"{user.FirstName} {user.LastName}"
+            : user.Username;
+    }
+    
     public static string GetMessage(Update update)
     {
         return update.Type switch

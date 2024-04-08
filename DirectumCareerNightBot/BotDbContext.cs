@@ -1,5 +1,4 @@
 ﻿using BotCommon.Repository;
-using DirectumCareerNightBot.Quiz;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -12,6 +11,7 @@ public sealed class BotDbContext : UserDbContext
     public DbSet<QuizPossibleAnswer> Choices { get; set; }
     public DbSet<QuizUserQuestion> UserQuestions { get; set; }
     public DbSet<QuizUserResult> UserResults { get; set; }
+    public DbSet<UserData> UserDatas { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite(_connectionString);
@@ -27,7 +27,6 @@ public sealed class BotDbContext : UserDbContext
             .HasOne(pa => pa.Question)
             .WithMany(q => q.Choices)
             .HasForeignKey(pa => pa.QuestionId);
-
         modelBuilder.Entity<QuizUserQuestion>()
             .HasOne(quq => quq.User)
             .WithMany()
@@ -36,6 +35,10 @@ public sealed class BotDbContext : UserDbContext
             .HasOne(r => r.BotUser)
             .WithMany()
             .HasForeignKey(r => r.UserId);
+        modelBuilder.Entity<UserData>()
+            .HasOne(u => u.BotUser)
+            .WithMany()
+            .HasForeignKey(u => u.UserId);
     }
 
     public BotDbContext() : base("Filename=quiz.db")

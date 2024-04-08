@@ -28,8 +28,8 @@ public class BotUpdateHandler : IUpdateHandler
         var userInfo = BotHelper.GetUserInfo(update);
         var userId = userInfo.Id;
 
-        await using var quizContext = new BotDbContext();
-        quizContext?.Add(new BotUser(
+        await using var botDbContext = new BotDbContext();
+        botDbContext?.Add(new BotUser(
             userId, 
             userInfo.Username,
             userInfo.FirstName,
@@ -45,7 +45,8 @@ public class BotUpdateHandler : IUpdateHandler
                 await botClient.SendTextMessageAsync(userId, 
                     BotMessages.BotStartMessage, 
                     replyMarkup: replyMarkup, 
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken,
+                    parseMode: ParseMode.MarkdownV2);
                 _userScenarioRepository?.Remove(userId);
                 return;
             }
@@ -55,7 +56,8 @@ public class BotUpdateHandler : IUpdateHandler
                 await botClient.SendTextMessageAsync(userId,
                     BotMessages.MainMenu,
                     replyMarkup: replyMarkup,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken,
+                    parseMode: ParseMode.MarkdownV2);
                 _userScenarioRepository?.Remove(userId);
                 return;
             }
@@ -73,7 +75,8 @@ public class BotUpdateHandler : IUpdateHandler
                 await botClient.SendTextMessageAsync(userId,
                     BotMessages.StudentMessage,
                     replyMarkup: replyMarkup,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken,
+                    parseMode: ParseMode.MarkdownV2);
                 _userScenarioRepository?.Remove(userId);
                 break;
             }
@@ -81,8 +84,9 @@ public class BotUpdateHandler : IUpdateHandler
             {
                 var buttons = new List<InlineKeyboardButton[]>
                 {
-                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.NotStudentButWantInIT, BotChatCommands.NotStudentButWantInIT), },
                     new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkerInITDept, BotChatCommands.WorkerInITDept), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkInITButWantToChangeCompany, BotChatCommands.WorkInITButWantToChangeCompany), },
+                    new [] { InlineKeyboardButton.WithUrl(BotMessages.Vacancies, "https://career.directum.ru/vacancy"), },
                     new [] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu), },
                 };
 
@@ -90,15 +94,13 @@ public class BotUpdateHandler : IUpdateHandler
                 await botClient.SendTextMessageAsync(userId,
                     BotMessages.NotStudentMessage,
                     replyMarkup: replyMarkup,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken,
+                    parseMode: ParseMode.MarkdownV2);
                 _userScenarioRepository?.Remove(userId);
                 break;
             }
             case BotChatCommands.WantToPractice:
                 userScenario = new UserCommandScenario(userId, new PracticeScenario());
-                break;
-            case BotChatCommands.NotStudentButWantInIT:
-                userScenario = new UserCommandScenario(userId, new NotStudentButWantInITScenario());
                 break;
             case BotChatCommands.WorkInITButWantToChangeCompany:
                 userScenario = new UserCommandScenario(userId, new WorkInITButWantToChangeCompanyScenario());
@@ -123,7 +125,8 @@ public class BotUpdateHandler : IUpdateHandler
                     userId,
                     BotMessages.Directum15QuestionsMessage,
                     replyMarkup: markup,
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken,
+                    parseMode: ParseMode.MarkdownV2);
                 break;
             }
             case BotChatCommands.RafflePrizes:
