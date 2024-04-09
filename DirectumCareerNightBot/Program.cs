@@ -1,6 +1,7 @@
 ﻿using System;
 using BotCommon;
 using BotCommon.KeepAlive;
+using HalloweenDirectumBot;
 using NLog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -30,6 +31,7 @@ internal class Program
     {
         var botKeepAlive = new BotKeepAlive(bot);
         botKeepAlive.StartKeepAlive();
+        StickersManager.InitializeStickerPack(bot, "Developer");
     }
     private static void StartBot(ITelegramBotClient bot)
     {

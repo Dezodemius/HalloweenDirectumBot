@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.Scenarios;
+using HalloweenDirectumBot;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -183,16 +184,18 @@ public class QuizScenario : AutoStepBotCommandScenario
         var quizIsDone = quizResult > 0;
         
         var resultMessage = string.Empty;
-        var botGiftMessage = "Держи код для бота \\@nochit2024\\_bot: *p1bzk*";
+        var botGiftMessage = "Введи код *p1bzk* в боте \\@nochit2024\\_bot и получи 15 баллов\\!";
+        var merchGiftMessage = "\ud83c\udf81*Покажи это сообщение на стенде Directum и получи подарок*\ud83c\udf81 ";
         var repeatQuizMessage = "Ты можешь ещё раз ответить на вопросы, но уже без приза \ud83d\ude09";
+        
         if (quizResult == 0)
             resultMessage = "Кажется ты подустал, зарядись и пройди тест ещё раз \ud83d\ude35\u200d\ud83d\udcab";
-        else if (quizResult == 1)
-            resultMessage = $"Not good, not terrible \ud83d\ude10\\. {botGiftMessage}\n\n{repeatQuizMessage}";
-        else if (quizResult > 1 && quizResult < 5)
+        else if (quizResult > 0 && quizResult < 3)
             resultMessage = $"Поздравляем\\! {botGiftMessage}\n\n{repeatQuizMessage}";
+        else if (quizResult > 2 && quizResult < 5)
+            resultMessage = $"Поздравляем\\! {merchGiftMessage}\n\n{botGiftMessage}\n\n{repeatQuizMessage}";
         else if (quizResult == 5)
-            resultMessage = $"Балдею от твоих ответов\ud83e\udee6\\! Ты такой умный Дядька \\(Тётька\\)\\! {botGiftMessage}\n\n{repeatQuizMessage}";
+            resultMessage = $"Балдею от твоих ответов\ud83e\udee6\\! Ты такой умный Дядька \\(Тётька\\)\\! {merchGiftMessage}\n\n{botGiftMessage}\n\n{repeatQuizMessage}";
         
         var userResult = botDbContext.UserResults.SingleOrDefault(r => r.UserId == botUser.Id);
         await botDbContext.SaveChangesAsync();
@@ -200,13 +203,17 @@ public class QuizScenario : AutoStepBotCommandScenario
         if (userResult == null)
         {
             botDbContext.UserResults.Add(new QuizUserResult(botUser.Id, quizIsDone));
+            if (quizIsDone)
+            {
+                StickersManager.SendStickerAsync(bot, chatId, "💎");
+            }
         }
-        else
-        {
-            userResult.IsQuizDone = quizIsDone;
-            // if (quizIsDone)
-            //     resultMessage = string.Empty;
-        }
+        // else
+        // {
+        //     userResult.IsQuizDone = quizIsDone;
+        //     if (quizIsDone)
+        //         resultMessage = string.Empty;
+        // }
         await botDbContext.SaveChangesAsync();
 
         var buttons = new List<InlineKeyboardButton[]>
