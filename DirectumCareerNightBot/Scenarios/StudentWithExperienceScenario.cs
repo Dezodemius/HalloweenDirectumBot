@@ -34,8 +34,37 @@ public class StudentWithExperienceScenario : AutoStepBotCommandScenario
         dbContext.UserDatas.Add(userData);
         await dbContext.SaveChangesAsync();
 
-        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself,
-            parseMode: ParseMode.MarkdownV2);
+        var buttons = new List<InlineKeyboardButton[]>
+        {
+            new []{ InlineKeyboardButton.WithCallbackData("Да", "Yes")},
+            new []{ InlineKeyboardButton.WithCallbackData("Нет", "No")}
+        };
+        var markup = new InlineKeyboardMarkup(buttons);
+        await bot.SendTextMessageAsync(chatId, "Работал ли ты до этого в IT?",
+            parseMode: ParseMode.MarkdownV2,
+            replyMarkup: markup);
+    }   
+    private async Task StepAction25(ITelegramBotClient bot, Update update, long chatId)
+    {
+        var userChoice = BotHelper.GetMessage(update);
+        if (userChoice == "Yes")
+        {
+            await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself,
+                parseMode: ParseMode.MarkdownV2);
+        }
+        else if (userChoice == "No")
+        {
+            this.steps = new List<BotCommandScenarioStep>().GetEnumerator();
+            var buttons = new List<InlineKeyboardButton[]>
+            {
+                new []{ InlineKeyboardButton.WithUrl(BotMessages.DirectumStudentsVK, "https://vk.com/student_directum")},
+                new []{ InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu)}
+            };
+            var markup = new InlineKeyboardMarkup(buttons);
+            await bot.SendTextMessageAsync(chatId, BotMessages.TraineeITMan,
+                parseMode: ParseMode.MarkdownV2,
+                replyMarkup: markup);
+        }
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
@@ -94,6 +123,7 @@ public class StudentWithExperienceScenario : AutoStepBotCommandScenario
         this.steps = new List<BotCommandScenarioStep>
         {
             new (StepAction1),
+            new (StepAction25),
             new (StepAction2),
             new (StepAction3),
             new (StepAction4),
