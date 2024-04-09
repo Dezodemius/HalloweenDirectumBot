@@ -84,8 +84,8 @@ public class BotUpdateHandler : IUpdateHandler
             {
                 var buttons = new List<InlineKeyboardButton[]>
                 {
-                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkerInITDept, BotChatCommands.WorkerInITDept), },
-                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkInITButWantToChangeCompany, BotChatCommands.WorkInITButWantToChangeCompany), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WantToIT, BotChatCommands.WantToIT), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WantInterview, BotChatCommands.WantInterview), },
                     new [] { InlineKeyboardButton.WithUrl(BotMessages.Vacancies, "https://career.directum.ru/vacancy"), },
                     new [] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu), },
                 };
@@ -102,13 +102,13 @@ public class BotUpdateHandler : IUpdateHandler
             case BotChatCommands.WantToPractice:
                 userScenario = new UserCommandScenario(userId, new PracticeScenario());
                 break;
-            case BotChatCommands.WorkInITButWantToChangeCompany:
+            case BotChatCommands.WantInterview:
                 userScenario = new UserCommandScenario(userId, new WorkInITButWantToChangeCompanyScenario());
                 break;
             case BotChatCommands.StudentWithExperience:
                 userScenario = new UserCommandScenario(userId, new StudentWithExperienceScenario());
                 break;
-            case BotChatCommands.WorkerInITDept:
+            case BotChatCommands.WantToIT:
                 userScenario = new UserCommandScenario(userId, new WorkingITDeptScenario());
                 break;
             case BotChatCommands.Directum15Questions:

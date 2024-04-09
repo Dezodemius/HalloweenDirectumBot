@@ -31,11 +31,8 @@
     <data name="WantToPractice" xml:space="preserve">
         <value>На практику!</value>
     </data>
-    <data name="NotStudentButWantInIT" xml:space="preserve">
-        <value>Хочу в IT</value>
-    </data>
-    <data name="WorkInITButWantToChangeCompany" xml:space="preserve">
-        <value>Хочу на собеседование</value>
+    <data name="WantInterview" xml:space="preserve">
+        <value>Cобеседование</value>
     </data>
     <data name="StudentWithExperience" xml:space="preserve">
         <value>На работу!</value>
@@ -43,8 +40,8 @@
     <data name="Vacancies" xml:space="preserve">
         <value>Открытые вакансии</value>
     </data>
-    <data name="WorkerInITDept" xml:space="preserve">
-        <value>Хочу в IT</value>
+    <data name="WantToIT" xml:space="preserve">
+        <value>Попасть в IT</value>
     </data>
     <data name="Directum15Questions" xml:space="preserve">
         <value>Узнать о направлениях работ</value>

@@ -198,15 +198,6 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Хочу в IT.
-        /// </summary>
-        internal static string NotStudentButWantInIT {
-            get {
-                return ResourceManager.GetString("NotStudentButWantInIT", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ⚡*В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику\.*⚡ 
         ///
         ///Сейчас *Directum готов принимать опытных специалистов*, и такие есть среди участников Ночи карьеры\.
@@ -445,6 +436,24 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cобеседование.
+        /// </summary>
+        internal static string WantInterview {
+            get {
+                return ResourceManager.GetString("WantInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Попасть в IT.
+        /// </summary>
+        internal static string WantToIT {
+            get {
+                return ResourceManager.GetString("WantToIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to На практику!.
         /// </summary>
         internal static string WantToPractice {
@@ -459,24 +468,6 @@ namespace DirectumCareerNightBot {
         internal static string WhatYouAlreadyLearned {
             get {
                 return ResourceManager.GetString("WhatYouAlreadyLearned", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Хочу в IT.
-        /// </summary>
-        internal static string WorkerInITDept {
-            get {
-                return ResourceManager.GetString("WorkerInITDept", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Хочу на собеседование.
-        /// </summary>
-        internal static string WorkInITButWantToChangeCompany {
-            get {
-                return ResourceManager.GetString("WorkInITButWantToChangeCompany", resourceCulture);
             }
         }
     }
