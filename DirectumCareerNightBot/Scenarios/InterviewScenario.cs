@@ -53,6 +53,15 @@ public class InterviewScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
+        await using var dbContext = new BotDbContext();
+        var user = BotHelper.GetUserInfo(update);
+        var userData = dbContext.UserDatas
+            .Where(u => u.UserId == user.Id)
+            .OrderByDescending(d => d.Id)
+            .First();
+        userData.Contact = BotHelper.GetMessage(update);
+        await dbContext.SaveChangesAsync();
+
         var buttons = new List<InlineKeyboardButton[]>()
         {
             new[]
@@ -71,15 +80,6 @@ public class InterviewScenario : AutoStepBotCommandScenario
         var userChoice = BotHelper.GetMessage(update);
         if (userChoice == BotChatCommands.WorkInIt)
         {
-            await using var dbContext = new BotDbContext();
-            var user = BotHelper.GetUserInfo(update);
-            var userData = dbContext.UserDatas
-                .Where(u => u.UserId == user.Id)
-                .OrderByDescending(d => d.Id)
-                .First();
-            userData.Contact = BotHelper.GetMessage(update);
-            await dbContext.SaveChangesAsync();
-
             await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutYourCompany,
                 parseMode: ParseMode.MarkdownV2);
         }
@@ -93,6 +93,7 @@ public class InterviewScenario : AutoStepBotCommandScenario
                 new (newScenario.StepAction5),
 
             }.GetEnumerator();
+            this.ExecuteStep(bot, update, chatId);
         }
     }
     private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)

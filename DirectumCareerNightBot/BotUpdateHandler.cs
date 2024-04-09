@@ -37,6 +37,7 @@ public class BotUpdateHandler : IUpdateHandler
             userInfo.LanguageCode));
 
         UserCommandScenario? userScenario = null;
+        
         switch (BotHelper.GetMessage(update))
         {
             case BotChatCommands.Start:
