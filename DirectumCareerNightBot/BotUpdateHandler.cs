@@ -100,16 +100,16 @@ public class BotUpdateHandler : IUpdateHandler
                 break;
             }
             case BotChatCommands.WantToPractice:
-                userScenario = new UserCommandScenario(userId, new PracticeScenario());
+                userScenario = new UserCommandScenario(userId, new StudentPracticeScenario());
                 break;
             case BotChatCommands.WantInterview:
-                userScenario = new UserCommandScenario(userId, new WorkInITButWantToChangeCompanyScenario());
+                userScenario = new UserCommandScenario(userId, new InterviewScenario());
                 break;
             case BotChatCommands.StudentWithExperience:
-                userScenario = new UserCommandScenario(userId, new StudentWithExperienceScenario());
+                userScenario = new UserCommandScenario(userId, new StudentWorkScenario());
                 break;
             case BotChatCommands.WantToIT:
-                userScenario = new UserCommandScenario(userId, new WorkingITDeptScenario());
+                userScenario = new UserCommandScenario(userId, new WantToITScenario());
                 break;
             case BotChatCommands.Directum15Questions:
             {
