@@ -189,6 +189,15 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Нет.
+        /// </summary>
+        internal static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Я уже не студент 😎.
         /// </summary>
         internal static string NotStudent {
@@ -200,7 +209,7 @@ namespace DirectumCareerNightBot {
         /// <summary>
         ///   Looks up a localized string similar to ⚡*В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику\.*⚡ 
         ///
-        ///Сейчас *Directum готов принимать опытных специалистов*, и такие есть среди участников Ночи карьеры\.
+        ///Сейчас *Directum готов принимать опытных специалистов*, и такие есть с1реди участников Ночи карьеры\.
         ///.
         /// </summary>
         internal static string NotStudentMessage {
@@ -468,6 +477,24 @@ namespace DirectumCareerNightBot {
         internal static string WhatYouAlreadyLearned {
             get {
                 return ResourceManager.GetString("WhatYouAlreadyLearned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Работал ли ты в IT\-компании или IT\-отделе?.
+        /// </summary>
+        internal static string WorkedInIT {
+            get {
+                return ResourceManager.GetString("WorkedInIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Да.
+        /// </summary>
+        internal static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

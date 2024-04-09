@@ -12,4 +12,6 @@ public class BotChatCommands
     public const string RafflePrizes = "RafflePrizes";
     public const string Student = "Student";
     public const string NotStudent = "NotStudent";
+    public const string WorkInIt = "WorkInIt";
+    public const string NoWorkInIt = "NoWorkInIt";
 }

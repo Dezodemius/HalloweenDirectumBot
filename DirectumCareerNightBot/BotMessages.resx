@@ -97,6 +97,12 @@
     <data name="Other" xml:space="preserve">
         <value>Другое</value>
     </data>
+    <data name="Yes" xml:space="preserve">
+        <value>Да</value>
+    </data>
+    <data name="No" xml:space="preserve">
+        <value>Нет</value>
+    </data>
     <data name="InterestingDirection" xml:space="preserve">
         <value>Какое направление тебе интересно?</value>
     </data>
@@ -165,6 +171,9 @@
     </data>    
     <data name="NotStudent" xml:space="preserve">
         <value>Я уже не студент 😎</value>
+    </data>    
+    <data name="WorkedInIT" xml:space="preserve">
+        <value>Работал ли ты в IT\-компании или IT\-отделе?</value>
     </data>
     <data name="StudentMessage" xml:space="preserve">
         <value>⚡*Да, в Directum можно работать со студенчества\.*⚡ 
@@ -175,7 +184,7 @@
     <data name="NotStudentMessage" xml:space="preserve">
         <value>⚡*В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику\.*⚡ 
 
-Сейчас *Directum готов принимать опытных специалистов*, и такие есть среди участников Ночи карьеры\.
+Сейчас *Directum готов принимать опытных специалистов*, и такие есть с1реди участников Ночи карьеры\.
 </value>
     </data>
 </root>
