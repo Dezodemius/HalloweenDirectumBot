@@ -209,7 +209,7 @@ namespace DirectumCareerNightBot {
         /// <summary>
         ///   Looks up a localized string similar to ⚡*В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику\.*⚡ 
         ///
-        ///Сейчас *Directum готов принимать опытных специалистов*, и такие есть с1реди участников Ночи карьеры\.
+        ///Сейчас *Directum готов принимать опытных специалистов*, и такие есть среди участников Ночи карьеры\.
         ///.
         /// </summary>
         internal static string NotStudentMessage {

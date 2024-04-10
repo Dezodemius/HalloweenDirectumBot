@@ -31,8 +31,8 @@ internal class Program
     {
         var botKeepAlive = new BotKeepAlive(bot);
         botKeepAlive.StartKeepAlive();
-        StickersManager.InitializeStickerPack(bot, "Developer");
     }
+
     private static void StartBot(ITelegramBotClient bot)
     {
         log.Debug("Start Bot");
