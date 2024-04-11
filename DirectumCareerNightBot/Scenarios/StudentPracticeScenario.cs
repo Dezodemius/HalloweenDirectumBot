@@ -34,7 +34,10 @@ public class StudentPracticeScenario : AutoStepBotCommandScenario
         BotDbContext.Instance.UserDatas.Add(userData);
         await BotDbContext.Instance.SaveChangesAsync();
 
-        await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself,
+        await bot.EditMessageTextAsync(
+            chatId,
+            update.CallbackQuery.Message.MessageId,
+            BotMessages.IntroduceYourself,
             parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)

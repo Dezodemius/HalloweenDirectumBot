@@ -54,12 +54,25 @@ public class BotUpdateHandler : IUpdateHandler
             case BotChatCommands.MainMenu:
             {
                 var replyMarkup = MainMenuCommand.GetMainMenuInlineMarkup();
-                await botClient.SendTextMessageAsync(userId,
-                    BotMessages.MainMenu,
-                    replyMarkup: replyMarkup,
-                    cancellationToken: cancellationToken,
-                    parseMode: ParseMode.MarkdownV2);
-                _userScenarioRepository?.Remove(userId);
+                if (update.Type == UpdateType.CallbackQuery)
+                {
+                    await botClient.EditMessageTextAsync(userId,
+                        update.CallbackQuery.Message.MessageId,
+                        BotMessages.MainMenu,
+                        replyMarkup: replyMarkup,
+                        cancellationToken: cancellationToken,
+                        parseMode: ParseMode.MarkdownV2);
+                    _userScenarioRepository?.Remove(userId);
+                }
+                else if (update.Type == UpdateType.Message)
+                {
+                    await botClient.SendTextMessageAsync(userId,
+                        BotMessages.MainMenu,
+                        replyMarkup: replyMarkup,
+                        cancellationToken: cancellationToken,
+                        parseMode: ParseMode.MarkdownV2);
+                    _userScenarioRepository?.Remove(userId);
+                }
                 return;
             }
             case BotChatCommands.Student:
@@ -73,7 +86,8 @@ public class BotUpdateHandler : IUpdateHandler
                 };
 
                 var replyMarkup = new InlineKeyboardMarkup(buttons);
-                await botClient.SendTextMessageAsync(userId,
+                await botClient.EditMessageTextAsync(userId,
+                    update.CallbackQuery.Message.MessageId,
                     BotMessages.StudentMessage,
                     replyMarkup: replyMarkup,
                     cancellationToken: cancellationToken,
@@ -92,7 +106,8 @@ public class BotUpdateHandler : IUpdateHandler
                 };
 
                 var replyMarkup = new InlineKeyboardMarkup(buttons);
-                await botClient.SendTextMessageAsync(userId,
+                await botClient.EditMessageTextAsync(userId,
+                    update.CallbackQuery.Message.MessageId,
                     BotMessages.NotStudentMessage,
                     replyMarkup: replyMarkup,
                     cancellationToken: cancellationToken,
@@ -122,8 +137,9 @@ public class BotUpdateHandler : IUpdateHandler
                     }
                 };
                 var markup = new InlineKeyboardMarkup(buttons);
-                await botClient.SendTextMessageAsync(
+                await botClient.EditMessageTextAsync(
                     userId,
+                    update.CallbackQuery.Message.MessageId,
                     BotMessages.Directum15QuestionsMessage,
                     replyMarkup: markup,
                     cancellationToken: cancellationToken,

@@ -39,7 +39,10 @@ public class StudentWorkScenario : AutoStepBotCommandScenario
             new []{ InlineKeyboardButton.WithCallbackData("Нет", "No")}
         };
         var markup = new InlineKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, "Работал ли ты до этого в IT?",
+        await bot.EditMessageTextAsync(
+            chatId,
+            update.CallbackQuery.Message.MessageId,
+            "Работал ли ты до этого в IT?",
             parseMode: ParseMode.MarkdownV2,
             replyMarkup: markup);
     }   
