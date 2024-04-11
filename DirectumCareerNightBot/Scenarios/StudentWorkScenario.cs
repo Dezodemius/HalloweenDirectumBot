@@ -107,7 +107,7 @@ public class StudentWorkScenario : AutoStepBotCommandScenario
         await dbContext.SaveChangesAsync();
 
         var sheetManager = new GoogleSheetsManager();
-        sheetManager.AddUserToInterviewSheet(userData.Fullname, userData.Contact, userData.SomeField, userData.Experience, userData.TelegramName);
+        sheetManager.AddUserToInterviewSheet(userData.Fullname, userData.Contact, userData.Experience, userData.TelegramName);
 
         var buttons = new List<InlineKeyboardButton[]>
         {
