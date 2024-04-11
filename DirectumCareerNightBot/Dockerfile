@@ -1,18 +1,9 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["DirectumCareerNightBot/DirectumCareerNightBot.csproj", "DirectumCareerNightBot/"]
-RUN dotnet restore "DirectumCareerNightBot/DirectumCareerNightBot.csproj"
-COPY . .
-WORKDIR "/src/DirectumCareerNightBot"
-RUN dotnet build "DirectumCareerNightBot.csproj" -c Release -o /app/build
+COPY . /app
 
-FROM build AS publish
-RUN dotnet publish "DirectumCareerNightBot.csproj" -c Release -o /app/publish /p:UseAppHost=false
+EXPOSE 80
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "DirectumCareerNightBot.dll"]

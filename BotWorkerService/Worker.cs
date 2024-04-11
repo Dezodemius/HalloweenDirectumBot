@@ -22,7 +22,7 @@ public class Worker : BackgroundService
   private void PrepareProcess()
   {
     _botProcess = new Process();
-    var botAssembly = Assembly.Load(nameof(Directum238Bot));
+    var botAssembly = Assembly.Load(nameof(DirectumCareerNightBot));
     var botExecutableFilepath = Path.ChangeExtension(botAssembly.Location, "exe");
     _botProcess.StartInfo = new ProcessStartInfo
     {

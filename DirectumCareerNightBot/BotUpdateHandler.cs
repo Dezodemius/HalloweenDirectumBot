@@ -162,6 +162,7 @@ public class BotUpdateHandler : IUpdateHandler
     public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
         log.Error(exception);
+        Environment.Exit(0);
     }
 
     public BotUpdateHandler()
