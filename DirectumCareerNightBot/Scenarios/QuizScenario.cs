@@ -179,7 +179,7 @@ public class QuizScenario : AutoStepBotCommandScenario
         var resultMessage = string.Empty;
         var botGiftMessage = "Введи код *p1bzk* в боте \\@nochit2024\\_bot и получи 15 баллов\\!";
         var merchGiftMessage = "\ud83c\udf81*Покажи это сообщение на стенде Directum и получи подарок*\ud83c\udf81 ";
-        var repeatQuizMessage = "Ты можешь ещё раз ответить на вопросы, но уже без приза \ud83d\ude09";
+        var repeatQuizMessage = "Держи эксклюзивный \u26a1[стикерпак](https://t.me/addstickers/directum_pack)\u26a1 от Directum\\!\nТы можешь ещё раз ответить на вопросы, но уже без приза \ud83d\ude09";
         
         if (quizResult == 0)
             resultMessage = "Кажется ты подустал, зарядись и пройди тест ещё раз \ud83d\ude35\u200d\ud83d\udcab";
@@ -196,17 +196,13 @@ public class QuizScenario : AutoStepBotCommandScenario
         if (userResult == null)
         {
             BotDbContext.Instance.UserResults.Add(new QuizUserResult(botUser.Id, quizIsDone));
-            if (quizIsDone)
-            {
-                StickersManager.SendStickerAsync(bot, chatId, "💎");
-            }
         }
-        // else
-        // {
-        //     userResult.IsQuizDone = quizIsDone;
-        //     if (quizIsDone)
-        //         resultMessage = string.Empty;
-        // }
+        else
+        {
+            if (userResult.IsQuizDone)
+                resultMessage = resultMessage.Replace(merchGiftMessage, string.Empty);
+        }
+ 
         await BotDbContext.Instance.SaveChangesAsync();
 
         var buttons = new List<InlineKeyboardButton[]>
