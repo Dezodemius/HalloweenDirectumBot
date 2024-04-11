@@ -24,12 +24,12 @@ public class BotUpdateHandler : IUpdateHandler
 
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        log.Trace(JsonConvert.SerializeObject(update));
         var userInfo = BotHelper.GetUserInfo(update);
-        log.Info($"user: {BotHelper.GetUsername(userInfo)}");
+        log.Info($"user: {BotHelper.GetUsername(userInfo)}, userMessage: {BotHelper.GetMessage(update)}");
         var userId = userInfo.Id;
 
-        await using var botDbContext = new BotDbContext();
-        botDbContext?.Add(new BotUser(
+        BotDbContext.Instance.Add(new BotUser(
             userId, 
             userInfo.Username,
             userInfo.FirstName,

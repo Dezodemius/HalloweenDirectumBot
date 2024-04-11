@@ -1,4 +1,5 @@
-﻿using BotCommon.Repository;
+﻿using System;
+using BotCommon.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -7,6 +8,27 @@ namespace DirectumCareerNightBot;
 
 public sealed class BotDbContext : UserDbContext
 {
+    private static readonly object padlock = new object();
+    private static volatile BotDbContext instance;
+    private static Lazy<BotDbContext> lazy = new(() => new BotDbContext());
+
+    public static BotDbContext Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                lock (padlock)
+                {
+                    if (instance == null)
+                    {
+                        instance = lazy.Value;
+                    }
+                }
+            }
+            return instance;
+        }
+    } 
     public DbSet<QuizQuestion> Questions { get; set; }
     public DbSet<QuizPossibleAnswer> Choices { get; set; }
     public DbSet<QuizUserQuestion> UserQuestions { get; set; }
@@ -41,7 +63,7 @@ public sealed class BotDbContext : UserDbContext
             .HasForeignKey(u => u.UserId);
     }
 
-    public BotDbContext() : base("Filename=quiz.db")
+    private BotDbContext() : base("Filename=quiz.db")
     {
         Database.EnsureCreated();
 

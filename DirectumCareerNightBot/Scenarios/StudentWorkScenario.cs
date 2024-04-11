@@ -18,7 +18,6 @@ public class StudentWorkScenario : AutoStepBotCommandScenario
     public override string ScenarioCommand => string.Empty;
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var dbContext = new BotDbContext();
         var botUserInfo = BotHelper.GetUserInfo(update);
         var userData = new UserData
         {
@@ -31,8 +30,8 @@ public class StudentWorkScenario : AutoStepBotCommandScenario
             SomeField = string.Empty,
             Experience = string.Empty
         };
-        dbContext.UserDatas.Add(userData);
-        await dbContext.SaveChangesAsync();
+        BotDbContext.Instance.UserDatas.Add(userData);
+        await BotDbContext.Instance.SaveChangesAsync();
 
         var buttons = new List<InlineKeyboardButton[]>
         {
@@ -68,28 +67,26 @@ public class StudentWorkScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var dbContext = new BotDbContext();
         var user = BotHelper.GetUserInfo(update);
-        var userData = dbContext.UserDatas
+        var userData = BotDbContext.Instance.UserDatas
             .Where(u => u.UserId == user.Id)
             .OrderByDescending(d => d.Id)
             .First();
         userData.Fullname = BotHelper.GetMessage(update);
-        await dbContext.SaveChangesAsync();
+        await BotDbContext.Instance.SaveChangesAsync();
         
         await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact,
             parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var dbContext = new BotDbContext();
         var user = BotHelper.GetUserInfo(update);
-        var userData = dbContext.UserDatas
+        var userData = BotDbContext.Instance.UserDatas
             .Where(u => u.UserId == user.Id)
             .OrderByDescending(d => d.Id)
             .First();
         userData.Contact = BotHelper.GetMessage(update);
-        await dbContext.SaveChangesAsync();
+        await BotDbContext.Instance.SaveChangesAsync();
         
         await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutITExpirience,
             parseMode: ParseMode.MarkdownV2);
@@ -97,14 +94,13 @@ public class StudentWorkScenario : AutoStepBotCommandScenario
 
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var dbContext = new BotDbContext();
         var user = BotHelper.GetUserInfo(update);
-        var userData = dbContext.UserDatas
+        var userData = BotDbContext.Instance.UserDatas
             .Where(u => u.UserId == user.Id)
             .OrderByDescending(d => d.Id)
             .First();
         userData.Experience = BotHelper.GetMessage(update);
-        await dbContext.SaveChangesAsync();
+        await BotDbContext.Instance.SaveChangesAsync();
 
         var sheetManager = new GoogleSheetsManager();
         sheetManager.AddUserToInterviewSheet(userData.Fullname, userData.Contact, userData.Experience, userData.TelegramName);

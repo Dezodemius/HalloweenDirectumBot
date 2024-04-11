@@ -18,18 +18,17 @@ public class QuizScenario : AutoStepBotCommandScenario
     public override string ScenarioCommand { get; }
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var botDbContext = new BotDbContext();
-        var botUser = botDbContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
-        var userQuestions = botDbContext.UserQuestions.Where(q => q.UserId == botUser.Id);
+        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var userQuestions = BotDbContext.Instance.UserQuestions.Where(q => q.UserId == botUser.Id);
         if (userQuestions.Any())
-            botDbContext.UserQuestions.RemoveRange(userQuestions);
+            BotDbContext.Instance.UserQuestions.RemoveRange(userQuestions);
         
-        var question = GetQuizQuestion(botDbContext, new Random().Next(1, 5));
+        var question = GetQuizQuestion(BotDbContext.Instance, new Random().Next(1, 5));
 
-        botDbContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
-        await botDbContext.SaveChangesAsync();
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await BotDbContext.Instance.SaveChangesAsync();
         
-        var questionChoices = GetQuestionChoices(botDbContext, question);
+        var questionChoices = GetQuestionChoices(BotDbContext.Instance, question);
         var replyMarkup = GetChoicesReplyMarkup(questionChoices);
         await bot.EditMessageTextAsync(
             chatId,
@@ -41,26 +40,25 @@ public class QuizScenario : AutoStepBotCommandScenario
 
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var quizContext = new BotDbContext();
-        var botUser = quizContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
 
-        var userChoiceId = quizContext.Choices
+        var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
-        var lastUserQuestion = quizContext.UserQuestions
+        var lastUserQuestion = BotDbContext.Instance.UserQuestions
             .Where(c => c.User.Id == botUser.Id)
             .OrderByDescending(i => i.Id)
             .FirstOrDefault();
-        var quizQuestion = quizContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+        var quizQuestion = BotDbContext.Instance.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
             quizQuestion.CorrectChoiceId == userChoiceId.Id));
 
-        var question = GetQuizQuestion(quizContext, new Random().Next(5, 9));
+        var question = GetQuizQuestion(BotDbContext.Instance, new Random().Next(5, 9));
 
 
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
-        await quizContext.SaveChangesAsync();
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await BotDbContext.Instance.SaveChangesAsync();
 
-        var questionChoices = GetQuestionChoices(quizContext, question);
+        var questionChoices = GetQuestionChoices(BotDbContext.Instance, question);
         var replyMarkup = GetChoicesReplyMarkup(questionChoices);
         await bot.EditMessageTextAsync(
             chatId,
@@ -71,26 +69,25 @@ public class QuizScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var quizContext = new BotDbContext();
-        var botUser = quizContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
 
-        var userChoiceId = quizContext.Choices
+        var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
-        var lastUserQuestion = quizContext.UserQuestions
+        var lastUserQuestion = BotDbContext.Instance.UserQuestions
             .Where(c => c.User.Id == botUser.Id)
             .OrderByDescending(i => i.Id)
             .FirstOrDefault();
-        var quizQuestion = quizContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+        var quizQuestion = BotDbContext.Instance.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
             quizQuestion.CorrectChoiceId == userChoiceId.Id));
 
-        var question = GetQuizQuestion(quizContext, new Random().Next(9, 13));
+        var question = GetQuizQuestion(BotDbContext.Instance, new Random().Next(9, 13));
 
 
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
-        await quizContext.SaveChangesAsync();
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await BotDbContext.Instance.SaveChangesAsync();
 
-        var questionChoices = GetQuestionChoices(quizContext, question);
+        var questionChoices = GetQuestionChoices(BotDbContext.Instance, question);
         var replyMarkup = GetChoicesReplyMarkup(questionChoices);
         await bot.EditMessageTextAsync(
             chatId,
@@ -101,26 +98,25 @@ public class QuizScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var quizContext = new BotDbContext();
-        var botUser = quizContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
 
-        var userChoiceId = quizContext.Choices
+        var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
-        var lastUserQuestion = quizContext.UserQuestions
+        var lastUserQuestion = BotDbContext.Instance.UserQuestions
             .Where(c => c.User.Id == botUser.Id)
             .OrderByDescending(i => i.Id)
             .FirstOrDefault();
-        var quizQuestion = quizContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+        var quizQuestion = BotDbContext.Instance.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
             quizQuestion.CorrectChoiceId == userChoiceId.Id));
 
-        var question = GetQuizQuestion(quizContext, new Random().Next(13, 17));
+        var question = GetQuizQuestion(BotDbContext.Instance, new Random().Next(13, 17));
 
 
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
-        await quizContext.SaveChangesAsync();
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await BotDbContext.Instance.SaveChangesAsync();
 
-        var questionChoices = GetQuestionChoices(quizContext, question);
+        var questionChoices = GetQuestionChoices(BotDbContext.Instance, question);
         var replyMarkup = GetChoicesReplyMarkup(questionChoices);
         await bot.EditMessageTextAsync(
             chatId,
@@ -131,26 +127,25 @@ public class QuizScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var quizContext = new BotDbContext();
-        var botUser = quizContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
 
-        var userChoiceId = quizContext.Choices
+        var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
-        var lastUserQuestion = quizContext.UserQuestions
+        var lastUserQuestion = BotDbContext.Instance.UserQuestions
             .Where(c => c.User.Id == botUser.Id)
             .OrderByDescending(i => i.Id)
             .FirstOrDefault();
-        var quizQuestion = quizContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+        var quizQuestion = BotDbContext.Instance.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
             quizQuestion.CorrectChoiceId == userChoiceId.Id));
 
-        var question = GetQuizQuestion(quizContext, new Random().Next(17, 21));
+        var question = GetQuizQuestion(BotDbContext.Instance, new Random().Next(17, 21));
 
 
-        quizContext.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
-        await quizContext.SaveChangesAsync();
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, question, null));
+        await BotDbContext.Instance.SaveChangesAsync();
 
-        var questionChoices = GetQuestionChoices(quizContext, question);
+        var questionChoices = GetQuestionChoices(BotDbContext.Instance, question);
         var replyMarkup = GetChoicesReplyMarkup(questionChoices);
         await bot.EditMessageTextAsync(
             chatId,
@@ -161,25 +156,23 @@ public class QuizScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction6(ITelegramBotClient bot, Update update, long chatId)
     {
-        await using var botDbContext = new BotDbContext();
+        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
 
-        var botUser = botDbContext.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
-
-        var userChoiceId = botDbContext.Choices
+        var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
-        var lastUserQuestion = botDbContext.UserQuestions
+        var lastUserQuestion = BotDbContext.Instance.UserQuestions
             .Where(c => c.User.Id == botUser.Id)
             .OrderByDescending(i => i.Id)
             .FirstOrDefault();
-        var quizQuestion = botDbContext.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
-        botDbContext.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
+        var quizQuestion = BotDbContext.Instance.Questions.SingleOrDefault(q => lastUserQuestion.QuestionId == q.Id);
+        BotDbContext.Instance.UserQuestions.Add(new QuizUserQuestion(botUser, quizQuestion, 
             quizQuestion.CorrectChoiceId == userChoiceId.Id));
-        await botDbContext.SaveChangesAsync();
+        await BotDbContext.Instance.SaveChangesAsync();
 
-        var userQuestions = botDbContext.UserQuestions.Where(q => q.UserId == botUser.Id);
+        var userQuestions = BotDbContext.Instance.UserQuestions.Where(q => q.UserId == botUser.Id);
         var quizResult = userQuestions.Count(q => q.IsCorrectAnswered.Value);
         
-        botDbContext.UserQuestions.RemoveRange(userQuestions);
+        BotDbContext.Instance.UserQuestions.RemoveRange(userQuestions);
         
         var quizIsDone = quizResult > 0;
         
@@ -197,12 +190,12 @@ public class QuizScenario : AutoStepBotCommandScenario
         else if (quizResult == 5)
             resultMessage = $"Балдею от твоих ответов\ud83e\udee6\\! Ты такой умный Дядька \\(Тётька\\)\\! {merchGiftMessage}\n\n{botGiftMessage}\n\n{repeatQuizMessage}";
         
-        var userResult = botDbContext.UserResults.SingleOrDefault(r => r.UserId == botUser.Id);
-        await botDbContext.SaveChangesAsync();
+        var userResult = BotDbContext.Instance.UserResults.SingleOrDefault(r => r.UserId == botUser.Id);
+        await BotDbContext.Instance.SaveChangesAsync();
 
         if (userResult == null)
         {
-            botDbContext.UserResults.Add(new QuizUserResult(botUser.Id, quizIsDone));
+            BotDbContext.Instance.UserResults.Add(new QuizUserResult(botUser.Id, quizIsDone));
             if (quizIsDone)
             {
                 StickersManager.SendStickerAsync(bot, chatId, "💎");
@@ -214,7 +207,7 @@ public class QuizScenario : AutoStepBotCommandScenario
         //     if (quizIsDone)
         //         resultMessage = string.Empty;
         // }
-        await botDbContext.SaveChangesAsync();
+        await BotDbContext.Instance.SaveChangesAsync();
 
         var buttons = new List<InlineKeyboardButton[]>
         {
