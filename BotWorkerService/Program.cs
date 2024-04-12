@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 IHost host = Host.CreateDefaultBuilder(args)
     .UseWindowsService(options =>
     {
-      options.ServiceName = nameof(Directum238Bot);
+      options.ServiceName = nameof(DirectumCareerNightBot);
     })
     .ConfigureServices(services =>
     {

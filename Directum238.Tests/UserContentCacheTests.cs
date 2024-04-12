@@ -1,4 +1,3 @@
-using Directum238Bot;
 using Directum238Bot.Repository;
 using NUnit.Framework;
 using Telegram.Bot.Types.Enums;
