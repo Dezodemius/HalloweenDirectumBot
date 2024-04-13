@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BotCommon;
 using BotCommon.Scenarios;
-using HalloweenDirectumBot;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -12,13 +11,12 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DirectumCareerNightBot.Scenarios;
 
-public class QuizScenario : AutoStepBotCommandScenario
+public class QuizActionSequence : AutoStepBotActionSequence
 {
-    public override Guid Id { get; } = new Guid("C2181931-E2A2-409D-9E9B-220177C40556");
-    public override string ScenarioCommand { get; }
+    public override Guid Id { get; } = new("C2181931-E2A2-409D-9E9B-220177C40556");
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.Users.First(u => u.Id == BotHelper.GetUserFromUpdate(update).Id);
         var userQuestions = BotDbContext.Instance.UserQuestions.Where(q => q.UserId == botUser.Id);
         if (userQuestions.Any())
             BotDbContext.Instance.UserQuestions.RemoveRange(userQuestions);
@@ -40,7 +38,7 @@ public class QuizScenario : AutoStepBotCommandScenario
 
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
-        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.Users.First(u => u.Id == BotHelper.GetUserFromUpdate(update).Id);
 
         var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
@@ -69,7 +67,7 @@ public class QuizScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
-        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.Users.First(u => u.Id == BotHelper.GetUserFromUpdate(update).Id);
 
         var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
@@ -98,7 +96,7 @@ public class QuizScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
-        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.Users.First(u => u.Id == BotHelper.GetUserFromUpdate(update).Id);
 
         var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
@@ -127,7 +125,7 @@ public class QuizScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
     {
-        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.Users.First(u => u.Id == BotHelper.GetUserFromUpdate(update).Id);
 
         var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
@@ -156,7 +154,7 @@ public class QuizScenario : AutoStepBotCommandScenario
     }
     private async Task StepAction6(ITelegramBotClient bot, Update update, long chatId)
     {
-        var botUser = BotDbContext.Instance.BotUsers.First(u => u.Id == BotHelper.GetUserInfo(update).Id);
+        var botUser = BotDbContext.Instance.Users.First(u => u.Id == BotHelper.GetUserFromUpdate(update).Id);
 
         var userChoiceId = BotDbContext.Instance.Choices
             .Single(c => c.Id == int.Parse(update.CallbackQuery.Data));
@@ -248,9 +246,9 @@ public class QuizScenario : AutoStepBotCommandScenario
         return replyMarkup;
     }
 
-    public QuizScenario()
+    public QuizActionSequence()
     {
-        this.steps = new List<BotCommandScenarioStep>
+        sequenceActions = new List<SequenceAction>
         {
             new (StepAction1),
             new (StepAction2),

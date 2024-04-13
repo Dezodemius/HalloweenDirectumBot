@@ -12,14 +12,12 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DirectumCareerNightBot.Scenarios;
 
-public class StudentPracticeScenario : AutoStepBotCommandScenario
+public class StudentWorkActionSequence : AutoStepBotActionSequence
 {
-    public override Guid Id { get; } = new Guid("87036BA3-710B-4742-86E0-A1FD8F699741");
-    public override string ScenarioCommand => string.Empty;
-
+    public override Guid Id { get; } = new ("A00C9F14-6B9E-4421-9D14-E73A1E73EB2F");
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        var botUserInfo = BotHelper.GetUserInfo(update);
+        var botUserInfo = BotHelper.GetUserFromUpdate(update);
         var userData = new UserData
         {
             TelegramName = string.IsNullOrEmpty(botUserInfo.Username)
@@ -34,94 +32,99 @@ public class StudentPracticeScenario : AutoStepBotCommandScenario
         BotDbContext.Instance.UserDatas.Add(userData);
         await BotDbContext.Instance.SaveChangesAsync();
 
+        var buttons = new List<InlineKeyboardButton[]>
+        {
+            new []{ InlineKeyboardButton.WithCallbackData("Да", "Yes")},
+            new []{ InlineKeyboardButton.WithCallbackData("Нет", "No")}
+        };
+        var markup = new InlineKeyboardMarkup(buttons);
         await bot.EditMessageTextAsync(
             chatId,
             update.CallbackQuery.Message.MessageId,
-            BotMessages.IntroduceYourself,
-            parseMode: ParseMode.MarkdownV2);
+            "Работал ли ты до этого в IT?",
+            parseMode: ParseMode.MarkdownV2,
+            replyMarkup: markup);
+    }   
+    private async Task StepAction25(ITelegramBotClient bot, Update update, long chatId)
+    {
+        var userChoice = BotHelper.GetMessageText(update);
+        if (userChoice == "Yes")
+        {
+            await bot.SendTextMessageAsync(chatId, BotMessages.IntroduceYourself,
+                parseMode: ParseMode.MarkdownV2);
+        }
+        else if (userChoice == "No")
+        {
+            sequenceActions = new List<SequenceAction>().GetEnumerator();
+            var buttons = new List<InlineKeyboardButton[]>
+            {
+                new []{ InlineKeyboardButton.WithUrl(BotMessages.DirectumStudentsVK, "https://vk.com/student_directum")},
+                new []{ InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu)}
+            };
+            var markup = new InlineKeyboardMarkup(buttons);
+            await bot.SendTextMessageAsync(chatId, BotMessages.TraineeITMan,
+                parseMode: ParseMode.MarkdownV2,
+                replyMarkup: markup);
+        }
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
-        var user = BotHelper.GetUserInfo(update);
+        var user = BotHelper.GetUserFromUpdate(update);
         var userData = BotDbContext.Instance.UserDatas
             .Where(u => u.UserId == user.Id)
             .OrderByDescending(d => d.Id)
             .First();
-        userData.Fullname = BotHelper.GetMessage(update);
+        userData.Fullname = BotHelper.GetMessageText(update);
         await BotDbContext.Instance.SaveChangesAsync();
-
+        
         await bot.SendTextMessageAsync(chatId, BotMessages.HowToContact,
             parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction3(ITelegramBotClient bot, Update update, long chatId)
     {
-        var user = BotHelper.GetUserInfo(update);
+        var user = BotHelper.GetUserFromUpdate(update);
         var userData = BotDbContext.Instance.UserDatas
             .Where(u => u.UserId == user.Id)
             .OrderByDescending(d => d.Id)
             .First();
-        userData.Contact = BotHelper.GetMessage(update);
+        userData.Contact = BotHelper.GetMessageText(update);
         await BotDbContext.Instance.SaveChangesAsync();
         
-        var buttons = new List<KeyboardButton[]>
-        {
-            new []{ new KeyboardButton(BotMessages.Programming)},
-            new []{ new KeyboardButton(BotMessages.Testing)},
-            new []{ new KeyboardButton(BotMessages.Marketing)},
-            new []{ new KeyboardButton(BotMessages.Sails)},
-            new []{ new KeyboardButton(BotMessages.Support)},
-            new []{ new KeyboardButton(BotMessages.Analitycs)},
-            new []{ new KeyboardButton(BotMessages.Other)},
-        };
-        var markup = new ReplyKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.InterestingDirection, replyMarkup: markup,
+        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutITExpirience,
             parseMode: ParseMode.MarkdownV2);
     }
+
     private async Task StepAction4(ITelegramBotClient bot, Update update, long chatId)
     {
-        var user = BotHelper.GetUserInfo(update);
+        var user = BotHelper.GetUserFromUpdate(update);
         var userData = BotDbContext.Instance.UserDatas
             .Where(u => u.UserId == user.Id)
             .OrderByDescending(d => d.Id)
             .First();
-        userData.SomeField = BotHelper.GetMessage(update);
-        await BotDbContext.Instance.SaveChangesAsync();
-
-        await bot.SendTextMessageAsync(chatId, BotMessages.TellAboutChosenDirection, replyMarkup: new ReplyKeyboardRemove(),
-            parseMode: ParseMode.MarkdownV2);
-    }
-    private async Task StepAction5(ITelegramBotClient bot, Update update, long chatId)
-    {
-        var user = BotHelper.GetUserInfo(update);
-        var userData = BotDbContext.Instance.UserDatas
-            .Where(u => u.UserId == user.Id)
-            .OrderByDescending(d => d.Id)
-            .First();
-        userData.Experience = BotHelper.GetMessage(update);
+        userData.Experience = BotHelper.GetMessageText(update);
         await BotDbContext.Instance.SaveChangesAsync();
 
         var sheetManager = new GoogleSheetsManager();
-        sheetManager.AddUserToTraineeSheet(userData.Fullname, userData.Contact, userData.SomeField, userData.Experience, userData.TelegramName);
-        
+        sheetManager.AddUserToInterviewSheet(userData.Fullname, userData.Contact, userData.Experience, userData.TelegramName);
+
         var buttons = new List<InlineKeyboardButton[]>
         {
             new[] { InlineKeyboardButton.WithUrl(BotMessages.DirectumStudentsVK, "https://vk.com/student_directum") },
             new[] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu) }
         };
         var markup = new InlineKeyboardMarkup(buttons);
-        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouPractice, replyMarkup: markup,
+        await bot.SendTextMessageAsync(chatId, BotMessages.ThankYouAlumnus, replyMarkup: markup,
             parseMode: ParseMode.MarkdownV2);
     }
-
-    public StudentPracticeScenario()
+    public StudentWorkActionSequence()
     {
-        this.steps = new List<BotCommandScenarioStep>
+        sequenceActions = new List<SequenceAction>
         {
             new (StepAction1),
+            new (StepAction25),
             new (StepAction2),
             new (StepAction3),
             new (StepAction4),
-            new (StepAction5),
 
         }.GetEnumerator();
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using BotCommon;
 using BotCommon.KeepAlive;
-using HalloweenDirectumBot;
 using NLog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;

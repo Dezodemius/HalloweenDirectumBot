@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BotCommon.ConfigManager;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -61,7 +62,7 @@ public class BotConfigManager
     {
       using (var reader = new StreamReader(stream))
       {
-        this.Config = _configDeserializer.Deserialize<BotConfig>(reader);
+        Config = _configDeserializer.Deserialize<BotConfig>(reader);
       }
     }
   }

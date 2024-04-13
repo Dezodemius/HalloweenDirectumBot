@@ -2,21 +2,33 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace HalloweenDirectumBot;
+namespace BotCommon;
 
-public static class StickersManager
+/// <summary>
+/// Sticker manager.
+/// </summary>
+public class StickersManager
 {
-  private static Sticker[] _stickers;
+  /// <summary>
+  /// Stickers.
+  /// </summary>
+  private Sticker[] _stickers;
 
-  public static void InitializeStickerPack(ITelegramBotClient bot, string stickerPackName)
+  public void InitializeStickerPack(ITelegramBotClient bot, string stickerPackName)
   {
     _stickers = bot.GetStickerSetAsync(stickerPackName).Result.Stickers;
   }
 
-  public static async void SendStickerAsync(ITelegramBotClient bot, long chatId, string stickerEmoji)
+  /// <summary>
+  /// Send  sticker.
+  /// </summary>
+  /// <param name="bot">Telegram bot client.</param>
+  /// <param name="userId">Telegram user id.</param>
+  /// <param name="stickerEmoji">Sticker emoji.</param>
+  public async void SendStickerAsync(ITelegramBotClient bot, long userId, string stickerEmoji)
   {
     if (_stickers == null)
       return;
-    await bot.SendStickerAsync(chatId, new InputFileId(_stickers.First(x => x.Emoji == stickerEmoji).FileId));
+    await bot.SendStickerAsync(userId, new InputFileId(_stickers.First(x => x.Emoji == stickerEmoji).FileId));
   }
 }

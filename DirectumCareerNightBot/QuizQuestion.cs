@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using BotCommon.Repository;
+using BotCommon.Repository.Entities;
 
 namespace DirectumCareerNightBot;
 
@@ -30,7 +30,7 @@ public record QuizUserQuestion
     [Key]
     public int Id { get; set; }
     public long UserId { get; set; }
-    public BotUser User { get; init; }
+    public TelegramUser User { get; init; }
 
     public int QuestionId { get; set; }
     public QuizQuestion Question { get; init; }
@@ -41,7 +41,7 @@ public record QuizUserQuestion
         
     }
     
-    public QuizUserQuestion(BotUser User, QuizQuestion Question, bool? IsCorrectAnswered)
+    public QuizUserQuestion(TelegramUser User, QuizQuestion Question, bool? IsCorrectAnswered)
     {
         this.User = User;
         this.Question = Question;
@@ -54,14 +54,14 @@ public record QuizUserResult
     [Key]
     public int Id { get; set; }
     public long UserId { get; set; }
-    public BotUser BotUser { get; set; }
+    public TelegramUser TelegramUser { get; set; }
     public bool IsQuizDone { get; set; }
     public QuizUserResult() { }
 
     public QuizUserResult(long userId, bool isQuizDone)
     {
-        this.UserId = userId;
-        this.IsQuizDone = isQuizDone;
+        UserId = userId;
+        IsQuizDone = isQuizDone;
     }
 }
 
@@ -70,7 +70,7 @@ public record UserData
     [Key]
     public int Id { get; set; }
     public long UserId { get; set; }
-    public BotUser BotUser { get; set; }
+    public TelegramUser TelegramUser { get; set; }
     [AllowNull]
     public string Fullname { get; set; }
     [AllowNull]

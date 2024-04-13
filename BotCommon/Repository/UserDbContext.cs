@@ -1,85 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using System.Linq;
+using BotCommon.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
-using Telegram.Bot.Types;
 
 namespace BotCommon.Repository;
 
-public class UserDbContext : DefaultDbContext<BotUser>
+/// <summary>
+/// User DB context for EF.
+/// </summary>
+public class UserDbContext 
+  : DefaultDbContext<TelegramUser>
 {
-  public DbSet<BotUser> BotUsers { get; set; }
+  #region Constants
 
-  public override BotUser Get(BotUser user)
+  private const string DefaultDbConnectionString = "Filename=app.db";
+
+  #endregion
+
+  #region Fields and Properties
+
+  /// <summary>
+  /// Telegram bot users.
+  /// </summary>
+  public DbSet<TelegramUser> Users { get; set; }
+
+  #endregion
+
+  #region Base class
+
+  public override TelegramUser Get(TelegramUser user)
   {
-    return this.BotUsers.SingleOrDefault(u => u.Id == user.Id);
+    return Users.SingleOrDefault(u => u.Id == user.Id);
   }
 
-  public override IEnumerable<BotUser> GetAll()
+  public override IEnumerable<TelegramUser> GetAll()
   {
-    return this.BotUsers;
+    return Users;
   }
 
-  public override void Add(BotUser user)
+  public override void Add(TelegramUser user)
   {
-    if (this.Get(user) != null)
+    if (Get(user) != null)
       return;
-    this.BotUsers.Add(user);
+    Users.Add(user);
     base.Add(user);
   }
 
-  public override void Delete(BotUser user)
+  public override void Delete(TelegramUser user)
   {
-    this.BotUsers.Remove(user);
+    Users.Remove(user);
     base.Delete(user);
   }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    optionsBuilder.UseSqlite(this._connectionString);
+    optionsBuilder.UseSqlite(_connectionString);
   }
 
-  public UserDbContext() : this("Filename=app.db")
+  #endregion
+
+  #region Constructors
+
+  /// <summary>
+  /// Constructor.
+  /// </summary>
+  public UserDbContext() 
+    : this(DefaultDbConnectionString)
   {
     
   }
   
-  public UserDbContext(string connectionString) : base(connectionString)
-  {
-  }
-}
-
-public class BotUser
-{
-  [Key]
-  public long Id { get; set; }
-  public string Username { get; set; }
-  public string FirstName { get; set; }
-  public string LastName { get; set; }
-  public string UserLanguage { get; set; }
-  public DateTime FirstMeet { get; set; }
-
-  public BotUser()
+  /// <summary>
+  /// Constructor.
+  /// </summary>
+  /// <param name="connectionString">Db connection string.</param>
+  public UserDbContext(string connectionString) 
+    : base(connectionString)
   {
   }
 
-  public BotUser(User user)
-  {
-    this.Id = user.Id;
-    this.LastName = user.LastName;
-    this.FirstName = user.FirstName;
-    this.Username= user.Username;
-    this.FirstMeet = DateTime.Now;
-  }
-  
-  public BotUser(long id, string username, string firstName, string lastName, string userLanguage)
-  {
-    this.Id = id;
-    this.Username = username;
-    this.FirstName = firstName;
-    this.LastName = lastName;
-    this.UserLanguage = userLanguage;
-    this.FirstMeet = DateTime.Now;
-  }
+  #endregion
 }

@@ -8,7 +8,7 @@ namespace DirectumCareerNightBot;
 
 public sealed class BotDbContext : UserDbContext
 {
-    private static readonly object padlock = new object();
+    private static readonly object padlock = new();
     private static volatile BotDbContext instance;
     private static Lazy<BotDbContext> lazy = new(() => new BotDbContext());
 
@@ -54,11 +54,11 @@ public sealed class BotDbContext : UserDbContext
             .WithMany()
             .HasForeignKey(quq => quq.UserId);
         modelBuilder.Entity<QuizUserResult>()
-            .HasOne(r => r.BotUser)
+            .HasOne(r => r.TelegramUser)
             .WithMany()
             .HasForeignKey(r => r.UserId);
         modelBuilder.Entity<UserData>()
-            .HasOne(u => u.BotUser)
+            .HasOne(u => u.TelegramUser)
             .WithMany()
             .HasForeignKey(u => u.UserId);
     }
