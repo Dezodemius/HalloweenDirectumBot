@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using BotCommon.ConfigManager;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace BotCommon;
+namespace BotCommon.ConfigManager;
 
 /// <summary>
 /// Bot configuration manager.

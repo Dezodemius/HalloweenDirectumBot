@@ -1,5 +1,6 @@
 ﻿using System;
 using BotCommon;
+using BotCommon.ConfigManager;
 using BotCommon.KeepAlive;
 using NLog;
 using Telegram.Bot;
