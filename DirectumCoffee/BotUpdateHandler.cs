@@ -40,6 +40,11 @@ public class BotUpdateHandler : IUpdateHandler
                     replyMarkup: replyMarkup);
                 break;
             }
+            case BotChatCommands.Go:
+            {
+                
+                break;
+            }
         }
         if (userScenario == null && _userScenarioRepository.TryGet(userId, out var _userScenario))
             userScenario = _userScenario;
