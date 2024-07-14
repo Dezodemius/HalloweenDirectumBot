@@ -42,7 +42,7 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.Go:
             {
-                
+                userScenario = new UserCommandScenario(userId, new MainScenario());
                 break;
             }
         }

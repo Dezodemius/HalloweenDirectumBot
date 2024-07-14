@@ -86,5 +86,104 @@ namespace DirectumCoffee {
                 return ResourceManager.GetString("GoMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Получилось\! 🥰
+        ///
+        ///Краткая инструкция\:
+        ///🔸 Раз в неделю в этом чате я буду присылать имя коллеги\, с которым тебе предстоит встретиться\.
+        ///🔸 Напиши ему или ей в Telegram или в ММ и договорись о времени\. Не откладывай на потом 🙂
+        ///🔸 Обычно Random Coffee проходит офлайн\. Но если вы с коллегой живете в разных городах\, можете договориться о встрече в Толке\!.
+        /// </summary>
+        internal static string MainScenbarioIsDonePart1 {
+            get {
+                return ResourceManager.GetString("MainScenbarioIsDonePart1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔸 Коллега не отвечает\? Напиши и я подберу новую пару для встречи\.
+        ///🔸 В пятницу я уточню\, как прошла встреча и хочешь ли ты продолжить участие в Random Coffee\.
+        ///🔸 Если хочешь взять паузу или совсем отказаться от встреч\, просто напиши мне \/help и выбери «Помоги»\.
+        ///🔸 Есть вопросы или предложения\? Буду рад пообщаться — просто напиши в этот чат\!.
+        /// </summary>
+        internal static string MainScenbarioIsDonePart2 {
+            get {
+                return ResourceManager.GetString("MainScenbarioIsDonePart2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Хороших встреч\! ☕️.
+        /// </summary>
+        internal static string MainScenbarioIsDonePart3 {
+            get {
+                return ResourceManager.GetString("MainScenbarioIsDonePart3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ясно, продолжай 🤓.
+        /// </summary>
+        internal static string OkContinue {
+            get {
+                return ResourceManager.GetString("OkContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ок, жду сообщения.
+        /// </summary>
+        internal static string OkWait {
+            get {
+                return ResourceManager.GetString("OkWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🧡 Укажи свой *город* — это поможет учесть разницу во времени для разных часовых поясов\..
+        /// </summary>
+        internal static string YourCity {
+            get {
+                return ResourceManager.GetString("YourCity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🧡 А теперь — немного *о себе*\: чем ты увлекаешься в свободное время\?.
+        /// </summary>
+        internal static string YourHobby {
+            get {
+                return ResourceManager.GetString("YourHobby", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🧡 О чем тебе *интересно пообщаться*\?.
+        /// </summary>
+        internal static string YourInterests {
+            get {
+                return ResourceManager.GetString("YourInterests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🧡 Как тебя зовут\? Укажи *имя и фамилию*\. Так коллега проще сможет найти тебя в справочнике «Сотрудник» или на блоге\..
+        /// </summary>
+        internal static string YourName {
+            get {
+                return ResourceManager.GetString("YourName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🧡 Коротко расскажи о своей *работе*, задачах и проектах\.
+        ///В каком направлении ты работаешь\?.
+        /// </summary>
+        internal static string YourWork {
+            get {
+                return ResourceManager.GetString("YourWork", resourceCulture);
+            }
+        }
     }
 }
