@@ -30,9 +30,12 @@ public class BotUpdateHandler : IUpdateHandler
         
         switch (BotHelper.GetMessage(update))
         {
-            case "/start":
+            case BotChatCommands.Start:
             {
-                await botClient.SendTextMessageAsync(userId, "hello", cancellationToken: cancellationToken);
+                await botClient.SendTextMessageAsync(userId, 
+                    BotMessages.BotStartMessage, 
+                    cancellationToken: cancellationToken,
+                    parseMode: ParseMode.MarkdownV2);
                 break;
             }
         }

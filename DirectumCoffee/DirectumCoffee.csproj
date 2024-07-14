@@ -15,4 +15,19 @@
       <ProjectReference Include="..\BotCommon\BotCommon.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="BotMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>BotMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="BotMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>BotMessages.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
