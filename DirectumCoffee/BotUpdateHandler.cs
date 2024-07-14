@@ -32,10 +32,12 @@ public class BotUpdateHandler : IUpdateHandler
         {
             case BotChatCommands.Start:
             {
+                var replyMarkup = new InlineKeyboardMarkup(InlineKeyboardButton.WithCallbackData(BotMessages.GoMessage, BotChatCommands.Go));
                 await botClient.SendTextMessageAsync(userId, 
                     BotMessages.BotStartMessage, 
                     cancellationToken: cancellationToken,
-                    parseMode: ParseMode.MarkdownV2);
+                    parseMode: ParseMode.MarkdownV2,
+                    replyMarkup: replyMarkup);
                 break;
             }
         }

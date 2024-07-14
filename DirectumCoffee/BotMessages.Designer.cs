@@ -77,5 +77,14 @@ namespace DirectumCoffee {
                 return ResourceManager.GetString("BotStartMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Поехали 🚀.
+        /// </summary>
+        internal static string GoMessage {
+            get {
+                return ResourceManager.GetString("GoMessage", resourceCulture);
+            }
+        }
     }
 }

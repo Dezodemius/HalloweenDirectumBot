@@ -3,5 +3,6 @@
 public class BotChatCommands
 {
     public const string Start = "/start";
-    public const string MainMenu = "/help";
+    public const string Help = "/help";
+    public const string Go = "/go";
 }
