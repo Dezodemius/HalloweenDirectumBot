@@ -73,7 +73,7 @@ public class BotUpdateHandler : IUpdateHandler
                 var userInfoText = new StringBuilder();
                 if (info == null)
                 {
-                    userInfoText.Append("Упс... Твоей анкеты ещё нет");
+                    userInfoText.Append(BotMessages.InfoNotFound);
                 }
                 else
                 {
@@ -87,8 +87,8 @@ public class BotUpdateHandler : IUpdateHandler
                 var replyMarkup = new InlineKeyboardMarkup(new []
                 {
                     new []{InlineKeyboardButton.WithCallbackData("Заполнить заново", BotChatCommands.Go)},
-                    new []{InlineKeyboardButton.WithCallbackData("Изменить анкету", BotChatCommands.Change)},
-                    new []{InlineKeyboardButton.WithCallbackData("Назад \u21a9\ufe0f", BotChatCommands.Start)},
+                    new []{InlineKeyboardButton.WithCallbackData(BotMessages.ChangeInfo, BotChatCommands.Change)},
+                    new []{InlineKeyboardButton.WithCallbackData(BotMessages.BackButton, BotChatCommands.Start)},
                 });
                 
                 await botClient.SendTextMessageAsync(userId, userInfoText.ToString(), cancellationToken: cancellationToken, replyMarkup: replyMarkup);
@@ -104,7 +104,7 @@ public class BotUpdateHandler : IUpdateHandler
                     new []{InlineKeyboardButton.WithCallbackData("Направление", BotChatCommands.ChangeWork)},
                     new []{InlineKeyboardButton.WithCallbackData("Увлечения", BotChatCommands.ChangeHobby)},
                     new []{InlineKeyboardButton.WithCallbackData("О чём хочешь пообщаться", BotChatCommands.ChangeInterests)},
-                    new []{InlineKeyboardButton.WithCallbackData("Назад \u21a9\ufe0f", BotChatCommands.Start)}
+                    new []{InlineKeyboardButton.WithCallbackData(BotMessages.BackButton, BotChatCommands.Start)}
                 });
                 await botClient.SendTextMessageAsync(userId, "Выбери, что хочешь изменить", replyMarkup: replyMarkup);
                 _userScenarioRepository?.Remove(userId);

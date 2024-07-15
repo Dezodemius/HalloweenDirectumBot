@@ -81,5 +81,14 @@
     <data name="Success" xml:space="preserve">
         <value>Успешно\! Хочешь изменить что\-то ещё\?</value>
     </data>
+    <data name="InfoNotFound" xml:space="preserve">
+        <value>"Упс... Твоей анкеты ещё нет"</value>
+    </data>
+    <data name="BackButton" xml:space="preserve">
+        <value>Назад \u21a9\ufe0f</value>
+    </data>
+    <data name="ChangeInfo" xml:space="preserve">
+        <value>Изменить анкету</value>
+    </data>
     
 </root>

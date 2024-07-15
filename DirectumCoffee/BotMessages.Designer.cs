@@ -60,6 +60,15 @@ namespace DirectumCoffee {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Назад \u21a9\ufe0f.
+        /// </summary>
+        internal static string BackButton {
+            get {
+                return ResourceManager.GetString("BackButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Привет\!👋
         ///*Я бот Random Coffee Directum* 🤖
         ///*Каждую неделю* я буду предлагать тебе встречу с кем\-то из твоих коллег\.
@@ -88,11 +97,29 @@ namespace DirectumCoffee {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Изменить анкету.
+        /// </summary>
+        internal static string ChangeInfo {
+            get {
+                return ResourceManager.GetString("ChangeInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Поехали 🚀.
         /// </summary>
         internal static string GoMessage {
             get {
                 return ResourceManager.GetString("GoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;Упс... Твоей анкеты ещё нет&quot;.
+        /// </summary>
+        internal static string InfoNotFound {
+            get {
+                return ResourceManager.GetString("InfoNotFound", resourceCulture);
             }
         }
         

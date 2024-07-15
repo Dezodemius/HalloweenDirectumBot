@@ -25,8 +25,8 @@ public class ChangeWorkScenario: AutoStepBotCommandScenario
         await BotDbContext.Instance.SaveChangesAsync();
         var replyMarkup = new InlineKeyboardMarkup(new []
         {
-            new []{InlineKeyboardButton.WithCallbackData("Изменить анкету", BotChatCommands.Change)},
-            new []{InlineKeyboardButton.WithCallbackData("Назад \u21a9\ufe0f", BotChatCommands.Start)},
+            new []{InlineKeyboardButton.WithCallbackData(BotMessages.ChangeInfo, BotChatCommands.Change)},
+            new []{InlineKeyboardButton.WithCallbackData(BotMessages.BackButton, BotChatCommands.Start)},
         });
         await bot.SendTextMessageAsync(chatId, BotMessages.Success, parseMode: ParseMode.MarkdownV2, replyMarkup: replyMarkup);
     }
