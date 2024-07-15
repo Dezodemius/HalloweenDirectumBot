@@ -49,13 +49,57 @@ public class BotUpdateHandler : IUpdateHandler
                 }
                 else
                 {
-                    var replyMarkup = new InlineKeyboardMarkup(InlineKeyboardButton.WithCallbackData(BotMessages.MyInfo, BotChatCommands.Info));
+                    var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                        .Where(i => i.UserId == userId)
+                        .FirstOrDefault();
+                    InlineKeyboardMarkup replyMarkup;
+                    if (userSystemInfo.SearchDisable)
+                    {
+                        replyMarkup = new InlineKeyboardMarkup(new []
+                        {
+                            new []{InlineKeyboardButton.WithCallbackData(BotMessages.MyInfo, BotChatCommands.Info)},
+                            new []{InlineKeyboardButton.WithCallbackData(BotMessages.RestartInfo, BotChatCommands.Restart)},
+                        });
+                    }
+                    else
+                    {
+                        replyMarkup = new InlineKeyboardMarkup(new []
+                        {
+                            new []{InlineKeyboardButton.WithCallbackData(BotMessages.MyInfo, BotChatCommands.Info)},
+                            new []{InlineKeyboardButton.WithCallbackData(BotMessages.StopInfo, BotChatCommands.Stop)},
+                        });
+                    }
                     await botClient.SendTextMessageAsync(userId,
                         BotMessages.BotStartMessage,
                         cancellationToken: cancellationToken,
                         parseMode: ParseMode.MarkdownV2,
                         replyMarkup: replyMarkup);
                 }
+                _userScenarioRepository?.Remove(userId);
+                break;
+            }
+            case BotChatCommands.Stop:
+            {
+                var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                    .Where(i => i.UserId == userId)
+                    .FirstOrDefault();
+                userSystemInfo.SearchDisable = true;
+                await BotDbContext.Instance.SaveChangesAsync(cancellationToken);
+                await botClient.SendTextMessageAsync(userId, BotMessages.StopInfoMessage, cancellationToken: cancellationToken, parseMode: ParseMode.MarkdownV2);
+                
+                _userScenarioRepository?.Remove(userId);
+                break;
+            }
+            case BotChatCommands.Restart:
+            {
+                var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                    .Where(i => i.UserId == userId)
+                    .FirstOrDefault();
+                userSystemInfo.SearchDisable = false;
+                await BotDbContext.Instance.SaveChangesAsync(cancellationToken);
+                
+                await botClient.SendTextMessageAsync(userId, BotMessages.RestartInfoMessage, cancellationToken: cancellationToken, parseMode: ParseMode.MarkdownV2);
+                
                 _userScenarioRepository?.Remove(userId);
                 break;
             }

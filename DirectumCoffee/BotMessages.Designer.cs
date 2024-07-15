@@ -60,7 +60,7 @@ namespace DirectumCoffee {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Назад \u21a9\ufe0f.
+        ///   Looks up a localized string similar to Назад ↩️.
         /// </summary>
         internal static string BackButton {
             get {
@@ -115,7 +115,7 @@ namespace DirectumCoffee {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Упс... Твоей анкеты ещё нет&quot;.
+        ///   Looks up a localized string similar to Упс... Твоей анкеты ещё нет.
         /// </summary>
         internal static string InfoNotFound {
             get {
@@ -181,6 +181,42 @@ namespace DirectumCoffee {
         internal static string OkWait {
             get {
                 return ResourceManager.GetString("OkWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Включить анкету.
+        /// </summary>
+        internal static string RestartInfo {
+            get {
+                return ResourceManager.GetString("RestartInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Рад снова тебя видеть\! Тебе снова будут прилетать приглашения\. Если хочешь, можешь изменить анкету через кнопку \/start\..
+        /// </summary>
+        internal static string RestartInfoMessage {
+            get {
+                return ResourceManager.GetString("RestartInfoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Отключить анкету.
+        /// </summary>
+        internal static string StopInfo {
+            get {
+                return ResourceManager.GetString("StopInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Грустно, но  я понимаю\. Если захочешь вернуться, то нажми снова \/start\..
+        /// </summary>
+        internal static string StopInfoMessage {
+            get {
+                return ResourceManager.GetString("StopInfoMessage", resourceCulture);
             }
         }
         

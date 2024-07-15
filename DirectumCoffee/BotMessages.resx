@@ -82,13 +82,24 @@
         <value>Успешно\! Хочешь изменить что\-то ещё\?</value>
     </data>
     <data name="InfoNotFound" xml:space="preserve">
-        <value>"Упс... Твоей анкеты ещё нет"</value>
+        <value>Упс... Твоей анкеты ещё нет</value>
     </data>
     <data name="BackButton" xml:space="preserve">
-        <value>Назад \u21a9\ufe0f</value>
+        <value>Назад ↩️</value>
     </data>
     <data name="ChangeInfo" xml:space="preserve">
         <value>Изменить анкету</value>
     </data>
-    
+    <data name="StopInfo" xml:space="preserve">
+        <value>Отключить анкету</value>
+    </data>
+    <data name="RestartInfo" xml:space="preserve">
+        <value>Включить анкету</value> 
+    </data>
+    <data name="StopInfoMessage" xml:space="preserve">
+        <value>Грустно, но  я понимаю\. Если захочешь вернуться, то нажми снова \/start\.</value> 
+    </data>
+    <data name="RestartInfoMessage" xml:space="preserve">
+        <value>Рад снова тебя видеть\! Тебе снова будут прилетать приглашения\. Если хочешь, можешь изменить анкету через кнопку \/start\.</value> 
+    </data>
 </root>
