@@ -2,7 +2,6 @@
 using BotCommon;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
