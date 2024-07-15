@@ -28,38 +28,25 @@ public sealed class BotDbContext : UserDbContext
             return instance;
         }
     } 
-    public DbSet<UserInfo> Questions { get; set; }
-    public DbSet<UserSystemInfo> Choices { get; set; }
+    public DbSet<UserInfo> UserInfos { get; set; }
+    public DbSet<UserSystemInfo> UserSystemInfos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite(_connectionString);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // modelBuilder.Entity<QuizQuestion>()
-        //     .HasOne(q => q.CorrectChoice)
-        //     .WithMany()
-        //     .HasForeignKey(q => q.CorrectChoiceId);
-        //
-        // modelBuilder.Entity<QuizPossibleAnswer>()
-        //     .HasOne(pa => pa.Question)
-        //     .WithMany(q => q.Choices)
-        //     .HasForeignKey(pa => pa.QuestionId);
-        // modelBuilder.Entity<QuizUserQuestion>()
-        //     .HasOne(quq => quq.User)
-        //     .WithMany()
-        //     .HasForeignKey(quq => quq.UserId);
-        // modelBuilder.Entity<QuizUserResult>()
-        //     .HasOne(r => r.BotUser)
-        //     .WithMany()
-        //     .HasForeignKey(r => r.UserId);
-        // modelBuilder.Entity<UserData>()
-        //     .HasOne(u => u.BotUser)
-        //     .WithMany()
-        //     .HasForeignKey(u => u.UserId);
+        modelBuilder.Entity<UserInfo>()
+            .HasOne(u => u.BotUser)
+            .WithMany()
+            .HasForeignKey(u => u.UserId);        
+        modelBuilder.Entity<UserSystemInfo>()
+            .HasOne(u => u.BotUser)
+            .WithMany()
+            .HasForeignKey(u => u.UserId);
     }
 
-    private BotDbContext() : base("Filename=quiz.db")
+    private BotDbContext() : base("Filename=coffee.db")
     {
         Database.EnsureCreated();
 

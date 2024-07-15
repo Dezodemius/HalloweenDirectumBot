@@ -23,9 +23,12 @@ public class BotUpdateHandler : IUpdateHandler
         var userInfo = BotHelper.GetUserInfo(update);
         log.Info($"user: {BotHelper.GetUsername(userInfo)}, userMessage: {BotHelper.GetMessage(update)}");
         var userId = userInfo.Id;
-
-
-
+        BotDbContext.Instance.Add(new BotUser(
+            userId, 
+            userInfo.Username,
+            userInfo.FirstName,
+            userInfo.LastName,
+            userInfo.LanguageCode));
         UserCommandScenario? userScenario = null;
         
         switch (BotHelper.GetMessage(update))
