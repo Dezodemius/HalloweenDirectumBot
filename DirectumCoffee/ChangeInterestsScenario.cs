@@ -1,5 +1,4 @@
-﻿using BotCommon;
-using BotCommon.Scenarios;
+﻿using BotCommon.Scenarios;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -7,21 +6,21 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DirectumCoffee;
 
-public class ChangeNameScenario : AutoStepBotCommandScenario
+public class ChangeInterestsScenario: AutoStepBotCommandScenario
 {
-    public override Guid Id { get; } = new Guid("EE3FCEBF-DFF8-458F-9029-D60466DA72D6");
+    public override Guid Id { get; } = new Guid("9E8BC08D-7172-45C2-936E-EC3E322EF3CA");
     public override string ScenarioCommand { get; }
 
     private async Task StepAction1(ITelegramBotClient bot, Update update, long chatId)
     {
-        await bot.SendTextMessageAsync(chatId, BotMessages.YourName, parseMode: ParseMode.MarkdownV2);
+        await bot.SendTextMessageAsync(chatId, BotMessages.YourInterests, parseMode: ParseMode.MarkdownV2);
     }
     private async Task StepAction2(ITelegramBotClient bot, Update update, long chatId)
     {
         var userInfo = BotDbContext.Instance.UserInfos
             .Where(i => i.UserId == chatId)
             .FirstOrDefault();
-        userInfo.Name = update.Message.Text;
+        userInfo.Interests = update.Message.Text;
 
         await BotDbContext.Instance.SaveChangesAsync();
         var replyMarkup = new InlineKeyboardMarkup(new []
@@ -32,7 +31,7 @@ public class ChangeNameScenario : AutoStepBotCommandScenario
         await bot.SendTextMessageAsync(chatId, BotMessages.Success, parseMode: ParseMode.MarkdownV2, replyMarkup: replyMarkup);
     }
 
-    public ChangeNameScenario()
+    public ChangeInterestsScenario()
     {
         this.steps = new List<BotCommandScenarioStep>
         {

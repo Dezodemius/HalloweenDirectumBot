@@ -112,22 +112,27 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.ChangeName:
             {
+                userScenario = new UserCommandScenario(userId, new ChangeNameScenario());
                 break;
             }
             case BotChatCommands.ChangeCity:
             {
+                userScenario = new UserCommandScenario(userId, new ChangeCityScenario());
                 break;
             }
             case BotChatCommands.ChangeWork:
             {
+                userScenario = new UserCommandScenario(userId, new ChangeWorkScenario());
                 break;
             }
             case BotChatCommands.ChangeHobby:
             {
+                userScenario = new UserCommandScenario(userId, new ChangeHobbyScenario());
                 break;
             }
             case BotChatCommands.ChangeInterests:
             {
+                userScenario = new UserCommandScenario(userId, new ChangeInterestsScenario());
                 break;
             }
         }
