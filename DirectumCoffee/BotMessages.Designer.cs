@@ -72,6 +72,15 @@ namespace DirectumCoffee {
         ///Для старта *ответь* на несколько вопросов и *прочитай* небольшую инструкцию\.
         ///        .
         /// </summary>
+        internal static string BotFirstMeet {
+            get {
+                return ResourceManager.GetString("BotFirstMeet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Coffee в Directum\! Раз в неделю я буду предлагать тебе встречу с кем\-то из твоих коллег\. Не откладывай эту возможность в долгий ящик 😉.
+        /// </summary>
         internal static string BotStartMessage {
             get {
                 return ResourceManager.GetString("BotStartMessage", resourceCulture);
@@ -104,8 +113,7 @@ namespace DirectumCoffee {
         /// <summary>
         ///   Looks up a localized string similar to 🔸 Коллега не отвечает\? Напиши и я подберу новую пару для встречи\.
         ///🔸 В пятницу я уточню\, как прошла встреча и хочешь ли ты продолжить участие в Random Coffee\.
-        ///🔸 Если хочешь взять паузу или совсем отказаться от встреч\, просто напиши мне \/help и выбери «Помоги»\.
-        ///🔸 Есть вопросы или предложения\? Буду рад пообщаться — просто напиши в этот чат\!.
+        ///🔸 Если хочешь отказаться от встреч\, просто напиши мне \/stop\..
         /// </summary>
         internal static string MainScenbarioIsDonePart2 {
             get {
@@ -119,6 +127,15 @@ namespace DirectumCoffee {
         internal static string MainScenbarioIsDonePart3 {
             get {
                 return ResourceManager.GetString("MainScenbarioIsDonePart3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Моя анкета.
+        /// </summary>
+        internal static string MyInfo {
+            get {
+                return ResourceManager.GetString("MyInfo", resourceCulture);
             }
         }
         
@@ -137,6 +154,15 @@ namespace DirectumCoffee {
         internal static string OkWait {
             get {
                 return ResourceManager.GetString("OkWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Успешно\! Хочешь изменить что\-то ещё\?.
+        /// </summary>
+        internal static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
             }
         }
         

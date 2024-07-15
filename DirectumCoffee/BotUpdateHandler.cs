@@ -1,4 +1,5 @@
-﻿using BotCommon;
+﻿using System.Text;
+using BotCommon;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -37,17 +38,96 @@ public class BotUpdateHandler : IUpdateHandler
         {
             case BotChatCommands.Start:
             {
-                var replyMarkup = new InlineKeyboardMarkup(InlineKeyboardButton.WithCallbackData(BotMessages.GoMessage, BotChatCommands.Go));
-                await botClient.SendTextMessageAsync(userId, 
-                    BotMessages.BotStartMessage, 
-                    cancellationToken: cancellationToken,
-                    parseMode: ParseMode.MarkdownV2,
-                    replyMarkup: replyMarkup);
+                var isFirstMeet = !BotDbContext.Instance.UserInfos.Any(u => u.UserId == userId);
+                if (isFirstMeet)
+                {
+                    var replyMarkup = new InlineKeyboardMarkup(InlineKeyboardButton.WithCallbackData(BotMessages.GoMessage, BotChatCommands.Go));
+                    await botClient.SendTextMessageAsync(userId,
+                        BotMessages.BotFirstMeet,
+                        cancellationToken: cancellationToken,
+                        parseMode: ParseMode.MarkdownV2,
+                        replyMarkup: replyMarkup);
+                }
+                else
+                {
+                    var replyMarkup = new InlineKeyboardMarkup(InlineKeyboardButton.WithCallbackData(BotMessages.MyInfo, BotChatCommands.Info));
+                    await botClient.SendTextMessageAsync(userId,
+                        BotMessages.BotStartMessage,
+                        cancellationToken: cancellationToken,
+                        parseMode: ParseMode.MarkdownV2,
+                        replyMarkup: replyMarkup);
+                }
+                _userScenarioRepository?.Remove(userId);
                 break;
             }
             case BotChatCommands.Go:
             {
                 userScenario = new UserCommandScenario(userId, new MainScenario());
+                break;
+            }
+            case BotChatCommands.Info:
+            {
+                var info = BotDbContext.Instance.UserInfos
+                    .Where(u => u.UserId == userId)
+                    .FirstOrDefault();
+                var userInfoText = new StringBuilder();
+                if (info == null)
+                {
+                    userInfoText.Append("Упс... Твоей анкеты ещё нет");
+                }
+                else
+                {
+                    userInfoText.AppendLine($"Имя: {info.Name}");
+                    userInfoText.AppendLine($"Город: {info.City}");
+                    userInfoText.AppendLine($"Направление: {info.Work}");
+                    userInfoText.AppendLine($"Увлечения: {info.Hobby}");
+                    userInfoText.AppendLine($"О чём хочешь пообщаться: {info.Interests}");
+                }
+
+                var replyMarkup = new InlineKeyboardMarkup(new []
+                {
+                    new []{InlineKeyboardButton.WithCallbackData("Заполнить заново", BotChatCommands.Go)},
+                    new []{InlineKeyboardButton.WithCallbackData("Изменить анкету", BotChatCommands.Change)},
+                    new []{InlineKeyboardButton.WithCallbackData("Назад \u21a9\ufe0f", BotChatCommands.Start)},
+                });
+                
+                await botClient.SendTextMessageAsync(userId, userInfoText.ToString(), cancellationToken: cancellationToken, replyMarkup: replyMarkup);
+                _userScenarioRepository?.Remove(userId);
+                break;
+            }
+            case BotChatCommands.Change:
+            {
+                var replyMarkup = new InlineKeyboardMarkup(new []
+                {
+                    new []{InlineKeyboardButton.WithCallbackData("Имя", BotChatCommands.ChangeName)},
+                    new []{InlineKeyboardButton.WithCallbackData("Город", BotChatCommands.ChangeCity)},
+                    new []{InlineKeyboardButton.WithCallbackData("Направление", BotChatCommands.ChangeWork)},
+                    new []{InlineKeyboardButton.WithCallbackData("Увлечения", BotChatCommands.ChangeHobby)},
+                    new []{InlineKeyboardButton.WithCallbackData("О чём хочешь пообщаться", BotChatCommands.ChangeInterests)},
+                    new []{InlineKeyboardButton.WithCallbackData("Назад \u21a9\ufe0f", BotChatCommands.Start)}
+                });
+                await botClient.SendTextMessageAsync(userId, "Выбери, что хочешь изменить", replyMarkup: replyMarkup);
+                _userScenarioRepository?.Remove(userId);
+                break;
+            }
+            case BotChatCommands.ChangeName:
+            {
+                break;
+            }
+            case BotChatCommands.ChangeCity:
+            {
+                break;
+            }
+            case BotChatCommands.ChangeWork:
+            {
+                break;
+            }
+            case BotChatCommands.ChangeHobby:
+            {
+                break;
+            }
+            case BotChatCommands.ChangeInterests:
+            {
                 break;
             }
         }
