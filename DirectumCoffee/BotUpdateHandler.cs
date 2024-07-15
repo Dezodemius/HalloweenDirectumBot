@@ -1,6 +1,7 @@
 ﻿using BotCommon;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using NLog;
 using Telegram.Bot;
@@ -29,6 +30,7 @@ public class BotUpdateHandler : IUpdateHandler
             userInfo.FirstName,
             userInfo.LastName,
             userInfo.LanguageCode));
+        FillUserSystemInfo(userId);
         UserCommandScenario? userScenario = null;
         
         switch (BotHelper.GetMessage(update))
@@ -56,6 +58,22 @@ public class BotUpdateHandler : IUpdateHandler
 
         if (userScenario != null && !(await userScenario.Run(botClient, update, userId)))
             _userScenarioRepository.Remove(userScenario);
+    }
+
+    private static void FillUserSystemInfo(long userId)
+    {
+        var info = BotDbContext.Instance.UserSystemInfos
+            .Where(i => i.UserId == userId)
+            .FirstOrDefault();
+        if (info == null)
+        {
+            var userInfo = new UserSystemInfo();
+            userInfo.UserId = userId;
+            userInfo.PairFound = false;
+            userInfo.SearchDisable = false;
+            BotDbContext.Instance.UserSystemInfos.Add(userInfo);
+            BotDbContext.Instance.SaveChanges();
+        }
     }
 
     public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
