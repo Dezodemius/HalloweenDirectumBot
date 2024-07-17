@@ -29,7 +29,6 @@ public sealed class BotDbContext : UserDbContext
         }
     } 
     public DbSet<UserInfo> UserInfos { get; set; }
-    public DbSet<UserSystemInfo> UserSystemInfos { get; set; }
     public DbSet<CoffeePair> CoffeePairs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -46,11 +45,6 @@ public sealed class BotDbContext : UserDbContext
             .HasConversion(
                 v => string.Join(',', v), 
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
-
-        modelBuilder.Entity<UserSystemInfo>()
-            .HasOne(u => u.BotUser)
-            .WithMany()
-            .HasForeignKey(u => u.UserId);
 
         modelBuilder.Entity<CoffeePair>()
             .HasOne(cp => cp.FirstUser)

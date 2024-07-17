@@ -14,4 +14,5 @@ public class BotChatCommands
     public const string ChangeHobby = "/changehobby";
     public const string ChangeInterests = "/changeinterests";
     public const string GeneratePairs = "/generatepairs";
+    public const string SendPairs = "/sendpairs";
 }

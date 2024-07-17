@@ -15,4 +15,6 @@ public class UserInfo
     public string Hobby { get; set; }
     public string Interests { get; set; }
     public List<string> KeyWords { get; set; }
+    public bool SearchDisable { get; set; }
+    public bool PairFound { get; set; }
 }

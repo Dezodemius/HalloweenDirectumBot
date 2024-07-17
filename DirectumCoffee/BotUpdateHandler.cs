@@ -49,7 +49,7 @@ public class BotUpdateHandler : IUpdateHandler
                 }
                 else
                 {
-                    var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                    var userSystemInfo = BotDbContext.Instance.UserInfos
                         .Where(i => i.UserId == userId)
                         .FirstOrDefault();
                     InlineKeyboardMarkup replyMarkup;
@@ -80,7 +80,7 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.Stop:
             {
-                var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                var userSystemInfo = BotDbContext.Instance.UserInfos
                     .Where(i => i.UserId == userId)
                     .FirstOrDefault();
                 userSystemInfo.SearchDisable = true;
@@ -92,7 +92,7 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.Restart:
             {
-                var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                var userSystemInfo = BotDbContext.Instance.UserInfos
                     .Where(i => i.UserId == userId)
                     .FirstOrDefault();
                 userSystemInfo.SearchDisable = false;
@@ -183,18 +183,23 @@ public class BotUpdateHandler : IUpdateHandler
                 if (userId != new BotConfigManager().Config.BotAdminId.FirstOrDefault())
                     return;
                 var profiles = BotDbContext.Instance.UserInfos
-                    .ToDictionary(k => k.UserId, v =>
+                    .Where(i => !i.SearchDisable && !i.PairFound).ToList();
+                var profilesDictionary = profiles
+                    .Where(p => !IsInfoEmpty(p))
+                    .ToDictionary(
+                        k => k.UserId, v =>
                     {
                         var sb = new StringBuilder(v.Interests);
                         sb.AppendLine();
                         sb.AppendLine(v.Hobby);
                         return sb.ToString();
                     });
+                
                 await botClient.SendTextMessageAsync(userId, "start generating pairs...",
                     cancellationToken: cancellationToken);
                 try
                 {
-                    new PairGenerator().GeneratePairs(profiles);
+                    new PairGenerator().GeneratePairs(profilesDictionary);
                 }
                 catch (Exception e)
                 {
@@ -207,7 +212,35 @@ public class BotUpdateHandler : IUpdateHandler
                 }
                 
                 break;
-            } 
+            }
+            case BotChatCommands.SendPairs:
+            {
+                if (userId != new BotConfigManager().Config.BotAdminId.FirstOrDefault())
+                    return;
+
+                var pairs = BotDbContext.Instance.CoffeePairs.ToList();
+
+                foreach (var coffeePair in pairs)
+                {
+                    var firstUserInfo = BotDbContext.Instance.UserInfos
+                        .Where(i => i.UserId == coffeePair.FirstUserId)
+                        .FirstOrDefault();
+                    var secondUserInfo = BotDbContext.Instance.UserInfos
+                        .Where(i => i.UserId == coffeePair.SecondUserId)
+                        .FirstOrDefault();
+
+                    if (coffeePair.SecondUserId != null)
+                    {
+                        await botClient.SendTextMessageAsync(
+                            coffeePair.FirstUserId,
+                            $"Пары совпали!\n Твой собеседник: {secondUserInfo.Name}. Вот о чём он написал: {secondUserInfo.Interests}. Скорей пиши ему в ММ и назначай встречу!");
+                        await botClient.SendTextMessageAsync(
+                            coffeePair.SecondUserId,
+                            $"Пары совпали!\n Твой собеседник: {firstUserInfo.Name}. Вот о чём он написал: {firstUserInfo.Interests}. Скорей пиши ему в ММ и назначай встречу!");
+                    }
+                }
+                break;
+            }
         }
         if (userScenario == null && _userScenarioRepository.TryGet(userId, out var _userScenario))
             userScenario = _userScenario;
@@ -220,16 +253,16 @@ public class BotUpdateHandler : IUpdateHandler
 
     private static void FillUserSystemInfo(long userId)
     {
-        var info = BotDbContext.Instance.UserSystemInfos
+        var info = BotDbContext.Instance.UserInfos
             .Where(i => i.UserId == userId)
             .FirstOrDefault();
         if (info == null)
         {
-            var userInfo = new UserSystemInfo();
+            var userInfo = new UserInfo();
             userInfo.UserId = userId;
             userInfo.PairFound = false;
             userInfo.SearchDisable = false;
-            BotDbContext.Instance.UserSystemInfos.Add(userInfo);
+            BotDbContext.Instance.UserInfos.Add(userInfo);
             BotDbContext.Instance.SaveChanges();
         }
     }
@@ -238,6 +271,11 @@ public class BotUpdateHandler : IUpdateHandler
     {
         log.Error(exception);
         Environment.Exit(0);
+    }
+
+    private bool IsInfoEmpty(UserInfo info)
+    {
+        return string.IsNullOrEmpty(info.Interests);
     }
 
     public BotUpdateHandler()
