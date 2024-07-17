@@ -178,6 +178,36 @@ public class BotUpdateHandler : IUpdateHandler
                 userScenario = new UserCommandScenario(userId, new ChangeInterestsScenario());
                 break;
             }
+            case BotChatCommands.GeneratePairs:
+            {
+                if (userId != new BotConfigManager().Config.BotAdminId.FirstOrDefault())
+                    return;
+                var profiles = BotDbContext.Instance.UserInfos
+                    .ToDictionary(k => k.UserId, v =>
+                    {
+                        var sb = new StringBuilder(v.Interests);
+                        sb.AppendLine();
+                        sb.AppendLine(v.Hobby);
+                        return sb.ToString();
+                    });
+                await botClient.SendTextMessageAsync(userId, "start generating pairs...",
+                    cancellationToken: cancellationToken);
+                try
+                {
+                    new PairGenerator().GeneratePairs(profiles);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    await botClient.SendTextMessageAsync(userId, "generating pairs completed",
+                        cancellationToken: cancellationToken);
+                }
+                
+                break;
+            } 
         }
         if (userScenario == null && _userScenarioRepository.TryGet(userId, out var _userScenario))
             userScenario = _userScenario;

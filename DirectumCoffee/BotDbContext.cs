@@ -30,6 +30,7 @@ public sealed class BotDbContext : UserDbContext
     } 
     public DbSet<UserInfo> UserInfos { get; set; }
     public DbSet<UserSystemInfo> UserSystemInfos { get; set; }
+    public DbSet<CoffeePair> CoffeePairs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite(_connectionString);
@@ -39,11 +40,31 @@ public sealed class BotDbContext : UserDbContext
         modelBuilder.Entity<UserInfo>()
             .HasOne(u => u.BotUser)
             .WithMany()
-            .HasForeignKey(u => u.UserId);        
+            .HasForeignKey(u => u.UserId);   
+        modelBuilder.Entity<UserInfo>()
+            .Property(cp => cp.KeyWords)
+            .HasConversion(
+                v => string.Join(',', v), 
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+
         modelBuilder.Entity<UserSystemInfo>()
             .HasOne(u => u.BotUser)
             .WithMany()
             .HasForeignKey(u => u.UserId);
+
+        modelBuilder.Entity<CoffeePair>()
+            .HasOne(cp => cp.FirstUser)
+            .WithMany()
+            .HasForeignKey(cp => cp.FirstUserId);
+        modelBuilder.Entity<CoffeePair>()
+            .HasOne(cp => cp.SecondUser)
+            .WithMany()
+            .HasForeignKey(cp => cp.SecondUserId);
+        modelBuilder.Entity<CoffeePair>()
+            .Property(cp => cp.CommonInterests)
+            .HasConversion(
+                v => string.Join(',', v), 
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
     }
 
     private BotDbContext() : base("Filename=coffee.db")
