@@ -37,63 +37,69 @@ namespace DirectumCoffee
                 BotDbContext.Instance.SaveChanges();
             }
 
-            // HashSet<long> pairedUsers = new HashSet<long>();
-            //
-            // for (int i = 0; i < profiles.Count - 1; i++)
-            // {
-            //     var profile1 = profiles.ElementAt(i);
-            //     var annotation1 = annotations[i];
-            //
-            //     if (pairedUsers.Contains(profile1.Key))
-            //     {
-            //         continue;
-            //     }
-            //
-            //     long bestMatchUserId = 0;
-            //     int maxCommonKeywords = 0;
-            //     string[] commonInterests = null;
-            //
-            //     for (int j = i + 1; j < profiles.Count; j++)
-            //     {
-            //         var profile2 = profiles.ElementAt(j);
-            //         var annotation2 = annotations[j];
-            //
-            //         if (pairedUsers.Contains(profile2.Key))
-            //         {
-            //             continue;
-            //         }
-            //
-            //         var keywords1 = ExtractKeywords(annotation1);
-            //         var keywords2 = ExtractKeywords(annotation2);
-            //
-            //         var commonKeywords = keywords1.Intersect(keywords2).ToList();
-            //
-            //         int commonCount = commonKeywords.Count;
-            //
-            //         if (commonCount > maxCommonKeywords)
-            //         {
-            //             maxCommonKeywords = commonCount;
-            //             bestMatchUserId = profile2.Key;
-            //             commonInterests = commonKeywords.ToArray();
-            //         }
-            //     }
-            //
-            //     if (bestMatchUserId != 0)
-            //     {
-            //         var pair = new CoffeePair
-            //         {
-            //             FirstUserId = profile1.Key,
-            //             SecondUserId = bestMatchUserId,
-            //             CommonInterests = commonInterests
-            //         };
-            //
-            //         BotDbContext.Instance.CoffeePairs.Add(pair);
-            //         pairedUsers.Add(profile1.Key);
-            //         pairedUsers.Add(bestMatchUserId);
-            //     }
-            // }
-            //
-            // BotDbContext.Instance.SaveChanges();
+            HashSet<long> pairedUsers = new HashSet<long>();
+            
+            for (int i = 0; i < profiles.Count - 1; i++)
+            {
+                var profile1 = profiles.ElementAt(i);
+                var annotation1 = annotations[i];
+            
+                if (pairedUsers.Contains(profile1.Key))
+                {
+                    continue;
+                }
+            
+                long bestMatchUserId = 0;
+                int maxCommonKeywords = 0;
+                string[] commonInterests = null;
+            
+                for (int j = i + 1; j < profiles.Count; j++)
+                {
+                    var profile2 = profiles.ElementAt(j);
+                    var annotation2 = annotations[j];
+            
+                    if (pairedUsers.Contains(profile2.Key))
+                    {
+                        continue;
+                    }
+            
+                    var keywords1 = BotDbContext.Instance.UserInfos
+                        .Where(u => u.UserId == annotation1.Key)
+                        .Select(u => u.KeyWords)
+                        .FirstOrDefault();
+                    var keywords2 = BotDbContext.Instance.UserInfos
+                        .Where(u => u.UserId == annotation2.Key)
+                        .Select(u => u.KeyWords)
+                        .FirstOrDefault();;
+            
+                    var commonKeywords = keywords1.Intersect(keywords2).ToList();
+            
+                    int commonCount = commonKeywords.Count;
+            
+                    if (commonCount > maxCommonKeywords)
+                    {
+                        maxCommonKeywords = commonCount;
+                        bestMatchUserId = profile2.Key;
+                        commonInterests = commonKeywords.ToArray();
+                    }
+                }
+            
+                if (bestMatchUserId != 0)
+                {
+                    var pair = new CoffeePair
+                    {
+                        FirstUserId = profile1.Key,
+                        SecondUserId = bestMatchUserId,
+                        CommonInterests = commonInterests
+                    };
+            
+                    BotDbContext.Instance.CoffeePairs.Add(pair);
+                    pairedUsers.Add(profile1.Key);
+                    pairedUsers.Add(bestMatchUserId);
+                }
+            }
+            
+            BotDbContext.Instance.SaveChanges();
         }
 
         private List<string> ExtractKeywords(Annotation annotation)
