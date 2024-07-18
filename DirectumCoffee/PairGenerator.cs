@@ -84,19 +84,17 @@ namespace DirectumCoffee
                     }
                 }
             
-                if (bestMatchUserId != 0)
+                var pair = new CoffeePair
                 {
-                    var pair = new CoffeePair
-                    {
-                        FirstUserId = profile1.Key,
-                        SecondUserId = bestMatchUserId,
-                        CommonInterests = commonInterests
-                    };
-            
-                    BotDbContext.Instance.CoffeePairs.Add(pair);
-                    pairedUsers.Add(profile1.Key);
+                    FirstUserId = profile1.Key,
+                    SecondUserId = bestMatchUserId != 0 ? bestMatchUserId : -1,
+                    CommonInterests = commonInterests ?? Array.Empty<string>()
+                };
+        
+                BotDbContext.Instance.CoffeePairs.Add(pair);
+                pairedUsers.Add(profile1.Key);
+                if (bestMatchUserId != 0)
                     pairedUsers.Add(bestMatchUserId);
-                }
             }
             
             BotDbContext.Instance.SaveChanges();

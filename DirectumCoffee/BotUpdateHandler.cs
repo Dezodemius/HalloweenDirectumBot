@@ -215,30 +215,77 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.SendPairs:
             {
-                if (userId != new BotConfigManager().Config.BotAdminId.FirstOrDefault())
-                    return;
-
-                var pairs = BotDbContext.Instance.CoffeePairs.ToList();
-
-                foreach (var coffeePair in pairs)
+                try
                 {
-                    var firstUserInfo = BotDbContext.Instance.UserInfos
-                        .Where(i => i.UserId == coffeePair.FirstUserId)
-                        .FirstOrDefault();
-                    var secondUserInfo = BotDbContext.Instance.UserInfos
-                        .Where(i => i.UserId == coffeePair.SecondUserId)
-                        .FirstOrDefault();
+                    if (userId != new BotConfigManager().Config.BotAdminId.FirstOrDefault())
+                        return;
 
-                    if (coffeePair.SecondUserId != null)
+                    var pairs = BotDbContext.Instance.CoffeePairs.ToList();
+
+                    foreach (var coffeePair in pairs)
                     {
-                        await botClient.SendTextMessageAsync(
-                            coffeePair.FirstUserId,
-                            $"Пары совпали!\n Твой собеседник: {secondUserInfo.Name}. Вот о чём он написал: {secondUserInfo.Interests}. Скорей пиши ему в ММ и назначай встречу!");
-                        await botClient.SendTextMessageAsync(
-                            coffeePair.SecondUserId,
-                            $"Пары совпали!\n Твой собеседник: {firstUserInfo.Name}. Вот о чём он написал: {firstUserInfo.Interests}. Скорей пиши ему в ММ и назначай встречу!");
+                        var firstUserInfo = BotDbContext.Instance.UserInfos
+                            .Where(i => i.UserId == coffeePair.FirstUserId)
+                            .FirstOrDefault();
+                        var secondUserInfo = BotDbContext.Instance.UserInfos
+                            .Where(i => i.UserId == coffeePair.SecondUserId)
+                            .FirstOrDefault();
+
+                        if (coffeePair.SecondUserId != -1)
+                        {
+                            await botClient.SendTextMessageAsync(
+                                coffeePair.FirstUserId,
+                                $"\u2728Пары совпали!\u2728\n\nТвой собеседник: {secondUserInfo.Name}. Вот о чём он написал: {secondUserInfo.Interests}. Скорей пиши в ММ и назначай встречу!");
+                            await botClient.SendTextMessageAsync(
+                                coffeePair.SecondUserId,
+                                $"\u2728Пары совпали!\u2728\n\nТвой собеседник: {firstUserInfo.Name}. Вот о чём он написал: {firstUserInfo.Interests}. Скорей пиши в ММ и назначай встречу!");
+                        }
+                        else
+                        {
+                            var reply = new InlineKeyboardMarkup(
+                                InlineKeyboardButton.WithCallbackData("Найти случайного собеседника",
+                                    BotChatCommands.RandomPair));
+                            await botClient.SendTextMessageAsync(
+                                coffeePair.FirstUserId,
+                                "\u2728Пары распределены!\u2728\n\nПока мы не нашли людей с интересами, похожими с твоими. Но не отчаивайся! Ты можешь попробовать пообщаться со случайным собеседником.",
+                                replyMarkup: reply,
+                                cancellationToken: cancellationToken);
+                        }
                     }
                 }
+                catch
+                {
+                    
+                }
+                break;
+            }
+            case BotChatCommands.RandomPair:
+            {
+                var userWithNoPair = BotDbContext.Instance.CoffeePairs
+                    .Where(p => p.SecondUserId == -1 && p.FirstUserId != userId)
+                    .FirstOrDefault();
+                userWithNoPair.SecondUserId = userId;
+                var currentUser = BotDbContext.Instance.CoffeePairs
+                    .Where(p => p.FirstUserId == userId)
+                    .FirstOrDefault();
+                currentUser.SecondUserId = userWithNoPair.FirstUserId;
+                await BotDbContext.Instance.SaveChangesAsync(cancellationToken);
+
+                
+                var firstUserInfo = BotDbContext.Instance.UserInfos
+                    .Where(i => i.UserId == userId)
+                    .FirstOrDefault();
+                var secondUserInfo = BotDbContext.Instance.UserInfos
+                    .Where(i => i.UserId == userWithNoPair.FirstUserId)
+                    .FirstOrDefault();
+
+                await botClient.SendTextMessageAsync(
+                    userId,
+                    $"Пары совпали!\n Твой собеседник: {secondUserInfo.Name}. Вот о чём он написал: {secondUserInfo.Interests}. Скорей пиши в ММ и назначай встречу!");
+                await botClient.SendTextMessageAsync(
+                    userWithNoPair.FirstUserId,
+                    $"Пары совпали!\n Твой собеседник: {firstUserInfo.Name}. Вот о чём он написал: {firstUserInfo.Interests}. Скорей пиши в ММ и назначай встречу!");
+
                 break;
             }
         }

@@ -51,10 +51,6 @@ public sealed class BotDbContext : UserDbContext
             .WithMany()
             .HasForeignKey(cp => cp.FirstUserId);
         modelBuilder.Entity<CoffeePair>()
-            .HasOne(cp => cp.SecondUser)
-            .WithMany()
-            .HasForeignKey(cp => cp.SecondUserId);
-        modelBuilder.Entity<CoffeePair>()
             .Property(cp => cp.CommonInterests)
             .HasConversion(
                 v => string.Join(',', v), 

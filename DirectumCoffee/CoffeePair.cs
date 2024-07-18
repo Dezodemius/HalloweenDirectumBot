@@ -10,6 +10,5 @@ public class CoffeePair
     public long FirstUserId { get; set; }
     public BotUser FirstUser { get; set; }
     public long SecondUserId { get; set; }
-    public BotUser SecondUser { get; set; }
     public string[] CommonInterests { get; set; }
 }
