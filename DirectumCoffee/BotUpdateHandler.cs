@@ -235,10 +235,10 @@ public class BotUpdateHandler : IUpdateHandler
                         {
                             await botClient.SendTextMessageAsync(
                                 coffeePair.FirstUserId,
-                                $"\u2728Пары совпали!\u2728\n\nТвой собеседник: {secondUserInfo.Name}. Вот о чём он написал: {secondUserInfo.Interests}. Скорей пиши в ММ и назначай встречу!");
+                                $"Пары распределены!\\u2728\\n\\nЭто {secondUserInfo.Name}.\n\nВот о чём он написал: {secondUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
                             await botClient.SendTextMessageAsync(
                                 coffeePair.SecondUserId,
-                                $"\u2728Пары совпали!\u2728\n\nТвой собеседник: {firstUserInfo.Name}. Вот о чём он написал: {firstUserInfo.Interests}. Скорей пиши в ММ и назначай встречу!");
+                                $"Пары распределены!\\u2728\\n\\nЭто {firstUserInfo.Name}.\n\nВот о чём он написал: {firstUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
                         }
                         else
                         {
@@ -247,7 +247,7 @@ public class BotUpdateHandler : IUpdateHandler
                                     BotChatCommands.RandomPair));
                             await botClient.SendTextMessageAsync(
                                 coffeePair.FirstUserId,
-                                "\u2728Пары распределены!\u2728\n\nПока мы не нашли людей с интересами, похожими с твоими. Но не отчаивайся! Ты можешь попробовать пообщаться со случайным собеседником.",
+                                "\u2728Пары распределены!\u2728\n\nПока мы не нашли людей с интересами, похожими на твои. Но не отчаивайся! Ты можешь попробовать пообщаться со случайным собеседником.",
                                 replyMarkup: reply,
                                 cancellationToken: cancellationToken);
                         }
@@ -264,6 +264,13 @@ public class BotUpdateHandler : IUpdateHandler
                 var userWithNoPair = BotDbContext.Instance.CoffeePairs
                     .Where(p => p.SecondUserId == -1 && p.FirstUserId != userId)
                     .FirstOrDefault();
+                if (userWithNoPair == null)
+                {
+                    await botClient.SendTextMessageAsync(
+                        userId,
+                        $"Кажется, пока нет свободных людей тебе в пару.\n\nНо не отчаивайся! Жди очередное распределение на следующей неделе!\n\nИ помни, чем больше интересов ты пропишешь, тем больше вероятность найти подходящего собеседника.");
+                    break;
+                }
                 userWithNoPair.SecondUserId = userId;
                 var currentUser = BotDbContext.Instance.CoffeePairs
                     .Where(p => p.FirstUserId == userId)
@@ -281,10 +288,10 @@ public class BotUpdateHandler : IUpdateHandler
 
                 await botClient.SendTextMessageAsync(
                     userId,
-                    $"Пары совпали!\n Твой собеседник: {secondUserInfo.Name}. Вот о чём он написал: {secondUserInfo.Interests}. Скорей пиши в ММ и назначай встречу!");
+                    $"\u2728Пары распределены!\u2728\n\nЭто {secondUserInfo.Name}.\n\nВот о чём он написал: {secondUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
                 await botClient.SendTextMessageAsync(
                     userWithNoPair.FirstUserId,
-                    $"Пары совпали!\n Твой собеседник: {firstUserInfo.Name}. Вот о чём он написал: {firstUserInfo.Interests}. Скорей пиши в ММ и назначай встречу!");
+                    $"\u2728Пары распределены!\u2728\n\nЭто {firstUserInfo.Name}.\n\nВот о чём он написал: {firstUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
 
                 break;
             }
@@ -306,9 +313,15 @@ public class BotUpdateHandler : IUpdateHandler
         if (info == null)
         {
             var userInfo = new UserInfo();
+            userInfo.Name = string.Empty;
+            userInfo.City = string.Empty;
+            userInfo.Hobby = string.Empty;
+            userInfo.Work = string.Empty;
+            userInfo.Interests = string.Empty;
             userInfo.UserId = userId;
             userInfo.PairFound = false;
             userInfo.SearchDisable = false;
+            userInfo.KeyWords = new List<string>();
             BotDbContext.Instance.UserInfos.Add(userInfo);
             BotDbContext.Instance.SaveChanges();
         }
