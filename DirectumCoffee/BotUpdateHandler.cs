@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using BotCommon;
+using BotCommon.Broadcast;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using Newtonsoft.Json;
@@ -293,6 +294,23 @@ public class BotUpdateHandler : IUpdateHandler
                     userWithNoPair.FirstUserId,
                     $"\u2728Пары распределены!\u2728\n\nЭто {firstUserInfo.Name}.\n\nВот о чём он написал: {firstUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
 
+                break;
+            }
+            case "/broadcast":
+            {
+                var pairs = BotDbContext.Instance.CoffeePairs
+                    .Where(p => p.FirstUserId != -1)
+                    .Select(p => p.FirstUserId)
+                    .Union(BotDbContext.Instance.CoffeePairs
+                        .Where(p => p.SecondUserId != -1)
+                        .Select(p => p.SecondUserId))
+                    .Distinct();
+                var users = BotDbContext.Instance.BotUsers
+                    .Where(u => pairs.Contains(u.Id))
+                    .ToList();
+                var message =
+                    "\ud83d\udc4b Привет, в понедельник пришлю тебе нового собеседника, а пока успей назначить встречу с текущим.\n\nДля лучших совпадений пропиши больше своих интересов, так выше вероятность найти подходящего собеседника. \n\nМожешь поменять \"обо всё\" на перечисление своих хобби и увлечений \u2728";
+                BroadcastMessageSender.BroadcastMessage(botClient, users, message);
                 break;
             }
         }
