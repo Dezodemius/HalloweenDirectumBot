@@ -30,7 +30,7 @@ public static class BroadcastMessageSender
       var botUser = userList[i];
       try
       {
-        await botClient.SendPhotoAsync(botUser.Id, new InputFileUrl("https://web.telegram.org/98a3a920-b858-4abe-aa25-87271713377f"), caption: message, parseMode: ParseMode.MarkdownV2);
+        await botClient.SendTextMessageAsync(botUser.Id, message, parseMode: ParseMode.MarkdownV2);
 
         var broadcastMessageUser = new BroadcastMessageUser(botUser.Id, DateTime.Now, true, false);
         BroadcastMessageDbContext.Instance.BroadcastMessageUsers.Add(broadcastMessageUser);
