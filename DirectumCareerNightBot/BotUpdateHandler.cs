@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BotCommon;
+using BotCommon.Broadcast;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using DirectumCareerNightBot.Scenarios;
@@ -37,7 +39,6 @@ public class BotUpdateHandler : IUpdateHandler
             userInfo.LanguageCode));
 
         UserCommandScenario? userScenario = null;
-        
         switch (BotHelper.GetMessage(update))
         {
             case BotChatCommands.Start:
