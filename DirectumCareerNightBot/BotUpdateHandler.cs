@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BotCommon;
+using BotCommon.Broadcast;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using DirectumCareerNightBot.Scenarios;
@@ -24,12 +26,12 @@ public class BotUpdateHandler : IUpdateHandler
 
     public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        log.Info(JsonConvert.SerializeObject(update));
+        log.Trace(JsonConvert.SerializeObject(update));
         var userInfo = BotHelper.GetUserInfo(update);
+        log.Info($"user: {BotHelper.GetUsername(userInfo)}, userMessage: {BotHelper.GetMessage(update)}");
         var userId = userInfo.Id;
 
-        await using var botDbContext = new BotDbContext();
-        botDbContext?.Add(new BotUser(
+        BotDbContext.Instance.Add(new BotUser(
             userId, 
             userInfo.Username,
             userInfo.FirstName,
@@ -53,12 +55,25 @@ public class BotUpdateHandler : IUpdateHandler
             case BotChatCommands.MainMenu:
             {
                 var replyMarkup = MainMenuCommand.GetMainMenuInlineMarkup();
-                await botClient.SendTextMessageAsync(userId,
-                    BotMessages.MainMenu,
-                    replyMarkup: replyMarkup,
-                    cancellationToken: cancellationToken,
-                    parseMode: ParseMode.MarkdownV2);
-                _userScenarioRepository?.Remove(userId);
+                if (update.Type == UpdateType.CallbackQuery)
+                {
+                    await botClient.EditMessageTextAsync(userId,
+                        update.CallbackQuery.Message.MessageId,
+                        BotMessages.MainMenu,
+                        replyMarkup: replyMarkup,
+                        cancellationToken: cancellationToken,
+                        parseMode: ParseMode.MarkdownV2);
+                    _userScenarioRepository?.Remove(userId);
+                }
+                else if (update.Type == UpdateType.Message)
+                {
+                    await botClient.SendTextMessageAsync(userId,
+                        BotMessages.MainMenu,
+                        replyMarkup: replyMarkup,
+                        cancellationToken: cancellationToken,
+                        parseMode: ParseMode.MarkdownV2);
+                    _userScenarioRepository?.Remove(userId);
+                }
                 return;
             }
             case BotChatCommands.Student:
@@ -72,7 +87,8 @@ public class BotUpdateHandler : IUpdateHandler
                 };
 
                 var replyMarkup = new InlineKeyboardMarkup(buttons);
-                await botClient.SendTextMessageAsync(userId,
+                await botClient.EditMessageTextAsync(userId,
+                    update.CallbackQuery.Message.MessageId,
                     BotMessages.StudentMessage,
                     replyMarkup: replyMarkup,
                     cancellationToken: cancellationToken,
@@ -84,14 +100,15 @@ public class BotUpdateHandler : IUpdateHandler
             {
                 var buttons = new List<InlineKeyboardButton[]>
                 {
-                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkerInITDept, BotChatCommands.WorkerInITDept), },
-                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WorkInITButWantToChangeCompany, BotChatCommands.WorkInITButWantToChangeCompany), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WantToIT, BotChatCommands.WantToIT), },
+                    new [] { InlineKeyboardButton.WithCallbackData(BotMessages.WantInterview, BotChatCommands.WantInterview), },
                     new [] { InlineKeyboardButton.WithUrl(BotMessages.Vacancies, "https://career.directum.ru/vacancy"), },
                     new [] { InlineKeyboardButton.WithCallbackData(BotMessages.MainMenuButton, BotChatCommands.MainMenu), },
                 };
 
                 var replyMarkup = new InlineKeyboardMarkup(buttons);
-                await botClient.SendTextMessageAsync(userId,
+                await botClient.EditMessageTextAsync(userId,
+                    update.CallbackQuery.Message.MessageId,
                     BotMessages.NotStudentMessage,
                     replyMarkup: replyMarkup,
                     cancellationToken: cancellationToken,
@@ -100,16 +117,16 @@ public class BotUpdateHandler : IUpdateHandler
                 break;
             }
             case BotChatCommands.WantToPractice:
-                userScenario = new UserCommandScenario(userId, new PracticeScenario());
+                userScenario = new UserCommandScenario(userId, new StudentPracticeScenario());
                 break;
-            case BotChatCommands.WorkInITButWantToChangeCompany:
-                userScenario = new UserCommandScenario(userId, new WorkInITButWantToChangeCompanyScenario());
+            case BotChatCommands.WantInterview:
+                userScenario = new UserCommandScenario(userId, new InterviewScenario());
                 break;
             case BotChatCommands.StudentWithExperience:
-                userScenario = new UserCommandScenario(userId, new StudentWithExperienceScenario());
+                userScenario = new UserCommandScenario(userId, new StudentWorkScenario());
                 break;
-            case BotChatCommands.WorkerInITDept:
-                userScenario = new UserCommandScenario(userId, new WorkingITDeptScenario());
+            case BotChatCommands.WantToIT:
+                userScenario = new UserCommandScenario(userId, new WantToITScenario());
                 break;
             case BotChatCommands.Directum15Questions:
             {
@@ -121,8 +138,9 @@ public class BotUpdateHandler : IUpdateHandler
                     }
                 };
                 var markup = new InlineKeyboardMarkup(buttons);
-                await botClient.SendTextMessageAsync(
+                await botClient.EditMessageTextAsync(
                     userId,
+                    update.CallbackQuery.Message.MessageId,
                     BotMessages.Directum15QuestionsMessage,
                     replyMarkup: markup,
                     cancellationToken: cancellationToken,
@@ -145,6 +163,7 @@ public class BotUpdateHandler : IUpdateHandler
     public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
         log.Error(exception);
+        Environment.Exit(0);
     }
 
     public BotUpdateHandler()

@@ -15,11 +15,11 @@ public class GoogleSheetsManager
 
     public const string SpreadSheetId = "1MJ81r3eO9YnksjXdKU_U5j3_bj02jHqlLPavljhfzaY";
     
-    public void AddUserToInterviewSheet(string fullname, string contact, string direction, string experience, string telegramName)
+    public void AddUserToInterviewSheet(string fullname, string contact, string experience, string telegramName)
     {
         var range = $"{GoogleSheets.Interview}!A:E";
         var valueRange = new ValueRange();
-        var objectList = new List<object>() { fullname, contact, direction, experience, telegramName };
+        var objectList = new List<object>() { fullname, contact, experience, telegramName };
 
         valueRange.Values = new List<IList<object>> { objectList };
 

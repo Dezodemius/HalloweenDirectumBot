@@ -1,10 +1,9 @@
-﻿using System;
-using BotCommon.Repository;
+﻿using BotCommon.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace DirectumCareerNightBot;
+namespace DirectumCoffee;
 
 public sealed class BotDbContext : UserDbContext
 {
@@ -29,41 +28,36 @@ public sealed class BotDbContext : UserDbContext
             return instance;
         }
     } 
-    public DbSet<QuizQuestion> Questions { get; set; }
-    public DbSet<QuizPossibleAnswer> Choices { get; set; }
-    public DbSet<QuizUserQuestion> UserQuestions { get; set; }
-    public DbSet<QuizUserResult> UserResults { get; set; }
-    public DbSet<UserData> UserDatas { get; set; }
+    public DbSet<UserInfo> UserInfos { get; set; }
+    public DbSet<CoffeePair> CoffeePairs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlite(_connectionString);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<QuizQuestion>()
-            .HasOne(q => q.CorrectChoice)
-            .WithMany()
-            .HasForeignKey(q => q.CorrectChoiceId);
-
-        modelBuilder.Entity<QuizPossibleAnswer>()
-            .HasOne(pa => pa.Question)
-            .WithMany(q => q.Choices)
-            .HasForeignKey(pa => pa.QuestionId);
-        modelBuilder.Entity<QuizUserQuestion>()
-            .HasOne(quq => quq.User)
-            .WithMany()
-            .HasForeignKey(quq => quq.UserId);
-        modelBuilder.Entity<QuizUserResult>()
-            .HasOne(r => r.BotUser)
-            .WithMany()
-            .HasForeignKey(r => r.UserId);
-        modelBuilder.Entity<UserData>()
+        modelBuilder.Entity<UserInfo>()
             .HasOne(u => u.BotUser)
             .WithMany()
-            .HasForeignKey(u => u.UserId);
+            .HasForeignKey(u => u.UserId);   
+        modelBuilder.Entity<UserInfo>()
+            .Property(cp => cp.KeyWords)
+            .HasConversion(
+                v => string.Join(',', v), 
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+
+        modelBuilder.Entity<CoffeePair>()
+            .HasOne(cp => cp.FirstUser)
+            .WithMany()
+            .HasForeignKey(cp => cp.FirstUserId);
+        modelBuilder.Entity<CoffeePair>()
+            .Property(cp => cp.CommonInterests)
+            .HasConversion(
+                v => string.Join(',', v), 
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
     }
 
-    private BotDbContext() : base("Filename=quiz.db")
+    private BotDbContext() : base("Filename=coffee.db")
     {
         Database.EnsureCreated();
 

@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿// See https://aka.ms/new-console-template for more information
+
+using System.Reflection;
 using BotCommon;
-using BotCommon.Broadcast;
 using BotCommon.KeepAlive;
-using BotCommon.Repository;
-using HalloweenDirectumBot;
+using DirectumCoffee;
 using NLog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using File = System.IO.File;
-
-namespace DirectumCareerNightBot;
 
 internal class Program
 {
@@ -33,13 +26,17 @@ internal class Program
         log.Info("Bye bye");
         Environment.Exit(0);
     }
-
+    
     private static void PrepareForStartBot(ITelegramBotClient bot)
     {
         var botKeepAlive = new BotKeepAlive(bot);
         botKeepAlive.StartKeepAlive();
+        
+        var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        var modelsAssemblyPath = Path.Combine(baseDirectory, "stanford.nlp.models", "edu.stanford.nlp.corenlp_english_models.dll");
+        Assembly.LoadFile(modelsAssemblyPath);
     }
-
+    
     private static void StartBot(ITelegramBotClient bot)
     {
         log.Debug("Start Bot");
@@ -52,12 +49,6 @@ internal class Program
             },
             ThrowPendingUpdates = true
         };
-        bot.StartReceiving<EmptyBotUpdateHandler>(receiverOptions: opts);
-        
-       
-        // BroadcastMessageDbContext.Instance.InitBroadcastUsers(users);
-        // BroadcastMessageSender.BroadcastMessage(bot, BotDbContext.Instance.BotUsers, BotMessages.DirectumTestersMeetup);
-        // BroadcastMessageSender.BroadcastMessageWithPhoto(bot, BotDbContext.Instance.BotUsers, BotMessages.DirectumTestersMeetup, InputFile.FromStream(stream));
-        BroadcastMessageSender.BroadcastMessageWithPhoto(bot, BotDbContext.Instance.BotUsers, BotMessages.DirectumTestersMeetup, "qa_meetup.png");
+        bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
     }
-} 
+}

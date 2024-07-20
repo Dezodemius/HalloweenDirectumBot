@@ -135,6 +135,50 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to *21 мая, во вторник, в 18\:30 встречаемся в Directum на митапе для тестировщиков\.*
+        ///
+        ///В программе\:
+        ///
+        ///🔸*Кристина Сбоева*, инженер по тестированию ПО, «Туры исследовательского тестирования в отделе тестирования Directum»\.
+        ///
+        ///🔸*Роман Сабуров*, инженер по тестированию ПО, «Как мы сократили время на подготовку тестового окружения за счет применения Ansible»\.
+        ///
+        ///🔸*Анастасия Маркова*, ресурс\-менеджер и тестлид, «Как составить индивидуальный план развития в тестировании и действительно развиваться?»
+        ///
+        ///Уча [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DirectumTestersMeetup {
+            get {
+                return ResourceManager.GetString("DirectumTestersMeetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Привет\! 
+        ///
+        ///Мы с отличной новостью – после \&quot;Ночи Карьеры в ИТ\&quot; захотелось не терять контакт с вами, теми, кто проявил интерес к Directum\. 
+        ///
+        ///*24 апреля к 18\:00 приглашаем к нам в офис
+        ///на \&quot;Welcome Day\&quot;\.* 
+        ///
+        ///*\&quot;Welcome Day\&quot;* – это очное мероприятие, где мы делимся
+        ///своей экспертизой и учим вас новому\. 
+        ///
+        ///На этот раз расскажем про онбординг и
+        ///адаптацию и проведём мастер\-класс \&quot;User Story Mapping\&quot;\. 
+        ///
+        ///Ждём вас в новом коворкинге Directum по
+        ///адресу\: `переулок Северный, 61`\.
+        ///
+        ///Мероприятие  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DirectumWelcomeDay {
+            get {
+                return ResourceManager.GetString("DirectumWelcomeDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Как удобнее будет поддерживать связь с нашим HR\-ом — *напиши свои телефон/почту/vk*.
         /// </summary>
         internal static string HowToContact {
@@ -189,6 +233,15 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Нет.
+        /// </summary>
+        internal static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Я уже не студент 😎.
         /// </summary>
         internal static string NotStudent {
@@ -198,19 +251,10 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Хочу в IT.
-        /// </summary>
-        internal static string NotStudentButWantInIT {
-            get {
-                return ResourceManager.GetString("NotStudentButWantInIT", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ⚡*В прошлом году после мероприятия 12 человек стали сотрудниками Directum, а трое прошли у нас практику\.*⚡ 
         ///
         ///Сейчас *Directum готов принимать опытных специалистов*, и такие есть среди участников Ночи карьеры\.
-        ///.
+        ///        .
         /// </summary>
         internal static string NotStudentMessage {
             get {
@@ -285,7 +329,7 @@ namespace DirectumCareerNightBot {
         ///   Looks up a localized string similar to ⚡*Да, в Directum можно работать со студенчества\.*⚡ 
         ///У нас можно пройти летнюю практику, *работать по 4 или 8 часов в день\.* И самое главное развиваться\.
         ///Чего хочешь ты?
-        ///.
+        ///        .
         /// </summary>
         internal static string StudentMessage {
             get {
@@ -386,8 +430,8 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ⚡*Поднимайся на сцену\. За столом с табличкой «Мы тебя ждали» тебе расскажут о возможностях в Directum\.⚡* 
-        ///Представься, чтобы твою анкету нашли и с тобой пообщался нужный специалист\..
+        ///   Looks up a localized string similar to ⚡*Поднимайся на сцену\. За столом с табличкой «Попасть в ИТ» тебе расскажут о возможностях\.*⚡
+        ///Крепись, ты можешь оказаться 30\-м в очереди на общение\. А  пока есть время, и ты уже занял очередь, можешь прогуляться к нашему стенду\..
         /// </summary>
         internal static string ThankYouInITDept {
             get {
@@ -420,11 +464,45 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Для начинающих айтишников мы подготовили формат группового общения с представителями направлений\. Узнай какой опыт нужно получить, чтобы устроиться к нам через время\.
+        ///
+        ///🔎*Ищи на сцене 3 больших стола Directum:*
+        ///\-  Стол «про разработку»\.
+        ///\-  Стол «про тестирование и тех\. поддержку»\.
+        ///\-  Стол «про аналитику, маркетинг, внедрение, продажи»\.
+        ///
+        ///*Группе от 6 человек специалисты рассказывают  о своих направлениях\.*.
+        /// </summary>
+        internal static string TraineeITMan {
+            get {
+                return ResourceManager.GetString("TraineeITMan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Открытые вакансии.
         /// </summary>
         internal static string Vacancies {
             get {
                 return ResourceManager.GetString("Vacancies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cобеседование.
+        /// </summary>
+        internal static string WantInterview {
+            get {
+                return ResourceManager.GetString("WantInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Попасть в IT.
+        /// </summary>
+        internal static string WantToIT {
+            get {
+                return ResourceManager.GetString("WantToIT", resourceCulture);
             }
         }
         
@@ -447,20 +525,20 @@ namespace DirectumCareerNightBot {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Хочу в IT.
+        ///   Looks up a localized string similar to Работал ли ты в IT\-компании или IT\-отделе?.
         /// </summary>
-        internal static string WorkerInITDept {
+        internal static string WorkedInIT {
             get {
-                return ResourceManager.GetString("WorkerInITDept", resourceCulture);
+                return ResourceManager.GetString("WorkedInIT", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Хочу на собеседование.
+        ///   Looks up a localized string similar to Да.
         /// </summary>
-        internal static string WorkInITButWantToChangeCompany {
+        internal static string Yes {
             get {
-                return ResourceManager.GetString("WorkInITButWantToChangeCompany", resourceCulture);
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }
