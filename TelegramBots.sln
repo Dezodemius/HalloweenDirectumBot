@@ -1,10 +1,14 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCommon", "BotCommon\BotCommon.csproj", "{BA378780-17FE-4DD8-9408-2A26324EB3F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectumCareerNightBot", "DirectumCareerNightBot\DirectumCareerNightBot.csproj", "{B40EB7F2-D464-487D-87AE-3A602292F6AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotWorkerService", "BotWorkerService\BotWorkerService.csproj", "{DE06C0A3-5FA8-4A90-959D-3A658EC88521}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BroadcastMessageSender", "BroadcastMessageSender\BroadcastMessageSender.csproj", "{2A4906BB-9716-4294-A5BA-F4DCD04FAF33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectumCoffee", "DirectumCoffee\DirectumCoffee.csproj", "{3F8040E8-8EC0-40BC-9241-B471E5375B95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,5 +29,13 @@ Global
 		{DE06C0A3-5FA8-4A90-959D-3A658EC88521}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE06C0A3-5FA8-4A90-959D-3A658EC88521}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE06C0A3-5FA8-4A90-959D-3A658EC88521}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A4906BB-9716-4294-A5BA-F4DCD04FAF33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A4906BB-9716-4294-A5BA-F4DCD04FAF33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A4906BB-9716-4294-A5BA-F4DCD04FAF33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A4906BB-9716-4294-A5BA-F4DCD04FAF33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F8040E8-8EC0-40BC-9241-B471E5375B95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F8040E8-8EC0-40BC-9241-B471E5375B95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F8040E8-8EC0-40BC-9241-B471E5375B95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F8040E8-8EC0-40BC-9241-B471E5375B95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
