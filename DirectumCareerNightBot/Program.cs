@@ -1,11 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using BotCommon;
+using BotCommon.Broadcast;
 using BotCommon.KeepAlive;
+using BotCommon.Repository;
 using HalloweenDirectumBot;
 using NLog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using File = System.IO.File;
 
 namespace DirectumCareerNightBot;
 
@@ -45,6 +52,12 @@ internal class Program
             },
             ThrowPendingUpdates = true
         };
-        bot.StartReceiving<BotUpdateHandler>(receiverOptions: opts);
+        bot.StartReceiving<EmptyBotUpdateHandler>(receiverOptions: opts);
+        
+       
+        // BroadcastMessageDbContext.Instance.InitBroadcastUsers(users);
+        // BroadcastMessageSender.BroadcastMessage(bot, BotDbContext.Instance.BotUsers, BotMessages.DirectumTestersMeetup);
+        // BroadcastMessageSender.BroadcastMessageWithPhoto(bot, BotDbContext.Instance.BotUsers, BotMessages.DirectumTestersMeetup, InputFile.FromStream(stream));
+        BroadcastMessageSender.BroadcastMessageWithPhoto(bot, BotDbContext.Instance.BotUsers, BotMessages.DirectumTestersMeetup, "qa_meetup.png");
     }
-}
+} 

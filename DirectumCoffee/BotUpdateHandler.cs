@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using BotCommon;
+using BotCommon.Broadcast;
 using BotCommon.Repository;
 using BotCommon.Scenarios;
 using Newtonsoft.Json;
@@ -49,7 +50,7 @@ public class BotUpdateHandler : IUpdateHandler
                 }
                 else
                 {
-                    var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                    var userSystemInfo = BotDbContext.Instance.UserInfos
                         .Where(i => i.UserId == userId)
                         .FirstOrDefault();
                     InlineKeyboardMarkup replyMarkup;
@@ -80,7 +81,7 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.Stop:
             {
-                var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                var userSystemInfo = BotDbContext.Instance.UserInfos
                     .Where(i => i.UserId == userId)
                     .FirstOrDefault();
                 userSystemInfo.SearchDisable = true;
@@ -92,7 +93,7 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.Restart:
             {
-                var userSystemInfo = BotDbContext.Instance.UserSystemInfos
+                var userSystemInfo = BotDbContext.Instance.UserInfos
                     .Where(i => i.UserId == userId)
                     .FirstOrDefault();
                 userSystemInfo.SearchDisable = false;
@@ -178,6 +179,140 @@ public class BotUpdateHandler : IUpdateHandler
                 userScenario = new UserCommandScenario(userId, new ChangeInterestsScenario());
                 break;
             }
+            case BotChatCommands.GeneratePairs:
+            {
+                if (userId != new BotConfigManager().Config.BotAdminId.FirstOrDefault())
+                    return;
+                var profiles = BotDbContext.Instance.UserInfos
+                    .Where(i => !i.SearchDisable && !i.PairFound).ToList();
+                var profilesDictionary = profiles
+                    .Where(p => !IsInfoEmpty(p))
+                    .ToDictionary(
+                        k => k.UserId, v =>
+                    {
+                        var sb = new StringBuilder(v.Interests);
+                        sb.AppendLine();
+                        sb.AppendLine(v.Hobby);
+                        return sb.ToString();
+                    });
+                
+                await botClient.SendTextMessageAsync(userId, "start generating pairs...",
+                    cancellationToken: cancellationToken);
+                try
+                {
+                    new PairGenerator().GeneratePairs(profilesDictionary);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    await botClient.SendTextMessageAsync(userId, "generating pairs completed",
+                        cancellationToken: cancellationToken);
+                }
+                
+                break;
+            }
+            case BotChatCommands.SendPairs:
+            {
+                try
+                {
+                    if (userId != new BotConfigManager().Config.BotAdminId.FirstOrDefault())
+                        return;
+
+                    var pairs = BotDbContext.Instance.CoffeePairs.ToList();
+
+                    foreach (var coffeePair in pairs)
+                    {
+                        var firstUserInfo = BotDbContext.Instance.UserInfos
+                            .Where(i => i.UserId == coffeePair.FirstUserId)
+                            .FirstOrDefault();
+                        var secondUserInfo = BotDbContext.Instance.UserInfos
+                            .Where(i => i.UserId == coffeePair.SecondUserId)
+                            .FirstOrDefault();
+
+                        if (coffeePair.SecondUserId != -1)
+                        {
+                            await botClient.SendTextMessageAsync(
+                                coffeePair.FirstUserId,
+                                $"Пары распределены!\\u2728\\n\\nЭто {secondUserInfo.Name}.\n\nВот о чём он написал: {secondUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
+                            await botClient.SendTextMessageAsync(
+                                coffeePair.SecondUserId,
+                                $"Пары распределены!\\u2728\\n\\nЭто {firstUserInfo.Name}.\n\nВот о чём он написал: {firstUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
+                        }
+                        else
+                        {
+                            var reply = new InlineKeyboardMarkup(
+                                InlineKeyboardButton.WithCallbackData("Найти случайного собеседника",
+                                    BotChatCommands.RandomPair));
+                            await botClient.SendTextMessageAsync(
+                                coffeePair.FirstUserId,
+                                "\u2728Пары распределены!\u2728\n\nПока мы не нашли людей с интересами, похожими на твои. Но не отчаивайся! Ты можешь попробовать пообщаться со случайным собеседником.",
+                                replyMarkup: reply,
+                                cancellationToken: cancellationToken);
+                        }
+                    }
+                }
+                catch
+                {
+                    
+                }
+                break;
+            }
+            case BotChatCommands.RandomPair:
+            {
+                var userWithNoPair = BotDbContext.Instance.CoffeePairs
+                    .Where(p => p.SecondUserId == -1 && p.FirstUserId != userId)
+                    .FirstOrDefault();
+                if (userWithNoPair == null)
+                {
+                    await botClient.SendTextMessageAsync(
+                        userId,
+                        $"Кажется, пока нет свободных людей тебе в пару.\n\nНо не отчаивайся! Жди очередное распределение на следующей неделе!\n\nИ помни, чем больше интересов ты пропишешь, тем больше вероятность найти подходящего собеседника.");
+                    break;
+                }
+                userWithNoPair.SecondUserId = userId;
+                var currentUser = BotDbContext.Instance.CoffeePairs
+                    .Where(p => p.FirstUserId == userId)
+                    .FirstOrDefault();
+                currentUser.SecondUserId = userWithNoPair.FirstUserId;
+                await BotDbContext.Instance.SaveChangesAsync(cancellationToken);
+
+                
+                var firstUserInfo = BotDbContext.Instance.UserInfos
+                    .Where(i => i.UserId == userId)
+                    .FirstOrDefault();
+                var secondUserInfo = BotDbContext.Instance.UserInfos
+                    .Where(i => i.UserId == userWithNoPair.FirstUserId)
+                    .FirstOrDefault();
+
+                await botClient.SendTextMessageAsync(
+                    userId,
+                    $"\u2728Пары распределены!\u2728\n\nЭто {secondUserInfo.Name}.\n\nВот о чём он написал: {secondUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
+                await botClient.SendTextMessageAsync(
+                    userWithNoPair.FirstUserId,
+                    $"\u2728Пары распределены!\u2728\n\nЭто {firstUserInfo.Name}.\n\nВот о чём он написал: {firstUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
+
+                break;
+            }
+            case "/broadcast":
+            {
+                var pairs = BotDbContext.Instance.CoffeePairs
+                    .Where(p => p.FirstUserId != -1)
+                    .Select(p => p.FirstUserId)
+                    .Union(BotDbContext.Instance.CoffeePairs
+                        .Where(p => p.SecondUserId != -1)
+                        .Select(p => p.SecondUserId))
+                    .Distinct();
+                var users = BotDbContext.Instance.BotUsers
+                    .Where(u => pairs.Contains(u.Id))
+                    .ToList();
+                var message =
+                    "\ud83d\udc4b Привет, в понедельник пришлю тебе нового собеседника, а пока успей назначить встречу с текущим.\n\nДля лучших совпадений пропиши больше своих интересов, так выше вероятность найти подходящего собеседника. \n\nМожешь поменять \"обо всё\" на перечисление своих хобби и увлечений \u2728";
+                BroadcastMessageSender.BroadcastMessage(botClient, users, message);
+                break;
+            }
         }
         if (userScenario == null && _userScenarioRepository.TryGet(userId, out var _userScenario))
             userScenario = _userScenario;
@@ -190,16 +325,22 @@ public class BotUpdateHandler : IUpdateHandler
 
     private static void FillUserSystemInfo(long userId)
     {
-        var info = BotDbContext.Instance.UserSystemInfos
+        var info = BotDbContext.Instance.UserInfos
             .Where(i => i.UserId == userId)
             .FirstOrDefault();
         if (info == null)
         {
-            var userInfo = new UserSystemInfo();
+            var userInfo = new UserInfo();
+            userInfo.Name = string.Empty;
+            userInfo.City = string.Empty;
+            userInfo.Hobby = string.Empty;
+            userInfo.Work = string.Empty;
+            userInfo.Interests = string.Empty;
             userInfo.UserId = userId;
             userInfo.PairFound = false;
             userInfo.SearchDisable = false;
-            BotDbContext.Instance.UserSystemInfos.Add(userInfo);
+            userInfo.KeyWords = new List<string>();
+            BotDbContext.Instance.UserInfos.Add(userInfo);
             BotDbContext.Instance.SaveChanges();
         }
     }
@@ -208,6 +349,11 @@ public class BotUpdateHandler : IUpdateHandler
     {
         log.Error(exception);
         Environment.Exit(0);
+    }
+
+    private bool IsInfoEmpty(UserInfo info)
+    {
+        return string.IsNullOrEmpty(info.Interests);
     }
 
     public BotUpdateHandler()

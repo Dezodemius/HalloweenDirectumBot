@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Reflection;
 using BotCommon;
 using BotCommon.KeepAlive;
 using DirectumCoffee;
@@ -30,6 +31,10 @@ internal class Program
     {
         var botKeepAlive = new BotKeepAlive(bot);
         botKeepAlive.StartKeepAlive();
+        
+        var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        var modelsAssemblyPath = Path.Combine(baseDirectory, "stanford.nlp.models", "edu.stanford.nlp.corenlp_english_models.dll");
+        Assembly.LoadFile(modelsAssemblyPath);
     }
     
     private static void StartBot(ITelegramBotClient bot)

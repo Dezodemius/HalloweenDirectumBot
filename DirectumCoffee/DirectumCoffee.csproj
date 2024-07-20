@@ -8,11 +8,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="slf4j-api" Version="1.7.5.4" />
+      <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+      <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
       <PackageReference Include="Telegram.Bot" Version="19.0.0" />
+      <PackageReference Include="IKVM" Version="8.7.5" />
+      <PackageReference Include="IKVM.Maven.Sdk" Version="1.6.8" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\BotCommon\BotCommon.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <MavenReference Include="edu.stanford.nlp:stanford-corenlp" Version="4.5.6"/>
+        <MavenReference Include="edu.stanford.nlp:stanford-corenlp" Version="4.5.6" Classifier="models" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,6 +38,18 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>BotMessages.resx</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="stanford.nlp.models/edu.stanford.nlp.corenlp_english_models.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="NLog.config">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
