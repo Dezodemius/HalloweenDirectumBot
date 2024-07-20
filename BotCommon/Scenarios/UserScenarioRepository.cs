@@ -22,12 +22,16 @@ public sealed class UserScenarioRepository
   public void Remove(long userId)
   {
     var foundedScenario = this.Get(userId);
+    if (foundedScenario == null)
+      return;
     foundedScenario.CommandScenario.Reset();
     this._userScenarios.Remove(foundedScenario);
   }
 
   public void Remove(UserCommandScenario commandScenario)
   {
+    if (commandScenario == null)
+      return;
     this.Remove(commandScenario.UserId);
   }
 
