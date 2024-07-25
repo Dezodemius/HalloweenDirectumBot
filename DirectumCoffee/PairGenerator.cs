@@ -57,8 +57,12 @@ namespace DirectumCoffee
                 {
                     var profile2 = profiles.ElementAt(j);
                     var annotation2 = annotations[j];
-            
-                    if (pairedUsers.Contains(profile2.Key))
+
+                    var isPairCreatedEarlier = BotDbContext.Instance.CoffeePairs
+                        .Any(p => (p.FirstUserId == profile1.Key && p.SecondUserId == profile2.Key && p.PairingDate != DateTime.Today) 
+                            || (p.FirstUserId == profile2.Key && p.SecondUserId == profile1.Key && p.PairingDate != DateTime.Today));
+    
+                    if (pairedUsers.Contains(profile2.Key) || isPairCreatedEarlier)
                     {
                         continue;
                     }
@@ -88,7 +92,8 @@ namespace DirectumCoffee
                 {
                     FirstUserId = profile1.Key,
                     SecondUserId = bestMatchUserId != 0 ? bestMatchUserId : -1,
-                    CommonInterests = commonInterests ?? Array.Empty<string>()
+                    CommonInterests = commonInterests ?? Array.Empty<string>(),
+                    PairingDate = DateTime.Today
                 };
         
                 BotDbContext.Instance.CoffeePairs.Add(pair);

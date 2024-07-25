@@ -11,4 +11,5 @@ public class CoffeePair
     public BotUser FirstUser { get; set; }
     public long SecondUserId { get; set; }
     public string[] CommonInterests { get; set; }
+    public DateTime PairingDate { get; set; }
 }

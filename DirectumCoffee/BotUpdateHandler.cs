@@ -221,7 +221,9 @@ public class BotUpdateHandler : IUpdateHandler
                     if (userId != new BotConfigManager().Config.BotAdminId.FirstOrDefault())
                         return;
 
-                    var pairs = BotDbContext.Instance.CoffeePairs.ToList();
+                    var pairs = BotDbContext.Instance.CoffeePairs
+                        .Where(p => p.PairingDate.Date == DateTime.Today)
+                        .ToList();
 
                     foreach (var coffeePair in pairs)
                     {
@@ -236,10 +238,12 @@ public class BotUpdateHandler : IUpdateHandler
                         {
                             await botClient.SendTextMessageAsync(
                                 coffeePair.FirstUserId,
-                                $"Пары распределены!\\u2728\\n\\nЭто {secondUserInfo.Name}.\n\nВот о чём он написал: {secondUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
+                                string.Format(BotMessages.PairFoundMessage, secondUserInfo.Name, secondUserInfo.Hobby, secondUserInfo.Work, secondUserInfo.Interests), 
+                                cancellationToken: cancellationToken);
                             await botClient.SendTextMessageAsync(
                                 coffeePair.SecondUserId,
-                                $"Пары распределены!\\u2728\\n\\nЭто {firstUserInfo.Name}.\n\nВот о чём он написал: {firstUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
+                                string.Format(BotMessages.PairFoundMessage, firstUserInfo.Name, firstUserInfo.Hobby, firstUserInfo.Work, firstUserInfo.Interests), 
+                                cancellationToken: cancellationToken);
                         }
                         else
                         {
@@ -248,7 +252,7 @@ public class BotUpdateHandler : IUpdateHandler
                                     BotChatCommands.RandomPair));
                             await botClient.SendTextMessageAsync(
                                 coffeePair.FirstUserId,
-                                "\u2728Пары распределены!\u2728\n\nПока мы не нашли людей с интересами, похожими на твои. Но не отчаивайся! Ты можешь попробовать пообщаться со случайным собеседником.",
+                                BotMessages.PairNotFoundMessage,
                                 replyMarkup: reply,
                                 cancellationToken: cancellationToken);
                         }
@@ -262,55 +266,62 @@ public class BotUpdateHandler : IUpdateHandler
             }
             case BotChatCommands.RandomPair:
             {
-                var userWithNoPair = BotDbContext.Instance.CoffeePairs
-                    .Where(p => p.SecondUserId == -1 && p.FirstUserId != userId)
-                    .FirstOrDefault();
-                if (userWithNoPair == null)
+                try
                 {
-                    await botClient.SendTextMessageAsync(
-                        userId,
-                        $"Кажется, пока нет свободных людей тебе в пару.\n\nНо не отчаивайся! Жди очередное распределение на следующей неделе!\n\nИ помни, чем больше интересов ты пропишешь, тем больше вероятность найти подходящего собеседника.");
-                    break;
-                }
-                userWithNoPair.SecondUserId = userId;
-                var currentUser = BotDbContext.Instance.CoffeePairs
-                    .Where(p => p.FirstUserId == userId)
-                    .FirstOrDefault();
-                currentUser.SecondUserId = userWithNoPair.FirstUserId;
-                await BotDbContext.Instance.SaveChangesAsync(cancellationToken);
+                    var userWithNoPair = BotDbContext.Instance.CoffeePairs
+                        .Where(p => p.SecondUserId == -1 && p.FirstUserId != userId && p.PairingDate.Date == DateTime.Today)
+                        .FirstOrDefault();
+                    if (userWithNoPair == null)
+                    {
+                        await botClient.SendTextMessageAsync(
+                            userId,
+                            BotMessages.PairNotFoundCompletelyMessage);
+                        break;
+                    }
+                    userWithNoPair.SecondUserId = userId;
+                    var currentUser = BotDbContext.Instance.CoffeePairs
+                        .Where(p => p.FirstUserId == userId)
+                        .FirstOrDefault();
+                    currentUser.SecondUserId = userWithNoPair.FirstUserId;
+                    await BotDbContext.Instance.SaveChangesAsync(cancellationToken);
 
                 
-                var firstUserInfo = BotDbContext.Instance.UserInfos
-                    .Where(i => i.UserId == userId)
-                    .FirstOrDefault();
-                var secondUserInfo = BotDbContext.Instance.UserInfos
-                    .Where(i => i.UserId == userWithNoPair.FirstUserId)
-                    .FirstOrDefault();
+                    var firstUserInfo = BotDbContext.Instance.UserInfos
+                        .Where(i => i.UserId == userId)
+                        .FirstOrDefault();
+                    var secondUserInfo = BotDbContext.Instance.UserInfos
+                        .Where(i => i.UserId == userWithNoPair.FirstUserId)
+                        .FirstOrDefault();
 
-                await botClient.SendTextMessageAsync(
-                    userId,
-                    $"\u2728Пары распределены!\u2728\n\nЭто {secondUserInfo.Name}.\n\nВот о чём он написал: {secondUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
-                await botClient.SendTextMessageAsync(
-                    userWithNoPair.FirstUserId,
-                    $"\u2728Пары распределены!\u2728\n\nЭто {firstUserInfo.Name}.\n\nВот о чём он написал: {firstUserInfo.Interests}.\n\nСкорей пиши в ММ и назначай встречу!");
+                    await botClient.SendTextMessageAsync(
+                        userId,
+                        string.Format(BotMessages.PairFoundMessage, secondUserInfo.Name, secondUserInfo.Hobby, secondUserInfo.Work, secondUserInfo.Interests), cancellationToken: cancellationToken);
+                    await botClient.SendTextMessageAsync(
+                        userWithNoPair.FirstUserId,
+                        string.Format(BotMessages.PairFoundMessage, firstUserInfo.Name, firstUserInfo.Hobby, firstUserInfo.Work, firstUserInfo.Interests), cancellationToken: cancellationToken);
 
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
                 break;
             }
             case "/broadcast":
             {
-                var pairs = BotDbContext.Instance.CoffeePairs
-                    .Where(p => p.FirstUserId != -1)
-                    .Select(p => p.FirstUserId)
-                    .Union(BotDbContext.Instance.CoffeePairs
-                        .Where(p => p.SecondUserId != -1)
-                        .Select(p => p.SecondUserId))
-                    .Distinct();
-                var users = BotDbContext.Instance.BotUsers
-                    .Where(u => pairs.Contains(u.Id))
-                    .ToList();
-                var message =
-                    "\ud83d\udc4b Привет, в понедельник пришлю тебе нового собеседника, а пока успей назначить встречу с текущим.\n\nДля лучших совпадений пропиши больше своих интересов, так выше вероятность найти подходящего собеседника. \n\nМожешь поменять \"обо всё\" на перечисление своих хобби и увлечений \u2728";
-                BroadcastMessageSender.BroadcastMessage(botClient, users, message);
+                // var pairs = BotDbContext.Instance.CoffeePairs
+                //     .Where(p => p.FirstUserId != -1)
+                //     .Select(p => p.FirstUserId)
+                //     .Union(BotDbContext.Instance.CoffeePairs
+                //         .Where(p => p.SecondUserId != -1)
+                //         .Select(p => p.SecondUserId))
+                //     .Distinct();
+                // var users = BotDbContext.Instance.BotUsers
+                //     .Where(u => pairs.Contains(u.Id))
+                //     .ToList();
+                // var message =
+                //     "\ud83d\udc4b Привет, в понедельник пришлю тебе нового собеседника, а пока успей назначить встречу с текущим\\.\n\nДля лучших совпадений пропиши больше своих интересов, так выше вероятность найти подходящего собеседника\\. \n\nМожешь поменять \"обо всём\" на перечисление своих хобби и увлечений \u2728";
+                // BroadcastMessageSender.BroadcastMessage(botClient, users, message);
                 break;
             }
         }

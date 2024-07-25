@@ -57,7 +57,8 @@ public sealed class BotDbContext : UserDbContext
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
     }
 
-    private BotDbContext() : base("Filename=coffee.db")
+    private BotDbContext() 
+        : base("Filename=coffee.db")
     {
         Database.EnsureCreated();
 

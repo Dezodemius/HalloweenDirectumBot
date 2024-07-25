@@ -185,6 +185,51 @@ namespace DirectumCoffee {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ✨ Собеседник найден! Это {0}.
+        ///
+        ///О чём можете пообщаться?
+        ///
+        ///✅ Увлечения: {1}
+        ///
+        ///✅ Работа: {2}
+        ///
+        ///✅ Интересы: {3}
+        ///
+        ///Скорей пиши в ММ и назначай встречу!.
+        /// </summary>
+        internal static string PairFoundMessage {
+            get {
+                return ResourceManager.GetString("PairFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Кажется, пока нет свободных людей тебе в пару.
+        ///
+        ///Но всё равно не отчаивайся! Жди очередное распределение на следующей неделе!
+        ///
+        ///И помни, чем больше интересов ты пропишешь, тем больше вероятность найти подходящего собеседника..
+        /// </summary>
+        internal static string PairNotFoundCompletelyMessage {
+            get {
+                return ResourceManager.GetString("PairNotFoundCompletelyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ✨ Пары распределены!✨
+        ///
+        ///Пока мы не нашли людей с интересами, похожими на твои. 
+        ///
+        ///Но не отчаивайся! Ты можешь попробовать пообщаться со случайным собеседником..
+        /// </summary>
+        internal static string PairNotFoundMessage {
+            get {
+                return ResourceManager.GetString("PairNotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Включить анкету.
         /// </summary>
         internal static string RestartInfo {
